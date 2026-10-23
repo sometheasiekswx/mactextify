@@ -3,15 +3,15 @@ import OCRCore
 import Darwin
 
 let help = """
-screenshot-ocr \(toolVersion) — local Apple Vision OCR for macOS
+mactextify \(toolVersion) — local Apple Vision OCR for macOS
 
 Usage:
-  screenshot-ocr process --folder PATH [--archive] [--dry-run]
+  mactextify process --folder PATH [--archive] [--dry-run]
                          [--engine livetext|vision] [--format markdown|text] [--languages en-US,...]
                          [--layout auto|whole] [--image-scale 0.5..2] [--language-correction] [--review-threshold 0.8]
-  screenshot-ocr status --folder PATH
-  screenshot-ocr languages [--engine livetext|vision]
-  screenshot-ocr --version
+  mactextify status --folder PATH
+  mactextify languages [--engine livetext|vision]
+  mactextify --version
 
 Defaults: keep originals, Markdown, English, Apple Live Text with automatic text-page layout.
 Automatic layout uses local paragraph/row OCR passes; --layout whole disables it.

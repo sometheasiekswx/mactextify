@@ -34,7 +34,7 @@ for name in names:
     if any(re.search(pattern, text) for pattern in patterns):
         raise SystemExit(f"Potential private material in {name}; review before packaging")
     files[name] = data
-prefix = f"screenshot-ocr-{version}"
+prefix = f"mactextify-{version}"
 out = repo / "dist"
 out.mkdir(exist_ok=True)
 archive = out / f"{prefix}-source.tar.gz"

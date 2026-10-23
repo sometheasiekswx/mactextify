@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "ScreenshotOCR", platforms: [.macOS(.v14)],
-    products: [.executable(name: "screenshot-ocr", targets: ["ScreenshotOCR"])],
+    name: "MacTextify", platforms: [.macOS(.v14)],
+    products: [.executable(name: "mactextify", targets: ["MacTextify"])],
     targets: [
         .target(name: "OCRCore"),
-        .executableTarget(name: "ScreenshotOCR", dependencies: ["OCRCore"]),
+        .executableTarget(name: "MacTextify", dependencies: ["OCRCore"]),
         .testTarget(name: "OCRCoreTests", dependencies: ["OCRCore"])
     ]
 )

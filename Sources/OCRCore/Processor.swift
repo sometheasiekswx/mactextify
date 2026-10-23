@@ -32,7 +32,7 @@ public final class Processor {
         try configuration.validate()
         let supported = try recognizer.supportedLanguages(for: configuration)
         guard configuration.languages.allSatisfy(supported.contains) else {
-            throw OCRFailure("Unsupported recognition language; run screenshot-ocr languages.")
+            throw OCRFailure("Unsupported recognition language; run mactextify languages.")
         }
         var summary = RunSummary()
         if dryRun {

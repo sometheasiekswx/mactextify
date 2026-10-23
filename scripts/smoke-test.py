@@ -22,11 +22,11 @@ def run(args, code=0, **kwargs):
         raise AssertionError(f"{args[0]}: expected {code}, got {result.returncode}\n{result.stdout}\n{result.stderr}")
     return result
 
-with tempfile.TemporaryDirectory(prefix="screenshot-ocr-smoke-") as tmp:
+with tempfile.TemporaryDirectory(prefix="mactextify-smoke-") as tmp:
     temporary = Path(tmp)
     prefix = temporary / "install space"
     run([repo / "scripts/install.sh", prefix])
-    binary = prefix / "bin/screenshot-ocr"
+    binary = prefix / "bin/mactextify"
     assert run([binary, "--version"]).stdout.strip() == current_version
     run([binary, "--help"])
     run([binary, "process"], code=2)
@@ -82,16 +82,16 @@ with tempfile.TemporaryDirectory(prefix="screenshot-ocr-smoke-") as tmp:
     # A moved installation works independently of the checkout and original prefix.
     moved = temporary / "moved prefix"
     prefix.rename(moved)
-    run([moved / "bin/screenshot-ocr", "--version"], cwd="/")
-    run([moved / "bin/screenshot-ocr-uninstall"])
-    assert not (moved / "bin/screenshot-ocr").exists()
+    run([moved / "bin/mactextify", "--version"], cwd="/")
+    run([moved / "bin/mactextify-uninstall"])
+    assert not (moved / "bin/mactextify").exists()
     assert (moved / "bin/unrelated").read_text() == "keep me"
     assert data_before == {str(p.relative_to(folder)): hashlib.sha256(p.read_bytes()).hexdigest()
                            for p in folder.rglob("*") if p.is_file()}
 
     conflict = temporary / "conflict"
     (conflict / "bin").mkdir(parents=True)
-    (conflict / "bin/screenshot-ocr").write_text("foreign")
+    (conflict / "bin/mactextify").write_text("foreign")
     run([repo / "scripts/install.sh", conflict], code=2)
-    assert (conflict / "bin/screenshot-ocr").read_text() == "foreign"
+    assert (conflict / "bin/mactextify").read_text() == "foreign"
 print("PASS: CLI exits, dry-run, real lock contention/SIGKILL recovery, install/reinstall/upgrade/rollback, relocated runtime, uninstall preservation, install conflict.")

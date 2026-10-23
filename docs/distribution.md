@@ -1,6 +1,6 @@
 # Distribution and release checklist
 
-Source is published at [sometheasiekswx/screenshot-ocr](https://github.com/sometheasiekswx/screenshot-ocr) under the existing MIT license (Screenshot OCR contributors). Private vulnerability reporting is enabled. Local build steps do not publish tags or release assets. There is no versioned binary release.
+Source is published at [sometheasiekswx/mactextify](https://github.com/sometheasiekswx/mactextify) under the existing MIT license (MacTextify contributors). Private vulnerability reporting is enabled. Local build steps do not publish tags or release assets. There is no versioned binary release.
 
 ## Source-first release
 

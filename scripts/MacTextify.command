@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 bin_dir=$(cd -- "$(dirname -- "$0")" && pwd)
-if [ ! -x "$bin_dir/screenshot-ocr" ]; then
-  echo 'screenshot-ocr is missing. Reinstall the tool before processing images.' >&2
+if [ ! -x "$bin_dir/mactextify" ]; then
+  echo 'mactextify is missing. Reinstall the tool before processing images.' >&2
   exit 2
 fi
 # No file paths are interpolated into AppleScript source.
@@ -24,7 +24,7 @@ end try
 APPLESCRIPT
 ); then exit 2; fi
 case "$choice" in
-  'Keep originals') "$bin_dir/screenshot-ocr" process --folder "$folder" ;;
-  'Archive originals') "$bin_dir/screenshot-ocr" process --folder "$folder" --archive ;;
+  'Keep originals') "$bin_dir/mactextify" process --folder "$folder" ;;
+  'Archive originals') "$bin_dir/mactextify" process --folder "$folder" --archive ;;
   *) exit 0 ;;
 esac

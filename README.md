@@ -1,4 +1,4 @@
-# Screenshot OCR
+# MacTextify
 
 Convert text-heavy screenshots into searchable Markdown or plain text, entirely on your Mac using Apple’s public Live Text API (VisionKit), with legacy Vision available explicitly. Install once and use it for study notes, research, technical screenshots, or other folders. No AI subscription, API key, Python runtime, or network connection is needed for OCR.
 
@@ -9,22 +9,22 @@ Convert text-heavy screenshots into searchable Markdown or plain text, entirely 
 Clone the source repository and install locally:
 
 ```sh
-git clone https://github.com/sometheasiekswx/screenshot-ocr.git
-cd screenshot-ocr
+git clone https://github.com/sometheasiekswx/mactextify.git
+cd mactextify
 ./scripts/install.sh
 ```
 
-Requires Swift 5.9+ and a compatible macOS SDK. Full Xcode is verified locally. Command Line Tools-only compilation failed on the development machine; that route remains unverified (see validation). Install Apple developer tools yourself if missing; the installer never downloads or installs prerequisites. The installer builds in release mode and writes only to `~/.local/bin` and `~/.local/share/screenshot-ocr`. No `sudo`. A custom absolute prefix is supported:
+Requires Swift 5.9+ and a compatible macOS SDK. Full Xcode is verified locally. Command Line Tools-only compilation failed on the development machine; that route remains unverified (see validation). Install Apple developer tools yourself if missing; the installer never downloads or installs prerequisites. The installer builds in release mode and writes only to `~/.local/bin` and `~/.local/share/mactextify`. No `sudo`. A custom absolute prefix is supported:
 
 ```sh
-./scripts/install.sh "$HOME/Tools/screenshot-ocr"
+./scripts/install.sh "$HOME/Tools/mactextify"
 ```
 
 Add the prefix's `bin` directory to your PATH, or use the executable's full path. For the default installation:
 
 ```sh
 export PATH="$HOME/.local/bin:$PATH"
-screenshot-ocr --version
+mactextify --version
 ```
 
 Builds are local; no official binary download currently exists. Do not disable Gatekeeper to run untrusted downloads. Read [distribution](docs/distribution.md) before preparing a public release.
@@ -34,27 +34,27 @@ Builds are local; no official binary download currently exists. Do not disable G
 Keep source images in place (default):
 
 ```sh
-screenshot-ocr process --folder "$HOME/Documents/Research screenshots"
+mactextify process --folder "$HOME/Documents/Research screenshots"
 ```
 
 Archive successfully extracted originals:
 
 ```sh
-screenshot-ocr process --folder "$HOME/Documents/Study screenshots" --archive
+mactextify process --folder "$HOME/Documents/Study screenshots" --archive
 ```
 
 Preview the work without OCR or filesystem changes:
 
 ```sh
-screenshot-ocr process --folder "$HOME/Documents/Study screenshots" --archive --dry-run
+mactextify process --folder "$HOME/Documents/Study screenshots" --archive --dry-run
 ```
 
 Plain text and language selection:
 
 ```sh
-screenshot-ocr languages
-screenshot-ocr process --folder "$HOME/Documents/Notes" --format text --languages en-US,fr-FR
-screenshot-ocr status --folder "$HOME/Documents/Notes"
+mactextify languages
+mactextify process --folder "$HOME/Documents/Notes" --format text --languages en-US,fr-FR
+mactextify status --folder "$HOME/Documents/Notes"
 ```
 
 Only top-level PNG, JPG and JPEG regular files are considered (case insensitive). Nested directories are not scanned. Unsupported files are ignored. Symlink images and managed directories are rejected. Use local folders; cloud/network coordination and hostile concurrent file modification are outside the support contract.
@@ -71,7 +71,7 @@ For a difficult image, compare a copy in a separate folder with `--image-scale 0
 
 ### Finder
 
-Open `~/.local/bin/Process Screenshots.command` (or the equivalent in your custom prefix). Choose a folder, then choose **Keep originals** or **Archive originals**. Cancel makes no changes. The script runs the same CLI and reports results in Terminal. It does not infer the folder from its own location.
+Open `~/.local/bin/MacTextify.command` (or the equivalent in your custom prefix). Choose a folder, then choose **Keep originals** or **Archive originals**. Cancel makes no changes. The script runs the same CLI and reports results in Terminal. It does not infer the folder from its own location.
 
 ### Output
 
@@ -114,7 +114,7 @@ OCR runs locally. No telemetry, background monitor, automatic update checks, cre
 Run `scripts/install.sh` from the desired source version. The installer refuses unrelated executables and switches to a verified, immutable installation slot; previous slots remain for rollback. It never rewrites project data. To roll back, install a previous trusted checkout. Older versions reject unsupported receipt schemas; do not edit a schema number to bypass this check.
 
 ```sh
-"$HOME/.local/bin/screenshot-ocr-uninstall"
+"$HOME/.local/bin/mactextify-uninstall"
 ```
 
 Uninstall checks installed-file manifests, removes owned executables/support files only, and preserves unrelated files and every project folder. Modified installed files cause a refusal. A stale installation lock after a killed installer requires manual inspection before removing the empty `.install-lock` directory. Interrupted `.stage.*` installation folders can remain for inspection; they are never runtime state.
@@ -131,3 +131,9 @@ python3 scripts/smoke-test.py
 Python 3 is used only for developer smoke tests and source packaging, not installation or OCR runtime. Tests generate synthetic images at runtime; never add private screenshots. See [architecture](docs/architecture.md), [contributing](CONTRIBUTING.md), [security](SECURITY.md), and [release checklist](docs/distribution.md).
 
 MIT license; Apple Vision remains an Apple platform framework and is not bundled here.
+
+## Renaming from Screenshot OCR
+
+MacTextify uses the `mactextify` command and `MacTextify.command` Finder launcher. Install with `./scripts/install.sh`. Existing `.ocr-state` receipts, `Extracted` exports and `Processed` originals remain compatible and are not migrated or overwritten.
+
+The new installation uses `share/mactextify` and can coexist with an older `screenshot-ocr` installation. Existing scripts using `screenshot-ocr` continue to use that older executable; update them explicitly to `mactextify`. To remove the older installation, use its original `screenshot-ocr-uninstall` command. Neither uninstaller removes study data.

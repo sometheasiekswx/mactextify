@@ -1,6 +1,6 @@
 # Contributing
 
-Source repository: [sometheasiekswx/screenshot-ocr](https://github.com/sometheasiekswx/screenshot-ocr). Development builds retain the accuracy and platform limitations in [validation](docs/validation.md).
+Source repository: [sometheasiekswx/mactextify](https://github.com/sometheasiekswx/mactextify). Development builds retain the accuracy and platform limitations in [validation](docs/validation.md).
 
 Use Swift 5.9+ and a compatible macOS SDK. Run `swift test`, `swift build -c release` and `python3 scripts/smoke-test.py` from the root. No external Swift dependencies. Keep source formatting consistent with the surrounding files.
 

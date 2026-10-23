@@ -1,0 +1,15 @@
+.build/
+.swiftpm/
+.DS_Store
+Extracted/
+Processed/
+.ocr-state/
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+*.heic
+*.HEIC
+dist/

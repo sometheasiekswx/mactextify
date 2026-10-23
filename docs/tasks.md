@@ -1,6 +1,6 @@
 # Implementation status
 
-This is the sanitized implementation record for the reusable product. The original personal study plan remains outside this repository.
+This is the sanitized implementation record for the reusable product. The sanitized [implementation plan](../tasks/plan.md) and [acceptance status](../tasks/todo.md) are maintained in this repository. Private corpus reports remain outside it.
 
 - [x] P1 core: native OCR adapter, language/configuration handling and synthetic fidelity tests. Platform-matrix runtime and human private-pilot visual check remain pending.
 - [x] P2: Markdown/text export, keep-original default, optional no-clobber archival and failure protection.

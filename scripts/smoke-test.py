@@ -28,7 +28,9 @@ with tempfile.TemporaryDirectory(prefix="mactextify-smoke-") as tmp:
     run([repo / "scripts/install.sh", prefix])
     binary = prefix / "bin/mactextify"
     assert run([binary, "--version"]).stdout.strip() == current_version
-    run([binary, "--help"])
+    assert "--output-folder" in run([binary, "--help"]).stdout
+    assert "--detect-answers" not in run([binary, "--help"]).stdout
+    run([binary, "process", "--folder", tmp, "--detect-answers", "purple"], code=2)
     run([binary, "process"], code=2)
     run([binary, "process", "--engine", "vision", "--folder", "missing"], code=2)
     run([binary, "process", "--engine", "vision", "--folder", tmp, "--format", "bad"], code=2)

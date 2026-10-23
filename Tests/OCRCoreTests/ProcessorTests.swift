@@ -45,6 +45,66 @@ final class ProcessorTests: XCTestCase {
         }
         return result
     }
+    func testCustomOutputLinksAndIdempotencyWithoutInputState() async throws {
+        let inputURL = try input("space # sample.png")
+        let destination = root.appendingPathComponent("Answered")
+        let processor = try Processor(root: root, outputFolder: destination, recognizer: fake, report: { _ in })
+        let first = try await processor.process(configuration: Configuration())
+        XCTAssertEqual(first.failed, 0); XCTAssertEqual(first.exported, 1)
+        XCTAssertFalse(fm.fileExists(atPath: root.appendingPathComponent(".ocr-state").path))
+        let store = try Storage(root: root, outputFolder: destination)
+        let receipt = try store.loadReceipts()[0]
+        let text = String(decoding: try Data(contentsOf: destination.appendingPathComponent(receipt.outputName)), as: UTF8.self)
+        XCTAssertTrue(text.contains("../space%20%23%20sample.png"))
+        XCTAssertTrue(fm.fileExists(atPath: inputURL.path))
+        let before = try manifest()
+        let again = try await processor.process(configuration: Configuration())
+        XCTAssertEqual(again.skipped, 1); XCTAssertEqual(try manifest(), before)
+        try Data("edited".utf8).write(to: destination.appendingPathComponent(receipt.outputName))
+        let edited = try await processor.process(configuration: Configuration())
+        XCTAssertEqual(edited.failed, 1)
+        XCTAssertEqual(try String(contentsOf: destination.appendingPathComponent(receipt.outputName)), "edited")
+    }
+    func testCustomOutputBindingAndUnsafePaths() async throws {
+        try input()
+        let destination = root.appendingPathComponent("Answered")
+        let processor = try Processor(root: root, outputFolder: destination, recognizer: fake, report: { _ in })
+        _ = try await processor.process(configuration: Configuration())
+        let other = root.appendingPathComponent("Other")
+        try fm.createDirectory(at: other, withIntermediateDirectories: false)
+        XCTAssertThrowsError(try Storage(root: other, outputFolder: destination))
+        XCTAssertThrowsError(try Storage(root: root, outputFolder: root))
+        XCTAssertThrowsError(try Storage(root: root, outputFolder: root.appendingPathComponent(".ocr-state")))
+        let link = root.appendingPathComponent("link")
+        try fm.createSymbolicLink(at: link, withDestinationURL: destination)
+        XCTAssertThrowsError(try Storage(root: root, outputFolder: link))
+        XCTAssertThrowsError(try Storage(root: root, outputFolder: link.appendingPathComponent("child")))
+    }
+    func testCustomOutputDryRunAndArchiveRejection() async throws {
+        try input()
+        let before = try manifest(), destination = root.appendingPathComponent("Answered")
+        let processor = try Processor(root: root, outputFolder: destination, recognizer: fake, report: { _ in })
+        _ = try await processor.process(configuration: Configuration(), dryRun: true)
+        XCTAssertEqual(try manifest(), before); XCTAssertFalse(fm.fileExists(atPath: destination.path))
+        var config = Configuration(); config.archive = true
+        do { _ = try await processor.process(configuration: config); XCTFail("Must reject custom archival") } catch {}
+        XCTAssertEqual(try manifest(), before)
+    }
+    func testCustomOutputRecoveryAndTextFormat() async throws {
+        try input()
+        let destination = root.appendingPathComponent("Answered")
+        var config = Configuration(); config.format = .text
+        let first = try Processor(root: root, outputFolder: destination, recognizer: fake, checkpoint: { point in
+            if point == .outputPublished { throw OCRFailure("interrupt") }
+        }, report: { _ in })
+        let interrupted = try await first.process(configuration: config)
+        XCTAssertEqual(interrupted.failed, 1)
+        let next = try Processor(root: root, outputFolder: destination, recognizer: fake, report: { _ in })
+        let recovered = try await next.process(configuration: config)
+        XCTAssertEqual(recovered.failed, 0); XCTAssertEqual(fake.calls, 1)
+        let receipt = try Storage(root: root, outputFolder: destination).loadReceipts()[0]
+        XCTAssertEqual(try String(contentsOf: destination.appendingPathComponent(receipt.outputName)), "Research result: sample 42\n")
+    }
     func testKeepDefaultAndIdempotency() async throws {
         let path = try input()
         let actual1 = try await processFixture().exported

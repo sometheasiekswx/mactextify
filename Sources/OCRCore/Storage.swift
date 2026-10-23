@@ -17,14 +17,58 @@ public final class FolderLock {
 public final class Storage {
     public let root: URL
     private let fm = FileManager.default
-    public var state: URL { root.appendingPathComponent(".ocr-state", isDirectory: true) }
+    public let customOutput: URL?
+    public var state: URL { (customOutput ?? root).appendingPathComponent(".ocr-state", isDirectory: true) }
     public var records: URL { state.appendingPathComponent("records", isDirectory: true) }
-    public var outputs: URL { root.appendingPathComponent("Extracted", isDirectory: true) }
+    public var outputs: URL { customOutput ?? root.appendingPathComponent("Extracted", isDirectory: true) }
     public var archives: URL { root.appendingPathComponent("Processed", isDirectory: true) }
-    public init(root: URL) throws {
+    public init(root: URL, outputFolder: URL? = nil) throws {
         self.root = root.standardizedFileURL
+        let requested = outputFolder?.standardizedFileURL
+        self.customOutput = requested?.path == self.root.appendingPathComponent("Extracted", isDirectory: true).path ? nil : requested
         try requireDirectory(self.root)
+        if let customOutput {
+            guard customOutput.path != self.root.path,
+                  !customOutput.path.hasPrefix(self.root.appendingPathComponent(".ocr-state").path + "/"),
+                  customOutput.path != self.root.appendingPathComponent(".ocr-state").path,
+                  customOutput.path != archives.path else { throw OCRFailure("Output folder overlaps a managed input directory.") }
+            var ancestor = customOutput
+            while ancestor.path != "/" {
+                // macOS system temp aliases are trusted; arbitrary user symlinks are not.
+                let systemAlias = ["/var": "private/var", "/tmp": "private/tmp"][ancestor.path]
+                let trusted = systemAlias != nil && (try? fm.destinationOfSymbolicLink(atPath: ancestor.path)) == systemAlias
+                if exists(ancestor) && !trusted { try requireDirectory(ancestor) }
+                ancestor.deleteLastPathComponent()
+            }
+            try requireDirectory(customOutput.deletingLastPathComponent())
+        }
         for url in [state, records, outputs, archives] where exists(url) { try requireDirectory(url) }
+        try validateBinding()
+    }
+    private var binding: URL { state.appendingPathComponent("input-folder.json") }
+    public func validateBinding() throws {
+        guard customOutput != nil else { return }
+        if exists(binding) {
+            let saved = try JSONDecoder().decode(String.self, from: read(binding))
+            guard saved == root.path else { throw OCRFailure("Output folder belongs to another input folder.") }
+        } else if exists(state) {
+            let entries = try fm.contentsOfDirectory(atPath: state.path).filter { $0 != "lock" && $0 != "records" }
+            let hasRecords = try exists(records) && !fm.contentsOfDirectory(atPath: records.path).isEmpty
+            guard entries.isEmpty && !hasRecords else { throw OCRFailure("Output folder contains unbound state.") }
+        }
+    }
+    public func bindInput() throws {
+        try validateBinding()
+        if customOutput != nil && !exists(binding) { try write(JSONEncoder().encode(root.path), to: binding) }
+    }
+    public func renderReceipt(_ receipt: Receipt, archived: Bool) -> Data {
+        guard customOutput != nil else { return render(receipt, archived: archived) }
+        let target = (archived ? archives : root).appendingPathComponent(archived ? receipt.archiveName : receipt.originalName)
+        let from = outputs.pathComponents, to = target.pathComponents
+        var common = 0
+        while common < min(from.count, to.count) && from[common] == to[common] { common += 1 }
+        let relative = Array(repeating: "..", count: from.count-common) + to.dropFirst(common).map(linkComponent)
+        return render(receipt, archived: archived, sourceLink: relative.joined(separator: "/"))
     }
     public func exists(_ url: URL) -> Bool {
         var value = stat()
@@ -54,6 +98,7 @@ public final class Storage {
         try requireDirectory(url)
     }
     public func prepare() throws {
+        if customOutput != nil { try directory(outputs) }
         try directory(state)
         try directory(records)
         try directory(outputs)

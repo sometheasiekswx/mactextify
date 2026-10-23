@@ -6,10 +6,10 @@ let help = """
 mactextify \(toolVersion) — local Apple Vision OCR for macOS
 
 Usage:
-  mactextify process --folder PATH [--archive] [--dry-run]
+  mactextify process --folder PATH [--archive] [--dry-run] [--output-folder PATH]
                          [--engine livetext|vision] [--format markdown|text] [--languages en-US,...]
                          [--layout auto|whole] [--image-scale 0.5..2] [--language-correction] [--review-threshold 0.8]
-  mactextify status --folder PATH
+  mactextify status --folder PATH [--output-folder PATH]
   mactextify languages [--engine livetext|vision]
   mactextify --version
 
@@ -17,7 +17,9 @@ Defaults: keep originals, Markdown, English, Apple Live Text with automatic text
 Automatic layout uses local paragraph/row OCR passes; --layout whole disables it.
 Live Text requires supported hardware and does not expose confidence scores.
 Use --engine vision for legacy Vision OCR; language correction is Vision-only.
-Only top-level PNG/JPEG regular files are processed. Outputs: Extracted/.
+Only top-level PNG/JPEG regular files are processed. Default outputs: Extracted/.
+--output-folder PATH keeps exports and independent state there; its parent must exist.
+Custom output folders require keeping originals (--archive is unsupported).
 --archive moves successful originals to Processed/; duplicates stay in place.
 Rerun to resume interrupted work. Edited/missing outputs are never replaced.
 A different configuration for a saved image is a conflict, not a reprocess.
@@ -42,7 +44,7 @@ do {
     let command = args.removeFirst()
     guard ["process", "status"].contains(command) else { throw OCRFailure("Unknown command. Use --help.") }
     var configuration = Configuration()
-    var folder: String?, dryRun = false, seen = Set<String>()
+    var folder: String?, outputFolder: String?, dryRun = false, seen = Set<String>()
     while !args.isEmpty {
         let option = args.removeFirst()
         guard seen.insert(option).inserted else { throw OCRFailure("Repeated option: \(option)") }
@@ -50,8 +52,9 @@ do {
             guard !args.isEmpty else { throw OCRFailure("Missing value for \(option).") }
             return args.removeFirst()
         }
-        if command == "status" && option != "--folder" { throw OCRFailure("status accepts only --folder.") }
+        if command == "status" && option != "--folder" && option != "--output-folder" { throw OCRFailure("status accepts --folder and --output-folder.") }
         switch option {
+        case "--output-folder": outputFolder = try value()
         case "--folder": folder = try value()
         case "--archive": configuration.archive = true
         case "--dry-run": dryRun = true
@@ -82,7 +85,9 @@ do {
     if configuration.selectedEngine == .vision && seen.contains("--layout") && configuration.layout == .automatic {
         throw OCRFailure("--layout auto requires --engine livetext.")
     }
-    let processor = try Processor(root: URL(fileURLWithPath: (folder as NSString).expandingTildeInPath))
+    if let outputFolder, outputFolder.isEmpty { throw OCRFailure("Output folder cannot be empty.") }
+    let processor = try Processor(root: URL(fileURLWithPath: (folder as NSString).expandingTildeInPath),
+        outputFolder: outputFolder.map { URL(fileURLWithPath: ($0 as NSString).expandingTildeInPath) })
     if command == "status" { try processor.status() }
     else {
         let result = try await processor.process(configuration: configuration, dryRun: dryRun)

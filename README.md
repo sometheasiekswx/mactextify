@@ -137,3 +137,13 @@ MIT license; Apple Vision remains an Apple platform framework and is not bundled
 MacTextify uses the `mactextify` command and `MacTextify.command` Finder launcher. Install with `./scripts/install.sh`. Existing `.ocr-state` receipts, `Extracted` exports and `Processed` originals remain compatible and are not migrated or overwritten.
 
 The new installation uses `share/mactextify` and can coexist with an older `screenshot-ocr` installation. Existing scripts using `screenshot-ocr` continue to use that older executable; update them explicitly to `mactextify`. To remove the older installation, use its original `screenshot-ocr-uninstall` command. Neither uninstaller removes study data.
+
+## Custom output folder
+
+```sh
+mactextify process --folder "/path/to/images" --output-folder "/path/to/Exports"
+```
+
+The destination's parent must already exist; MacTextify creates the destination if needed. Exports, index and independent `.ocr-state` receipts/lock live in the destination. Input images and existing input-side receipts/exports are untouched. Reuse the same two paths on subsequent runs (including `status`); a destination is bound to one input folder. Markdown source links remain relative to the output location. Edited exports and unowned files are protected.
+
+Custom output mode keeps originals in place and rejects `--archive`. Symlink destinations/ancestors, input-directory collisions and managed-state collisions are rejected. Omitting the option retains the historical folder layout and behavior. Explicitly naming the default `Extracted` path also retains historical state behavior.

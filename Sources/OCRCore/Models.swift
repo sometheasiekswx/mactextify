@@ -128,12 +128,12 @@ public func markdownLabel(_ name: String) -> String {
         .replacingOccurrences(of: "<", with: "&lt;").replacingOccurrences(of: ">", with: "&gt;")
 }
 
-public func render(_ receipt: Receipt, archived: Bool) -> Data {
+public func render(_ receipt: Receipt, archived: Bool, sourceLink: String? = nil) -> Data {
     let body = receipt.lines.map(\.text).joined(separator: "\n") + "\n"
     if receipt.configuration.format == .text { return Data(body.utf8) }
     let longest = body.split(whereSeparator: { $0 != "`" }).map(\.count).max() ?? 0
     let fence = String(repeating: "`", count: max(3, longest + 1))
-    let source = archived ? "../Processed/\(linkComponent(receipt.archiveName))" : "../\(linkComponent(receipt.originalName))"
+    let source = sourceLink ?? (archived ? "../Processed/\(linkComponent(receipt.archiveName))" : "../\(linkComponent(receipt.originalName))")
     let warning = receipt.confidenceUnavailable ? "needs-review (confidence unavailable; Live Text does not expose scores)" :
         (receipt.reviewNeeded ? "needs-review (low-confidence lines)" : "unverified")
     let liveText = receipt.configuration.selectedEngine == .liveText

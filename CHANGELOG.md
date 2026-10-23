@@ -5,6 +5,12 @@
 - Rename the product, CLI, Finder launcher, source package and GitHub repository to MacTextify.
 - Preserve receipt/export formats and support side-by-side installation with Screenshot OCR.
 
+### Custom output folders
+
+- Add `--output-folder PATH` for independent exports/state and relative source links.
+- Bind each destination to one input folder and retain edited-file protections and resumable writes.
+- Keep custom-output inputs read-only; reject `--archive` in this mode.
+
 ### Accuracy safeguards
 
 - Check both horizontal and vertical coverage of whole-image text observations before using adaptive crops; fall back to whole-image Live Text when text lies outside the extraction bands.

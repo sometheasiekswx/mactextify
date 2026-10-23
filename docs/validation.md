@@ -1,3 +1,11 @@
+# Custom output-folder validation
+
+58 tests pass, including destination ownership, symlink rejection, escaped source links, idempotency, edited-output protection, dry-run immutability, archive rejection and interrupted text-export recovery. Release build and CLI/install/recovery smoke checks pass. Three screenshot copies were extracted successfully into an independent destination; existing study files were unchanged.
+
+Review covered path handling, destination binding, locking, recovery, rendering and compatibility with the default directory layout. No blocking findings. Custom output mode requires keeping originals; minimum-OS, Intel and manual Finder checks remain unverified.
+
+---
+
 # Current validation — unreleased accuracy safeguards
 
 The mixed-contrast omission and image-wide frequency override were reproduced by new failing regression tests before the fixes. Automatic layout now checks horizontal and vertical observation coverage; local aligned token counts take precedence over image-wide frequency. Adaptive engine evidence identifies this algorithm as v2; receipt schema and the eight-candidate format are unchanged.

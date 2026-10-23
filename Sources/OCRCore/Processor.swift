@@ -15,10 +15,10 @@ public final class Processor {
     private let recognizer: Recognizer
     private let checkpoint: (Checkpoint) throws -> Void
     private let report: (String) -> Void
-    public init(root: URL, recognizer: Recognizer = LocalRecognizer(),
+    public init(root: URL, outputFolder: URL? = nil, recognizer: Recognizer = LocalRecognizer(),
                 checkpoint: @escaping (Checkpoint) throws -> Void = { _ in },
                 report: @escaping (String) -> Void = { print($0) }) throws {
-        storage = try Storage(root: root); self.recognizer = recognizer
+        storage = try Storage(root: root, outputFolder: outputFolder); self.recognizer = recognizer
         self.checkpoint = checkpoint; self.report = report
     }
     public func status() throws {
@@ -30,6 +30,10 @@ public final class Processor {
     }
     public func process(configuration: Configuration, dryRun: Bool = false) async throws -> RunSummary {
         try configuration.validate()
+        if storage.customOutput != nil && configuration.archive {
+            throw OCRFailure("--output-folder with --archive is unsupported; keep originals in place.")
+        }
+        try storage.validateBinding()
         let supported = try recognizer.supportedLanguages(for: configuration)
         guard configuration.languages.allSatisfy(supported.contains) else {
             throw OCRFailure("Unsupported recognition language; run mactextify languages.")
@@ -40,7 +44,8 @@ public final class Processor {
             do { try storage.validateIndexOwnership() }
             catch { summary.failed += 1; report("ERROR: \(error)") }
             for receipt in records {
-                do { try validateExisting(receipt); report("Recorded: \(displayName(receipt.originalName)) (\(receipt.stage.rawValue))") }
+                do {
+                    try validateExisting(receipt); report("Recorded: \(displayName(receipt.originalName)) (\(receipt.stage.rawValue))") }
                 catch { summary.failed += 1; report("ERROR: \(error)") }
             }
             for input in try storage.inputs() {
@@ -66,6 +71,7 @@ public final class Processor {
         try storage.prepare()
         let lock = try FolderLock(storage.state.appendingPathComponent("lock"))
         defer { withExtendedLifetime(lock) {} }
+        try storage.bindInput()
         var records = try storage.loadReceipts()
         // Failures in one record do not cause the same image to be re-OCR'd below.
         for i in records.indices {
@@ -117,8 +123,8 @@ public final class Processor {
         let output = storage.outputs.appendingPathComponent(receipt.outputName)
         if storage.exists(output) {
             let data = try storage.read(output)
-            guard data == render(receipt, archived: false) ||
-                    (receipt.configuration.archive && data == render(receipt, archived: true)) else {
+            guard data == storage.renderReceipt(receipt, archived: false) ||
+                    (receipt.configuration.archive && data == storage.renderReceipt(receipt, archived: true)) else {
                 throw OCRFailure("Export edited or corrupt; refusing to replace it.")
             }
         } else if receipt.stage != .prepared { throw OCRFailure("Saved export is missing; refusing automatic regeneration.") }
@@ -136,7 +142,7 @@ public final class Processor {
         let source = storage.root.appendingPathComponent(receipt.originalName)
         let archive = storage.archives.appendingPathComponent(receipt.archiveName)
         if receipt.stage == .prepared {
-            if !storage.exists(output) { try storage.write(render(receipt, archived: false), to: output) }
+            if !storage.exists(output) { try storage.write(storage.renderReceipt(receipt, archived: false), to: output) }
             try checkpoint(.outputPublished)
             receipt.stage = .exported
             try storage.save(receipt)
@@ -154,7 +160,7 @@ public final class Processor {
             } else {
                 guard receipt.stage != .archived else { throw OCRFailure("Archived original missing; cannot silently archive a replacement.") }
                 guard digest(try storage.read(source)) == receipt.id else { throw OCRFailure("Source changed before archival.") }
-                guard try storage.read(output) == render(receipt, archived: false) else {
+                guard try storage.read(output) == storage.renderReceipt(receipt, archived: false) else {
                     throw OCRFailure("Export changed before archival; source retained.")
                 }
                 try storage.move(source, to: archive)
@@ -168,9 +174,9 @@ public final class Processor {
                 try storage.save(receipt)
                 try checkpoint(.archived)
             }
-            let final = render(receipt, archived: true)
+            let final = storage.renderReceipt(receipt, archived: true)
             let existing = try storage.read(output)
-            guard existing == final || existing == render(receipt, archived: false) else {
+            guard existing == final || existing == storage.renderReceipt(receipt, archived: false) else {
                 throw OCRFailure("Export changed before link update; refusing to replace it.")
             }
             if existing != final { try storage.write(final, to: output, replace: true) }

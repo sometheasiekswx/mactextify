@@ -13,3 +13,4 @@ Processed/
 *.heic
 *.HEIC
 dist/
+graphify-out/

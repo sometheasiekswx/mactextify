@@ -1,0 +1,8 @@
+.build/
+.git/
+.swiftpm/
+graphify-out/
+dist/
+Extracted/
+Processed/
+.ocr-state/

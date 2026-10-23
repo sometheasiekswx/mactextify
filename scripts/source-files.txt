@@ -2,6 +2,7 @@
 .github/workflows/checks.yml
 .github/workflows/release-check.yml
 .gitignore
+.graphifyignore
 CHANGELOG.md
 CONTRIBUTING.md
 LICENSE
@@ -30,3 +31,4 @@ scripts/package-source.py
 scripts/smoke-test.py
 scripts/source-files.txt
 scripts/uninstall.sh
+scripts/check-prerequisites.sh

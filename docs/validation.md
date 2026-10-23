@@ -1,3 +1,11 @@
+# Source-install prerequisite validation — 2026-10-24
+
+The source installer checks macOS 14+, selected full Xcode, its macOS SDK and Swift 5.9+ before writing installation state. It builds with selected Xcode Swift instead of an unrelated Swift earlier on PATH. Smoke checks cover missing Xcode without prefix creation and a shadow Swift executable that must not be used. These changes add no OCR settings, answer detection, study workflow, runtime dependencies or network services.
+
+Clean temporary source copies passed 58 Swift tests, release build, installation/reinstallation/distinct-version upgrade/rollback/uninstall checks, lock recovery and unrelated-file preservation. The 34-file allowlisted source archive passed packaging and installation/uninstall after extraction. Checks used generated temporary data and did not replace the default installation or existing image folders. Full Xcode/Swift 6.4, Apple Silicon, macOS 27.0.1 were tested locally. Source publication and its actual CI/clone results are verified separately for the pushed commit; no versioned binary release is claimed.
+
+---
+
 # Custom output-folder validation
 
 58 tests pass, including destination ownership, symlink rejection, escaped source links, idempotency, edited-output protection, dry-run immutability, archive rejection and interrupted text-export recovery. Release build and CLI/install/recovery smoke checks pass. Three screenshot copies were extracted successfully into an independent destination; existing study files were unchanged.

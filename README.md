@@ -14,7 +14,7 @@ cd mactextify
 ./scripts/install.sh
 ```
 
-Requires Swift 5.9+ and a compatible macOS SDK. Full Xcode is verified locally. Command Line Tools-only compilation failed on the development machine; that route remains unverified (see validation). Install Apple developer tools yourself if missing; the installer never downloads or installs prerequisites. The installer builds in release mode and writes only to `~/.local/bin` and `~/.local/share/mactextify`. No `sudo`. A custom absolute prefix is supported:
+Requires macOS 14+, Swift 5.9+ and full Xcode with a compatible macOS SDK. The installer checks prerequisites before creating installation state and builds with the selected Xcode Swift. Command Line Tools alone are not the supported build setup (see validation). If needed, set `DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"` for the current Terminal session after completing Xcode first-launch setup. Run `./scripts/check-prerequisites.sh` to check without installing. Install Apple developer tools yourself if missing; the installer never downloads or installs prerequisites. The installer builds in release mode and writes only to `~/.local/bin` and `~/.local/share/mactextify`. No `sudo`. A custom absolute prefix is supported:
 
 ```sh
 ./scripts/install.sh "$HOME/Tools/mactextify"

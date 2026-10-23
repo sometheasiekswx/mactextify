@@ -3,6 +3,9 @@
 set -euo pipefail
 umask 077
 repo=$(cd -- "$(dirname -- "$0")/.." && pwd)
+"$repo/scripts/check-prerequisites.sh"
+# Build with the selected Xcode rather than an unrelated Swift on PATH.
+export PATH="$(dirname "$(xcrun --find swift)"):$PATH"
 prefix=${1:-"$HOME/.local"}
 if [ "$#" -gt 1 ] || [[ "$prefix" != /* ]]; then
   echo 'Usage: scripts/install.sh [/absolute/user-owned/prefix]' >&2; exit 2

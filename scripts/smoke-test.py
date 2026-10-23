@@ -4,6 +4,7 @@ import fcntl
 import hashlib
 import json
 import os
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -25,7 +26,17 @@ def run(args, code=0, **kwargs):
 with tempfile.TemporaryDirectory(prefix="mactextify-smoke-") as tmp:
     temporary = Path(tmp)
     prefix = temporary / "install space"
-    run([repo / "scripts/install.sh", prefix])
+    # Missing developer tools must fail before creating installation state.
+    run([repo / "scripts/install.sh", prefix], code=2,
+        env=dict(os.environ, DEVELOPER_DIR=str(temporary / "missing Xcode")))
+    assert not prefix.exists()
+    # A different Swift earlier on PATH must not override selected Xcode.
+    shadow = temporary / "shadow tools"
+    shadow.mkdir()
+    (shadow / "swift").write_text("#!/bin/bash\nexit 99\n")
+    (shadow / "swift").chmod(0o755)
+    run([repo / "scripts/install.sh", prefix],
+        env=dict(os.environ, PATH=str(shadow) + os.pathsep + os.environ["PATH"]))
     binary = prefix / "bin/mactextify"
     assert run([binary, "--version"]).stdout.strip() == current_version
     assert "--output-folder" in run([binary, "--help"]).stdout

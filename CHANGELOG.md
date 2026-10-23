@@ -2,6 +2,12 @@
 
 ## Unreleased — MacTextify
 
+### Source installation
+
+- Check macOS 14+, full Xcode, its macOS SDK and Swift 5.9+ before creating installation state.
+- Build with the selected Xcode Swift even when another Swift executable is earlier on PATH.
+- Include prerequisite checks in the source archive and test rejection without filesystem writes.
+
 - Rename the product, CLI, Finder launcher, source package and GitHub repository to MacTextify.
 - Preserve receipt/export formats and support side-by-side installation with Screenshot OCR.
 
@@ -42,4 +48,4 @@
 - Versioned receipts, duplicate detection and interruption recovery.
 - Finder chooser, source installer, upgrade/uninstall manifests and safety tests.
 
-Not published. See docs/validation.md for verification limits.
+Source is published; no versioned binary release is provided. See docs/validation.md for verification limits.

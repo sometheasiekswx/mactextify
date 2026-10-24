@@ -1,179 +1,143 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/LogoDark.svg">
-  <img src="assets/Logo.svg" alt="MacTextify" width="300">
-</picture>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/LogoDark.svg">
+    <img src="assets/Logo.svg" alt="MacTextify" width="320">
+  </picture>
+</p>
 
-# MacTextify
+<h1 align="center">Your screenshots. Now searchable.</h1>
 
-Convert text-heavy screenshots into searchable Markdown or plain text, entirely on your Mac using Apple’s public Live Text API (VisionKit), with legacy Vision available explicitly. Install once and use it for study notes, research, technical screenshots, or other folders. No AI subscription, API key, Python runtime, or network connection is needed for OCR.
+<p align="center">
+  Turn images into text you can search, copy, and keep.<br>
+  A native Mac app. Apple OCR. Everything stays on your device.
+</p>
 
-**Source development version 0.3.0, with unreleased accuracy safeguards. No signed/notarized binary release.** macOS 14+ is the deployment target. See [validation](docs/validation.md) for tested platforms; do not infer Intel or older-OS runtime support from successful compilation.
+<p align="center">
+  <a href="#quick-start">Get started</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="docs/cli.md">Command-line guide</a> ·
+  <a href="docs/architecture.md">Architecture</a>
+</p>
 
-## Install from source
+<p align="center">
+  <img src="assets/readme/badges.svg" alt="macOS 14+ · Swift 5.9+ · On-device OCR · MIT license" width="460">
+</p>
 
-Clone the source repository and install locally:
+<p align="center">
+  <a href="assets/readme/app-workspace.png"><img src="assets/readme/app-workspace.png" alt="MacTextify with three synthetic screenshots exported successfully and inline output settings visible" width="880"></a>
+</p>
+
+<p align="center"><sub>Real app captures with synthetic sample documents. Original images stay in place.</sub></p>
+
+## Keep the words. Keep your workflow.
+
+A screenshot is easy to save and easy to lose track of. MacTextify turns folders of PNG and JPEG images into individual text or Markdown files, with an index to find your way back.
+
+- **Made for your Mac.** A compact SwiftUI interface, drag-and-drop, and a native file-and-folder picker with ⌘O.
+- **Private by design.** OCR runs locally with Apple Live Text or an explicitly selected Vision engine. No account, API key, subscription, or application network requests.
+- **A batch, your way.** Mix files and folders, opt into subfolders, and choose exactly where exports go.
+- **Files you own.** Plain text for a clean transcript. Markdown for recognized text, source links, and extraction metadata.
+- **Careful with your work.** The app keeps originals in place, protects edited exports, and saves progress for recovery.
+
+## Quick start
+
+**MacTextify is currently a source build.** There is no official signed or notarized app download. Building requires **macOS 14+, Swift 5.9+, and full Xcode** with a compatible macOS SDK; Command Line Tools alone are not the supported setup. Runtime availability of Live Text depends on your hardware and OS. See [tested platforms](docs/validation.md) and [distribution status](docs/distribution.md).
 
 ```sh
 git clone https://github.com/sometheasiekswx/mactextify.git
 cd mactextify
-./scripts/install.sh
+./scripts/check-prerequisites.sh
+./scripts/build-app.sh
+open .build/MacTextify.app
 ```
 
-Requires macOS 14+, Swift 5.9+ and full Xcode with a compatible macOS SDK. The installer checks prerequisites before creating installation state and builds with the selected Xcode Swift. Command Line Tools alone are not the supported build setup (see validation). If needed, set `DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"` for the current Terminal session after completing Xcode first-launch setup. Run `./scripts/check-prerequisites.sh` to check without installing. Install Apple developer tools yourself if missing; the installer never downloads or installs prerequisites. The installer builds in release mode and writes only to `~/.local/bin` and `~/.local/share/mactextify`. No `sudo`. A custom absolute prefix is supported:
+The build creates a locally ad-hoc-signed development app. Install Apple’s developer tools separately if needed; the scripts do not download prerequisites. If Xcode is installed but not selected, complete its first-launch setup, then set its location in your Terminal session:
 
 ```sh
-./scripts/install.sh "$HOME/Tools/mactextify"
+export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"
 ```
 
-Add the prefix's `bin` directory to your PATH, or use the executable's full path. For the default installation:
+1. **Add your images.** Drop PNG/JPEG files or folders onto the window, or press ⌘O. Turn on **Include subfolders** when you need it.
+2. **Choose where the text goes.** Expand **Extracted text settings**, choose a **Location**, then select **New subfolder** or **Directly here**. Pick text or Markdown and your OCR engine.
+3. **Extract text.** Open or reveal each completed export from its queue row. Review the recognized text before relying on it.
 
-```sh
-export PATH="$HOME/.local/bin:$PATH"
-mactextify --version
-```
+**Directly here** means the exact directory shown in **Location**, including a folder containing your source images. **New subfolder** creates the named folder beneath it. Extraction starts when you click **Extract text**; **Stop after current image** preserves completed work.
 
-Builds are local; no official binary download currently exists. Do not disable Gatekeeper to run untrusted downloads. Read [distribution](docs/distribution.md) before preparing a public release.
+## How it works
 
-## Use
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/readme/workflow-dark.svg">
+    <img src="assets/readme/workflow.svg" alt="PNG and JPEG images pass through local Apple OCR to text or Markdown exports, an index, and saved recovery records; original images remain unchanged in the native app" width="880">
+  </picture>
+</p>
 
-Keep source images in place (default):
+The native app and CLI share **OCRCore**. Live Text is the default engine; Vision is available when you select it. There is no silent fallback between engines. The CLI also exposes layout, language, scale, and archival options in the [command-line guide](docs/cli.md).
 
-```sh
-mactextify process --folder "$HOME/Documents/Research screenshots"
-```
+<p align="center">
+  <a href="assets/readme/app-detail.png"><img src="assets/readme/app-detail.png" alt="MacTextify’s completed batch alongside the actual plain-text output from the synthetic Project notes image" width="880"></a>
+</p>
 
-Archive successfully extracted originals:
+## Simple output. Useful context.
 
-```sh
-mactextify process --folder "$HOME/Documents/Study screenshots" --archive
-```
-
-Preview the work without OCR or filesystem changes:
-
-```sh
-mactextify process --folder "$HOME/Documents/Study screenshots" --archive --dry-run
-```
-
-Plain text and language selection:
-
-```sh
-mactextify languages
-mactextify process --folder "$HOME/Documents/Notes" --format text --languages en-US,fr-FR
-mactextify status --folder "$HOME/Documents/Notes"
-```
-
-Only top-level PNG, JPG and JPEG regular files are considered (case insensitive). Nested directories are not scanned. Unsupported files are ignored. Symlink images and managed directories are rejected. Use local folders; cloud/network coordination and hostile concurrent file modification are outside the support contract.
-
-The default is Apple Live Text in English with `--layout auto`. For a detected light-background, single-column text page, the tool automatically recognizes paragraphs at several vertical scales and recognizes individual rows with both Apple engines. It aligns the literal OCR candidates, rejects very different passes, and selects corroborated tokens. Repeated spellings within the same image help resolve disagreements. There are no subject-specific substitutions, dictionaries, LLM calls, or reference transcriptions in this process.
-
-Unrecognized layouts, multiple-column gutters, unsupported orientations/language combinations and crops that would exclude recognized text keep whole-image Live Text. Use `--layout whole` to explicitly retain the previous extraction path. The detector is conservative but not a general document-layout parser: tables, diagrams, complex screenshots and ambiguous words still need review. Automatic processing is slower than one OCR pass and cannot guarantee accuracy.
-
-All eight candidate transcripts per detected paragraph and the selected text are retained in the private receipt under `.ocr-state/records/`. They are evidence, not confidence scores. The Markdown contains the selected text and points to this evidence. The evaluation references used during development are never inputs to the OCR tool. Live Text requires supported hardware/OS; an unsupported device gets an explicit error.
-
-Live Text does **not expose confidence scores or line geometry**. Receipts store those values as unavailable, and exports are flagged for review. A review flag does not mean an invented low score. For legacy Vision OCR, use `--engine vision`; only that engine accepts the explicit `--language-correction` flag and a confidence review threshold (`--review-threshold 0.8`). The adaptive row pass uses Vision language correction internally. Neither engine's scores nor agreement between passes prove correctness.
-
-For a difficult image, compare a copy in a separate folder with `--image-scale 0.5` or `--image-scale 1.5` (supported range 0.5–2). Resampling can recover text or make it worse; it is opt-in, never rewrites image bytes, and its value is recorded. Do not assume a scale is universally best. `languages --engine vision` lists legacy engine language support; `languages` uses Live Text.
-
-### Finder
-
-Open `~/.local/bin/MacTextify.command` (or the equivalent in your custom prefix). Choose a folder, then choose **Keep originals** or **Archive originals**. Cancel makes no changes. The script runs the same CLI and reports results in Terminal. It does not infer the folder from its own location.
-
-### Output
+A native-app batch saved into a new subfolder looks like this:
 
 ```text
-project/
-  incoming.png
-  Extracted/
-    incoming--<sha256>.md   # .txt with --format text
-    index.md
-  Processed/               # only created for --archive
-    incoming--<sha256>.png
-  .ocr-state/              # receipts, lock and index ownership data
+Extracted text/
+├── Project_notes--<sha256>.txt
+├── Reading_list--<sha256>.txt
+├── Meeting_recap--<sha256>.txt
+├── index.md
+└── .ocr-state/                  # Saved text, ownership and recovery records
 ```
 
-Markdown includes an original-image link, source hash, engine/configuration metadata, review status, and literal OCR text. Plain-text files contain only recognized lines; metadata stays in the receipt and index. The index provides navigation without combining every document. Keep your own annotations in separate files.
+Text exports contain recognized lines only. Markdown exports also include an original-image link, engine settings, source hash, and review status. `index.md` links the batch together without merging every document into one file. Keep annotations in separate files so generated exports stay verifiable.
 
-Synthetic example: an image containing `Research notes` and `Sample count: 42` produces those lines in the export. Real OCR may misread characters, numbers, identifiers or line order. Color, diagrams, answer highlighting and semantic structure are not reconstructed. The tool never determines correct answers or sends text to a language model. Reading exports with an AI assistant is separate and may consume tokens; treat OCR as untrusted source material.
+### Recovery without guesswork
 
-## Safety and recovery
+Edited or unowned exports and edited indexes are protected. A different OCR configuration for an existing image is a conflict; choose a new destination to compare settings. Keep the hidden `.ocr-state` records: they retain recognized text and establish ownership.
 
-- Originals are kept by default. With `--archive`, the export is saved before the original is moved, and original bytes are unchanged.
-- Identical images are recognized once per folder. Additional identical copies are reported and left untouched. Different image bytes get different output names.
-- New receipts use schema 2; schema-1 receipts retain their original Vision engine and rendering. Receipts retain recognized lines so interrupted exports/moves can resume without calling OCR again. Rerun the command to reconcile pending work.
-- Pending operations resume with their saved configuration, including their archival choice, even if a later invocation has different defaults. Inspect `status` first if unsure.
-- A new engine/scale/format/language/policy for an existing image is a configuration conflict, not an overwrite request. V1 has no destructive `--force` mode. To compare settings, use a separate folder containing copies of your images.
-- Empty/corrupt images stay in place. Nonempty results with unavailable confidence (Live Text) or low confidence (Vision) get `needs-review`; archival still applies when explicitly selected.
-- Changed or missing saved exports, changed source bytes, conflicting archives, malformed/newer receipts and edited indexes are reported, not silently replaced.
-- `index.md` can be rebuilt if missing. If you edited it, preserve your edited copy elsewhere and remove the generated index before rerunning.
-- On an unresolved collision, keep both files and investigate before moving/removing either. Do not delete receipts to force recovery: they establish file ownership and retain recognized data.
-- Keep backups. Recovery covers ordinary process interruption and reported errors; it is not a guarantee against hardware failure, power loss or another program racing file changes.
+In the native app, missing exports from older, unselected images do not block a new batch or reappear automatically. Select the same image and extract with matching settings to restore a missing export from saved text. Retry a partial batch with the same destination and settings.
 
-Exit codes: **0** completed (may include review warnings or duplicates); **1** item/index failure; **2** invocation/preflight failure. Other images continue after an individual failure. `status` is a read-only snapshot of receipts, not a full integrity audit.
+Use separate destinations for GUI and CLI runs: they have different receipt layouts. The [CLI guide](docs/cli.md#safety-and-recovery) documents its recovery and optional archival behavior.
 
-## Privacy
+### Know what OCR can miss
 
-OCR runs locally. No telemetry, background monitor, automatic update checks, credentials or application network requests. Installation may require separately acquiring source and Apple tools. Receipts contain recognized text and filenames, and Markdown contains the original filename; treat all output folders as private. Console output prints sanitized filenames and errors, not full OCR bodies. New managed files/directories use restrictive permissions, subject to the user's existing folder permissions.
+Review names, numbers, identifiers, and line order. OCR can misread characters; it does not reconstruct diagrams, color, highlighting, or semantic structure. Live Text does not expose confidence scores or line geometry, so those values are recorded as unavailable and exports are flagged for review. Vision confidence and agreement between passes also do not prove correctness.
 
-## Upgrade and uninstall
+Use local folders. Cloud/network coordination and hostile concurrent file changes are outside the support contract. Keep backups: recovery records help with ordinary interruptions, not every possible failure.
 
-Run `scripts/install.sh` from the desired source version. The installer refuses unrelated executables and switches to a verified, immutable installation slot; previous slots remain for rollback. It never rewrites project data. To roll back, install a previous trusted checkout. Older versions reject unsupported receipt schemas; do not edit a schema number to bypass this check.
+## Prefer the terminal?
+
+Install the CLI locally, then extract a folder:
 
 ```sh
-"$HOME/.local/bin/mactextify-uninstall"
+./scripts/install.sh
+export PATH="$HOME/.local/bin:$PATH"
+mactextify process --folder "$HOME/Documents/Screenshots"
 ```
 
-Uninstall checks installed-file manifests, removes owned executables/support files only, and preserves unrelated files and every project folder. Modified installed files cause a refusal. A stale installation lock after a killed installer requires manual inspection before removing the empty `.install-lock` directory. Interrupted `.stage.*` installation folders can remain for inspection; they are never runtime state.
+The CLI scans top-level PNG/JPEG files and keeps originals by default. Use `--output-folder` for a separate destination, `--format text` for plain text, or `--dry-run` to preview without OCR or filesystem changes. The optional `--archive` mode moves successfully exported originals; it cannot be combined with custom output mode.
 
-## Develop
+Installation uses `~/.local/bin` and `~/.local/share/mactextify`, without `sudo`. A Finder launcher is also included. See the [full CLI guide](docs/cli.md) for custom prefixes, OCR options, recovery, upgrades, uninstall, and compatibility with older Screenshot OCR installations.
+
+## Built in the open
 
 ```sh
 swift build
 swift test
-swift build -c release
-python3 scripts/smoke-test.py
+python3 scripts/test-package-source.py
 ```
 
-Python 3 is used only for developer smoke tests and source packaging, not installation or OCR runtime. Tests generate synthetic images at runtime; never add private screenshots. See [architecture](docs/architecture.md), [contributing](CONTRIBUTING.md), [security](SECURITY.md), and [release checklist](docs/distribution.md).
+Python is used for developer checks and source packaging, not OCR or installation. Tests generate synthetic images; private screenshots do not belong in the repository.
 
-MIT license; Apple Vision remains an Apple platform framework and is not bundled here.
+| Explore | Read more |
+| --- | --- |
+| Design and implementation | [Architecture](docs/architecture.md) · [GUI specification](tasks/macos-gui/SPEC.md) |
+| Verification and release | [Validation](docs/validation.md) · [GUI verification](tasks/macos-gui/validation.md) · [Distribution](docs/distribution.md) |
+| Get involved | [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md) |
+| Presentation assets | [Screenshot and diagram provenance](docs/readme-assets.md) |
 
-## Renaming from Screenshot OCR
-
-MacTextify uses the `mactextify` command and `MacTextify.command` Finder launcher. Install with `./scripts/install.sh`. Existing `.ocr-state` receipts, `Extracted` exports and `Processed` originals remain compatible and are not migrated or overwritten.
-
-The new installation uses `share/mactextify` and can coexist with an older `screenshot-ocr` installation. Existing scripts using `screenshot-ocr` continue to use that older executable; update them explicitly to `mactextify`. To remove the older installation, use its original `screenshot-ocr-uninstall` command. Neither uninstaller removes study data.
-
-## Custom output folder
-
-```sh
-mactextify process --folder "/path/to/images" --output-folder "/path/to/Exports"
-```
-
-The destination's parent must already exist; MacTextify creates the destination if needed. Exports, index and independent `.ocr-state` receipts/lock live in the destination. Input images and existing input-side receipts/exports are untouched. Reuse the same two paths on subsequent runs (including `status`); a destination is bound to one input folder. Markdown source links remain relative to the output location. Edited exports and unowned files are protected.
-
-Custom output mode keeps originals in place and rejects `--archive`. Symlink destinations/ancestors, input-directory collisions and managed-state collisions are rejected. Omitting the option retains the historical folder layout and behavior. Explicitly naming the default `Extracted` path also retains historical state behavior.
-
-## Native macOS application (local development)
-
-Build the Pearl interface with `./scripts/build-app.sh`, then open `.build/MacTextify.app` in Finder. This creates a locally ad-hoc-signed app; it is not a notarized distribution or App Store build. The GUI uses the same OCRCore recognition engine as the CLI.
-
-Add multiple PNG/JPEG files or folders, optionally include subfolders, then choose an output location. Extracted text settings expand inline beneath the queue. Choose a named subfolder or select **Directly here** to save into the exact directory shown in **Location**, in plain text or Markdown. That directory may also contain the source images or be their parent. Exports, `index.md` and hidden recovery metadata are saved there. Extraction starts only when you click Extract text. Originals stay in place. Stop requests preserve completed exports and stop further work at safe boundaries.
-
-The GUI supports mixed source folders through independently versioned batch state. Use a separate destination from existing CLI runs: GUI destinations contain `.ocr-state/batch-owner.json` and `.ocr-state/batch-records/`, while CLI receipts retain their existing layout and schema. GUI batch records are not input to MacTextify Helper; use the existing CLI workflow for that companion. Do not delete hidden state to force reprocessing; choose a new destination when changing OCR settings. Edited exports remain protected. Missing completed exports from older, unselected images do not block new batches or reappear automatically. Select the same image and click Extract text with matching settings to restore its missing export from saved text. A partially completed run can be retried using the same destination and settings.
-
-Folder enumeration skips hidden files, symbolic links, packages and unsupported formats. Images remain selectable after exporting beside them; hidden recovery metadata is skipped. Markdown links point to original images. The 544 × 720-point window starts with a large drop area and reveals the queue after images are added. Large queues have their own scroll region; the Extract action remains outside the collapsible destination section. Use Command-O to add files and folders in one picker. Location paths support
-mouse selection and copying; the copy button copies the full destination path.
-
-The native app bundles a text-free White icon (dark mark on white) for Finder and the Dock. To regenerate
-all icon resolutions after editing its vector geometry, run
-`swift scripts/generate-app-icon.swift`, then `scripts/build-app.sh`.
-
-The running app switches its header and Dock icon to Midnight (white mark on
-pure black) in dark mode and back to White in light mode. Finder and the Dock
-while the app is closed use the default White bundle icon on the macOS 14 baseline.
-The README uses matching transparent SVG wordmarks for each appearance.
-
-GUI design and implementation: [specification](tasks/macos-gui/SPEC.md),
-[plan](tasks/macos-gui/plan.md), [checklist](tasks/macos-gui/todo.md), and
-[validation](tasks/macos-gui/validation.md). Personal tooling policy:
-[development tools](docs/development-tools.md).
+<p align="center">
+  <sub><a href="LICENSE">MIT licensed</a> · Built with SwiftUI, AppKit, VisionKit, and Vision.<br>Apple frameworks are provided by macOS and are not bundled here.</sub>
+</p>

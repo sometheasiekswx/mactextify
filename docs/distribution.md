@@ -11,7 +11,7 @@ Prepare a local source archive with `python3 scripts/package-source.py`. This us
 ## Pending publication checks
 
 - [x] Source repository owner/name, public visibility, existing MIT attribution and private security reporting configured.
-- [x] Initial publication used a 32-file source allowlist. The current source package has 34 allowlisted files, including generic prerequisite checks and Graphify indexing exclusions; no private images, receipts, generated graphs or build artifacts are packaged.
+- [x] Initial publication used a 32-file source allowlist. The current source package follows `scripts/source-files.txt`, including generic prerequisite checks, public branding and synthetic README screenshots. No private images, receipts, generated graphs or build artifacts are packaged.
 - [ ] Run macOS CI on the advertised ARM/Intel and OS matrix. Record actual runtime coverage.
 - [ ] Complete a manual Finder chooser test (selection, cancellation, keep and archive) on supported systems.
 - [ ] Confirm VERSION, CLI version, changelog and intended tag agree.

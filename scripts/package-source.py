@@ -16,6 +16,8 @@ if len(names) != len(set(names)):
     raise SystemExit("Duplicate manifest paths")
 # Binary exceptions are exact public asset paths, not arbitrary image inputs.
 binary_signatures = {
+    "assets/readme/app-workspace.png": b"\x89PNG\r\n\x1a\n",
+    "assets/readme/app-detail.png": b"\x89PNG\r\n\x1a\n",
     "assets/AppIcon.png": b"\x89PNG\r\n\x1a\n",
     "assets/AppIconDark.png": b"\x89PNG\r\n\x1a\n",
     "assets/AppIcon.icns": b"icns",

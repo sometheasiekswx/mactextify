@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-labelledby="workflow-dark-title workflow-dark-desc" id="workflow-dark-root">
+<title id="workflow-dark-title">From screenshots to searchable text</title>
+<desc id="workflow-dark-desc">PNG and JPEG images go through local Apple OCR into text or Markdown exports and an index, with saved records for recovery and originals kept in place by the native app.</desc>
+<defs>
+      <style>#workflow-dark-root { color: #ffffff; font-family: -apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif; }
+      #workflow-dark-root .diagram-container { width:100%; overflow-x:auto; }
+      #workflow-dark-root .name { font-size:20px; font-weight:600; fill:#ffffff; }
+      #workflow-dark-root .sub { font-size:14px; fill:#b8b8b8; }
+      #workflow-dark-root .mono { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; fill:#b8b8b8; }
+      #workflow-dark-root .diagram-eyebrow { font-size:12px;letter-spacing:2px;fill:#b8b8b8; }
+      @media print {
+#workflow-dark-root .diagram-container { overflow:visible; }
+}</style><pattern id="workflow-dark-dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.7" fill="#333333"/></pattern><marker id="workflow-dark-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#b8b8b8"/></marker></defs>
+<rect x="0" y="0" width="960" height="480" fill="#000000"/>
+<rect x="24" y="24" width="912" height="432" rx="8" fill="url(#workflow-dark-dots)" stroke="#333333"/>
+<text x="48" y="64" class="diagram-eyebrow">A LOCAL WORKFLOW</text>
+<text x="48" y="104" fill="#ffffff" font-size="30" font-weight="600">From screenshots to searchable text.</text>
+<line x1="248" y1="232" x2="328" y2="232" stroke="#b8b8b8" stroke-width="1.5" marker-end="url(#workflow-dark-arrow)"/>
+<line x1="612" y1="232" x2="692" y2="232" stroke="#b8b8b8" stroke-width="1.5" marker-end="url(#workflow-dark-arrow)"/>
+<line x1="472" y1="288" x2="472" y2="332" stroke="#b8b8b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#workflow-dark-arrow)"/>
+<rect x="48" y="176" width="200" height="112" rx="6" fill="#111111" stroke="#333333"/>
+<text x="68" y="208" class="mono">01 / INPUT</text>
+<text x="68" y="240" class="name">Your images</text>
+<text x="68" y="268" class="sub">PNG · JPEG · folders</text>
+<rect x="332" y="176" width="280" height="112" rx="6" fill="#ffffff" stroke="#ffffff"/>
+<text x="352" y="208" fill="#000000" font-size="12" letter-spacing="1">02 / ON YOUR MAC</text>
+<text x="352" y="240" fill="#000000" font-size="20" font-weight="600">Apple OCR</text>
+<text x="352" y="268" fill="#000000" font-size="14">Live Text or selected Vision</text>
+<rect x="696" y="176" width="216" height="112" rx="6" fill="#111111" stroke="#333333"/>
+<text x="716" y="208" class="mono">03 / EXPORT</text>
+<text x="716" y="240" class="name">Text you can use</text>
+<text x="716" y="268" class="sub">Text / Markdown + index</text>
+<rect x="332" y="336" width="280" height="68" rx="6" fill="#111111" stroke="#333333"/>
+<text x="352" y="364" fill="#ffffff" font-size="16" font-weight="600">Saved recovery records</text>
+<text x="352" y="388" class="mono">.ocr-state · text + ownership</text>
+<text x="48" y="432" class="sub">Native app: originals stay in place.</text>
+<text x="912" y="432" text-anchor="end" class="sub">No uploads. No API keys.</text>
+</svg>

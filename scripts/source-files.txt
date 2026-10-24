@@ -50,3 +50,13 @@ tasks/macos-gui/SPEC.md
 tasks/macos-gui/plan.md
 tasks/macos-gui/todo.md
 tasks/macos-gui/validation.md
+docs/cli.md
+docs/readme-assets.md
+assets/readme/badges.svg
+assets/readme/workflow.html
+assets/readme/workflow-dark.html
+assets/readme/workflow.svg
+assets/readme/workflow-dark.svg
+assets/readme/app-workspace.png
+assets/readme/app-detail.png
+tasks/readme-presentation/plan.md

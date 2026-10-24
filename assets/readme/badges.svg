@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="32" viewBox="0 0 460 32" role="img" aria-labelledby="badges-title"><title id="badges-title">macOS 14+, Swift 5.9+, on-device OCR, MIT license</title>
+<rect x="0.5" y=".5" width="105" height="31" rx="6" fill="#fafafa" stroke="#d4d4d4"/>
+<text x="53.0" y="20" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#171717">macOS 14+</text>
+<rect x="116.5" y=".5" width="109" height="31" rx="6" fill="#fafafa" stroke="#d4d4d4"/>
+<text x="171.0" y="20" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#171717">Swift 5.9+</text>
+<rect x="236.5" y=".5" width="149" height="31" rx="6" fill="#fafafa" stroke="#d4d4d4"/>
+<text x="311.0" y="20" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#171717">On-device OCR</text>
+<rect x="396.5" y=".5" width="61" height="31" rx="6" fill="#fafafa" stroke="#d4d4d4"/>
+<text x="427.0" y="20" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#171717">MIT</text>
+</svg>

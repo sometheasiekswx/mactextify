@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/LogoDark.svg">
+  <img src="assets/Logo.svg" alt="MacTextify" width="300">
+</picture>
+
 # MacTextify
 
 Convert text-heavy screenshots into searchable Markdown or plain text, entirely on your Mac using Apple’s public Live Text API (VisionKit), with legacy Vision available explicitly. Install once and use it for study notes, research, technical screenshots, or other folders. No AI subscription, API key, Python runtime, or network connection is needed for OCR.
@@ -147,3 +152,27 @@ mactextify process --folder "/path/to/images" --output-folder "/path/to/Exports"
 The destination's parent must already exist; MacTextify creates the destination if needed. Exports, index and independent `.ocr-state` receipts/lock live in the destination. Input images and existing input-side receipts/exports are untouched. Reuse the same two paths on subsequent runs (including `status`); a destination is bound to one input folder. Markdown source links remain relative to the output location. Edited exports and unowned files are protected.
 
 Custom output mode keeps originals in place and rejects `--archive`. Symlink destinations/ancestors, input-directory collisions and managed-state collisions are rejected. Omitting the option retains the historical folder layout and behavior. Explicitly naming the default `Extracted` path also retains historical state behavior.
+
+## Native macOS application (local development)
+
+Build the Pearl interface with `./scripts/build-app.sh`, then open `.build/MacTextify.app` in Finder. This creates a locally ad-hoc-signed app; it is not a notarized distribution or App Store build. The GUI uses the same OCRCore recognition engine as the CLI.
+
+Add multiple PNG/JPEG files or folders, optionally include subfolders, then choose an output location. Extracted text settings expand inline beneath the queue. Choose a named subfolder or save directly into the selected directory, in plain text or Markdown. Extraction starts only when you click Extract text. Originals stay in place. Stop requests preserve completed exports and stop further work at safe boundaries.
+
+The GUI supports mixed source folders through independently versioned batch state. Use a separate destination from existing CLI runs: GUI destinations contain `.ocr-state/batch-owner.json` and `.ocr-state/batch-records/`, while CLI receipts retain their existing layout and schema. GUI batch records are not input to MacTextify Helper; use the existing CLI workflow for that companion. Do not delete hidden state to force reprocessing; choose a new destination when changing OCR settings. Edited or missing saved exports are never silently recreated. A partially completed run can be retried using the same destination and settings.
+
+Folder enumeration skips hidden files, symbolic links, packages and unsupported formats. Use a new output directory outside selected input files. Markdown links point to original images. Large queues have their own scroll region; the Extract action remains outside the collapsible destination section. Use Command-O to add images and Command-Shift-O to add folders.
+
+The native app bundles a text-free White icon (dark mark on white) for Finder and the Dock. To regenerate
+all icon resolutions after editing its vector geometry, run
+`swift scripts/generate-app-icon.swift`, then `scripts/build-app.sh`.
+
+The running app switches its header and Dock icon to Midnight (white mark on
+`#151820`) in dark mode and back to White in light mode. Finder and the Dock
+while the app is closed use the default White bundle icon on the macOS 14 baseline.
+The README uses matching transparent SVG wordmarks for each appearance.
+
+GUI design and implementation: [specification](tasks/macos-gui/SPEC.md),
+[plan](tasks/macos-gui/plan.md), [checklist](tasks/macos-gui/todo.md), and
+[validation](tasks/macos-gui/validation.md). Personal tooling policy:
+[development tools](docs/development-tools.md).

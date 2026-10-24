@@ -45,6 +45,21 @@ public final class Storage {
         for url in [state, records, outputs, archives] where exists(url) { try requireDirectory(url) }
         try validateBinding()
     }
+    // GUI batch ownership is separate from the CLI's single-input-root binding.
+    init(batchDestination: URL) throws {
+        root = batchDestination.standardizedFileURL
+        customOutput = root
+        var ancestor = root
+        while ancestor.path != "/" {
+            let alias = ["/var": "private/var", "/tmp": "private/tmp"][ancestor.path]
+            let trusted = alias != nil && (try? fm.destinationOfSymbolicLink(atPath: ancestor.path)) == alias
+            if exists(ancestor) && !trusted { try requireDirectory(ancestor) }
+            guard ancestor.lastPathComponent != ".ocr-state" else { throw OCRFailure("Cannot export inside managed state.") }
+            ancestor.deleteLastPathComponent()
+        }
+        try requireDirectory(root.deletingLastPathComponent())
+        for url in [state, records, outputs] where exists(url) { try requireDirectory(url) }
+    }
     private var binding: URL { state.appendingPathComponent("input-folder.json") }
     public func validateBinding() throws {
         guard customOutput != nil else { return }

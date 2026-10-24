@@ -14,3 +14,7 @@ Processed/
 *.HEIC
 dist/
 graphify-out/
+
+# Public application artwork; keep other image inputs ignored.
+!/assets/AppIcon.png
+!/assets/AppIconDark.png

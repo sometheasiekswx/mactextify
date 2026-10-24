@@ -49,15 +49,20 @@ public final class Storage {
     init(batchDestination: URL) throws {
         root = batchDestination.standardizedFileURL
         customOutput = root
+        func trustedAliasTarget(_ url: URL) -> URL? {
+            guard let target = ["/var": "private/var", "/tmp": "private/tmp"][url.path],
+                  (try? fm.destinationOfSymbolicLink(atPath: url.path)) == target else { return nil }
+            return URL(fileURLWithPath: "/" + target, isDirectory: true)
+        }
         var ancestor = root
         while ancestor.path != "/" {
-            let alias = ["/var": "private/var", "/tmp": "private/tmp"][ancestor.path]
-            let trusted = alias != nil && (try? fm.destinationOfSymbolicLink(atPath: ancestor.path)) == alias
-            if exists(ancestor) && !trusted { try requireDirectory(ancestor) }
+            if exists(ancestor) { try requireDirectory(trustedAliasTarget(ancestor) ?? ancestor) }
             guard ancestor.lastPathComponent != ".ocr-state" else { throw OCRFailure("Cannot export inside managed state.") }
             ancestor.deleteLastPathComponent()
         }
-        try requireDirectory(root.deletingLastPathComponent())
+        // Keep the same trusted-system-alias policy for the immediate parent.
+        let parent = root.deletingLastPathComponent()
+        try requireDirectory(trustedAliasTarget(parent) ?? parent)
         for url in [state, records, outputs] where exists(url) { try requireDirectory(url) }
     }
     private var binding: URL { state.appendingPathComponent("input-folder.json") }

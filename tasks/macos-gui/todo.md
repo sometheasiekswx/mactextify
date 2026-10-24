@@ -9,9 +9,12 @@ Evidence and commands: [validation](validation.md).
 - [x] Order-independent explicit folder selection, with recursion off by default.
 - [x] Inline settings, direct/named destinations and visible validation.
 - [x] Typed progress, safe stop and actionable OCR errors with engine selection.
-- [x] Open/reveal controls, disclosure focus handling and native spring transitions.
-- [x] White/Midnight assets and native icon-switching smoke check.
-- [x] 68 Swift tests, 5 packaging tests and CLI/install smoke checks.
+- [x] Open/reveal controls, disclosure focus handling and clipped height transitions.
+- [x] Pure black/white White/Midnight assets and native icon-switching smoke check.
+- [x] Compact 544 × 720 layout, expanding empty drop area, combined picker and selectable/copyable paths.
+- [x] Direct output into the selected source/parent folder, with original and export preservation checks.
+- [x] Populated 17-image queue, excluded-item popover and invalid-name flow checked in the native app.
+- [x] 72 Swift tests, 5 packaging tests and CLI/install smoke checks.
 - [x] Source archive and locally signed application build.
 
 ## Outstanding verification and distribution

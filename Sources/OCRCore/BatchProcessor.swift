@@ -17,7 +17,6 @@ public struct BatchSelection {
             guard info.isSymbolicLink != true, info.isHidden != true, info.isPackage != true else { result.excluded.append("\(u.lastPathComponent): hidden, package or symbolic link"); return }
             if info.isDirectory == true {
                 if !descend && !explicitPaths.contains(u.path) { result.excluded.append("\(u.lastPathComponent): subfolder excluded"); return }
-                if FileManager.default.fileExists(atPath: u.appendingPathComponent(".ocr-state").path) && !explicitPaths.contains(u.path) { result.excluded.append("\(u.lastPathComponent): managed output folder"); return }
                 do { for child in try FileManager.default.contentsOfDirectory(at: u, includingPropertiesForKeys: nil).sorted(by: { $0.path < $1.path }) { try visit(child, descend: recursive) } }
                 catch is CancellationError { throw CancellationError() }
                 catch { result.excluded.append("\(u.lastPathComponent): \(error.localizedDescription)") }
@@ -63,7 +62,8 @@ public final class BatchProcessor {
         let supported = try recognizer.supportedLanguages(for: configuration)
         guard configuration.languages.allSatisfy(supported.contains) else { throw OCRFailure("Unsupported OCR language.") }
         let dest = destination.standardizedFileURL
-        guard !files.contains(where: { $0.standardizedFileURL.deletingLastPathComponent() == dest || $0.standardizedFileURL.path.hasPrefix(dest.path + "/") }) else { throw OCRFailure("Choose an output folder separate from the selected images.") }
+        // Exports may share a directory with originals. Storage ownership, file
+        // collision checks and source revalidation protect the inputs independently.
         let store = try Storage(batchDestination: dest)
         let marker = store.state.appendingPathComponent("batch-owner.json")
         func validateOwner() throws {

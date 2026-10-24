@@ -33,11 +33,12 @@ struct QueueItem: Identifiable {
     }
     func access(_ url: URL) { if url.startAccessingSecurityScopedResource() { scopes.append(url) } }
     deinit { for url in scopes { url.stopAccessingSecurityScopedResource() } }
-    func choose(folderOnly: Bool) {
-        let panel = NSOpenPanel(); panel.canChooseDirectories = folderOnly; panel.canChooseFiles = !folderOnly
+    func choose() {
+        let panel = NSOpenPanel(); panel.canChooseDirectories = true; panel.canChooseFiles = true
         panel.allowsMultipleSelection = true
-        if !folderOnly { panel.allowedContentTypes = [.png,.jpeg] }
-        panel.prompt = "Add"; panel.title = folderOnly ? "Add folders" : "Add images"
+        panel.allowedContentTypes = [.png,.jpeg]
+        panel.treatsFilePackagesAsDirectories = false
+        panel.prompt = "Add"; panel.title = "Add files or folders"
         panel.begin { response in if response == .OK { self.add(panel.urls) } }
     }
     func chooseOutput() {
@@ -90,15 +91,14 @@ struct QueueItem: Identifiable {
     @StateObject private var session = Session()
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     var body: some Scene {
-        WindowGroup("MacTextify") {
+        WindowGroup("MacTextify", id: "narrow-workspace") {
             PearlView(session: session).onAppear { delegate.session = session }
         }
-        .defaultSize(width: 780, height: 880)
+        .defaultSize(width: 544, height: 720)
         .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(replacing: .newItem) {
-                Button("Add images…") { session.choose(folderOnly: false) }.keyboardShortcut("o").disabled(session.busy || session.scanning)
-                Button("Add folders…") { session.choose(folderOnly: true) }.keyboardShortcut("o", modifiers: [.command,.shift]).disabled(session.busy || session.scanning)
+                Button("Add files or folders…") { session.choose() }.keyboardShortcut("o").disabled(session.busy || session.scanning)
             }
         }
     }
@@ -117,127 +117,281 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 }
 
+/// A single-line, selectable path. Updating unrelated UI state preserves selection.
+struct SelectablePath: NSViewRepresentable {
+    let path: String
+    let label: String
+    func makeNSView(context: Context) -> NSTextField {
+        let field = NSTextField()
+        field.isEditable = false; field.isSelectable = true
+        field.isBordered = false; field.drawsBackground = false
+        field.font = .systemFont(ofSize: 12)
+        field.textColor = .labelColor
+        field.cell?.isScrollable = true
+        field.cell?.wraps = false
+        field.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        return field
+    }
+    func updateNSView(_ field: NSTextField, context: Context) {
+        if field.stringValue != path { field.stringValue = path }
+        field.isSelectable = context.environment.isEnabled
+        field.setAccessibilityLabel(label)
+        field.toolTip = path
+    }
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSTextField, context: Context) -> CGSize? {
+        CGSize(width: proposal.width ?? 200, height: 20)
+    }
+}
+
 struct PearlView: View {
     @ObservedObject var session: Session
     @State private var expanded = true
     @State private var targeted = false
+    @State private var showExclusions = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
     @FocusState private var settingsFocused: Bool
-    private let accent = Color(red: 0.27, green: 0.42, blue: 0.77)
+    private var ink: Color { colorScheme == .dark ? .white : .black }
+    private var paper: Color { colorScheme == .dark ? .black : .white }
+    private var hairline: Color { ink.opacity(0.16) }
+
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Group {
-                    if let icon = AppBrand.icon(dark: colorScheme == .dark) {
-                        Image(nsImage: icon).resizable().frame(width: 32, height: 32).accessibilityHidden(true)
-                    }
-                }
-                Text("MacTextify").fontWeight(.semibold)
-                Spacer()
-                Label("On-device OCR", systemImage: "lock.shield").font(.caption).foregroundStyle(.secondary)
-            }.onChange(of: colorScheme, initial: true) { _, scheme in
-                AppBrand.apply(dark: scheme == .dark)
-            }.padding(.horizontal, 28).padding(.top, 28).padding(.bottom, 18).background(.bar)
-            ScrollView {
-                VStack(alignment: .leading, spacing: 22) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("A little less typing.").font(.system(size: 29, weight: .semibold, design: .rounded))
-                        Text("Bring your images. Take the words with you.").foregroundStyle(.secondary)
-                    }
-                    VStack(spacing: 12) {
-                        Image(systemName: "doc.viewfinder").font(.system(size: 32, weight: .light)).foregroundStyle(accent)
-                        Text(targeted ? "Drop to add to your batch" : "Images in. Words out.").font(.title3.weight(.medium))
-                        Text("Drop images or folders here").foregroundStyle(.secondary)
-                        HStack {
-                            Button("Add files…") { session.choose(folderOnly: false) }
-                            Button("Add folders…") { session.choose(folderOnly: true) }
-                        }.controlSize(.large)
-                        Text("PNG and JPEG • Your originals stay put").font(.caption).foregroundStyle(.secondary)
-                    }.frame(maxWidth: .infinity).padding(22)
-                        .background(targeted ? accent.opacity(0.13) : Color.primary.opacity(0.025), in: RoundedRectangle(cornerRadius: 16))
-                        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(accent.opacity(targeted ? 0.8 : 0.3), style: StrokeStyle(lineWidth: 1.5, dash: [5,4])))
-                        .disabled(session.busy || session.scanning)
-                        .dropDestination(for: URL.self) { urls, _ in
-                            guard !session.busy, !session.scanning else { return false }; session.add(urls); return true
-                        } isTargeted: { targeted = $0 }
-                    HStack {
-                        Toggle("Include subfolders when adding", isOn: $session.recursive).toggleStyle(.checkbox)
-                        Spacer()
-                        if !session.items.isEmpty { Button("Clear queue") { session.items = []; session.exclusions = []; session.message = "" } }
-                    }.font(.caption).disabled(session.busy || session.scanning)
-                    if session.scanning { HStack { ProgressView().controlSize(.small); Text("Checking files…"); Button("Stop adding") { session.scanJob?.cancel() } } }
-                    if !session.items.isEmpty {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("\(session.items.count) images in this batch").font(.headline)
-                            ScrollView {
-                                LazyVStack(spacing: 0) {
-                                    ForEach(session.items) { item in
-                                        HStack(spacing: 12) {
-                                            Image(systemName: "doc.richtext").foregroundStyle(accent).font(.title2)
-                                            VStack(alignment: .leading, spacing: 3) {
-                                                Text(item.url.lastPathComponent).lineLimit(1).truncationMode(.middle)
-                                                Text(item.detail.isEmpty ? item.url.deletingLastPathComponent().path : item.detail).font(.caption).foregroundStyle(.secondary).lineLimit(2)
-                                            }
-                                            Spacer()
-                                            Text(item.state).font(.caption).foregroundStyle(.secondary)
-                                            if let output = item.output {
-                                                Button { NSWorkspace.shared.open(output) } label: { Image(systemName: "doc.text.magnifyingglass") }.help("Open export").accessibilityLabel("Open export for \(item.url.lastPathComponent)")
-                                                Button { NSWorkspace.shared.activateFileViewerSelecting([output]) } label: { Image(systemName: "folder") }.help("Reveal export in Finder").accessibilityLabel("Reveal export for \(item.url.lastPathComponent)")
-                                            }
-                                            if !session.busy { Button { session.items.removeAll { $0.id == item.id } } label: { Image(systemName: "xmark") }.buttonStyle(.plain).accessibilityLabel("Remove \(item.url.lastPathComponent)") }
-                                        }.padding(.vertical, 12)
-                                        Divider()
-                                    }
-                                }
-                            }.frame(height: min(CGFloat(session.items.count) * 70, 210))
-                        }
-                    }
-                    if !session.exclusions.isEmpty {
-                        DisclosureGroup("\(session.exclusions.count) excluded items") {
-                            ForEach(Array(session.exclusions.enumerated()), id: \.offset) { _, reason in Text(reason).font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading) }
-                        }
-                    }
-                    VStack(spacing: 0) {
-                        Button {
-                            settingsFocused = true
-                            withAnimation(reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 1)) { expanded.toggle() }
-                        } label: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text("Extracted text settings").fontWeight(.semibold)
-                                    Text((session.destination?.path ?? "Choose a valid destination") + " · " + (session.format == .text ? "Plain text" : "Markdown")).font(.caption).foregroundStyle(.secondary).lineLimit(2)
-                                }
-                                Spacer()
-                                Text(expanded ? "Hide settings" : "Change settings").font(.caption).foregroundStyle(accent)
-                                Image(systemName: expanded ? "chevron.up" : "chevron.down").font(.caption).foregroundStyle(accent)
-                            }.padding(18).contentShape(Rectangle())
-                        }.buttonStyle(.plain).focused($settingsFocused).accessibilityValue(expanded ? "Expanded" : "Collapsed")
-                        if expanded {
-                            VStack(alignment: .leading, spacing: 16) {
-                                Divider()
-                                HStack { Text("Location").foregroundStyle(.secondary).frame(width: 90, alignment: .leading); Text(session.parent?.path ?? "Not selected").lineLimit(1).truncationMode(.middle); Spacer(); Button("Choose…") { session.chooseOutput() } }
-                                Picker("Save into", selection: $session.newFolder) { Text("New subfolder").tag(true); Text("Directly here").tag(false) }.pickerStyle(.segmented)
-                                if session.newFolder { HStack { Text("Folder name").foregroundStyle(.secondary).frame(width: 90, alignment: .leading); TextField("Extracted text", text: $session.folder).textFieldStyle(.roundedBorder).accessibilityLabel("Output folder name") } }
-                                Picker("Format", selection: $session.format) { Text("Plain text (.txt)").tag(ExportFormat.text); Text("Markdown (.md)").tag(ExportFormat.markdown) }
-                                Picker("OCR engine", selection: $session.engine) { Text("Apple Live Text").tag(OCREngine.liveText); Text("Vision OCR").tag(OCREngine.vision) }
-                                Text("Save to " + (session.destination?.path ?? "a valid destination")).font(.caption).foregroundStyle(.secondary).textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading).padding(12).background(accent.opacity(0.07), in: RoundedRectangle(cornerRadius: 8))
-                                Text("Only extracted text is saved here. Your originals stay in place.").font(.caption).foregroundStyle(.secondary)
-                            }.padding(.horizontal,18).padding(.bottom,18).disabled(session.busy).transition(.opacity.combined(with: .move(edge: .top)))
-                        }
-                    }.background(.background, in: RoundedRectangle(cornerRadius: 14)).overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.primary.opacity(0.12)))
-                    if let issue = session.validation { Label(issue, systemImage: "exclamationmark.triangle").font(.callout).foregroundStyle(.red) }
-                }.padding(28)
-            }
-            VStack(alignment: .leading, spacing: 10) {
+            header
+            Divider()
+            VStack(spacing: 12) {
+                dropArea
                 HStack {
-                    VStack(alignment: .leading, spacing: 3) { Text("Processed on your Mac."); Text("No uploads. Originals preserved.") }.font(.caption).foregroundStyle(.secondary)
+                    Toggle("Include subfolders", isOn: $session.recursive).toggleStyle(.checkbox).disabled(session.scanning)
                     Spacer()
-                    if session.busy { ProgressView().controlSize(.small); Button("Stop after current image") { session.job?.cancel(); session.message = "Stopping safely…" } }
-                    else { Button("Extract text") { session.run() }.buttonStyle(.borderedProminent).tint(accent).controlSize(.large).disabled(session.items.isEmpty || session.scanning || session.validation != nil).keyboardShortcut(.return, modifiers: .command) }
+                    if session.scanning {
+                        ProgressView().controlSize(.small)
+                        Button("Stop adding") { session.scanJob?.cancel() }
+                    } else if !session.items.isEmpty {
+                        Button("Clear") { session.items = []; session.exclusions = []; session.message = "" }
+                    }
+                }.font(.caption)
+                    .disabled(session.busy)
+                if !session.items.isEmpty { queue }
+                else if !session.exclusions.isEmpty { exclusionsButton.frame(maxWidth: .infinity, alignment: .trailing) }
+                settings.fixedSize(horizontal: false, vertical: true)
+                if let issue = session.validation {
+                    Label(issue, systemImage: "exclamationmark.triangle")
+                        .font(.caption).frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                if !session.message.isEmpty { Text(session.message).font(.caption).foregroundStyle(.secondary).textSelection(.enabled).accessibilityLabel("Batch status: \(session.message)") }
-            }.padding(20).background(.bar)
-        }.frame(minWidth: 620, minHeight: 640).background(Color(nsColor: .windowBackgroundColor))
+            }.padding(16)
+            Divider()
+            footer
+        }
+        .foregroundStyle(ink).tint(ink)
+        .frame(minWidth: 544, minHeight: 680)
+        .background(paper)
+        .onChange(of: colorScheme, initial: true) { _, scheme in AppBrand.apply(dark: scheme == .dark) }
+    }
+
+    private var header: some View {
+        HStack(spacing: 6) {
+            if let icon = AppBrand.icon(dark: colorScheme == .dark) {
+                Image(nsImage: icon).resizable().frame(width: 25, height: 25).accessibilityHidden(true)
+            }
+            Text("MacTextify").font(.system(size: 13, weight: .semibold))
+            Spacer()
+            Label("On-device", systemImage: "lock").font(.caption).foregroundStyle(.secondary)
+        }.padding(.horizontal, 16).frame(height: 36)
+    }
+
+    private var dropArea: some View {
+        Group {
+            if session.items.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "doc.viewfinder").font(.system(size: 36, weight: .light)).accessibilityHidden(true)
+                    Text(targeted ? "Drop to add" : "Drop images or folders").font(.headline)
+                    Text("PNG and JPEG").font(.caption).foregroundStyle(.secondary)
+                    Button("Add files or folders…") { session.choose() }
+                }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                HStack(spacing: 10) {
+                    Image(systemName: "doc.viewfinder").font(.system(size: 20)).accessibilityHidden(true)
+                    Text(targeted ? "Drop to add" : "Drop images or folders").font(.system(size: 12, weight: .medium))
+                    Spacer(minLength: 4)
+                    Button("Add files or folders…") { session.choose() }
+                }
+            }
+        }.padding(16).frame(maxWidth: .infinity)
+            .background(targeted ? ink.opacity(0.07) : paper, in: RoundedRectangle(cornerRadius: 10))
+            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(targeted ? ink : hairline, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
+            .disabled(session.busy || session.scanning)
+            .dropDestination(for: URL.self) { urls, _ in
+                guard !session.busy, !session.scanning else { return false }
+                session.add(urls); return true
+            } isTargeted: { targeted = $0 }
+    }
+
+    private var exclusionsButton: some View {
+        Button("\(session.exclusions.count) excluded") { showExclusions.toggle() }
+            .font(.caption)
+            .popover(isPresented: $showExclusions) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Excluded items").font(.headline)
+                        ForEach(Array(session.exclusions.enumerated()), id: \.offset) { _, reason in
+                            Text(reason).font(.caption).textSelection(.enabled)
+                        }
+                    }.padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                }.frame(width: 360, height: 220)
+            }
+    }
+
+    private var queue: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("\(session.items.count) images").font(.caption.weight(.medium)).monospacedDigit()
+                Spacer()
+                if !session.exclusions.isEmpty { exclusionsButton }
+            }
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(session.items) { item in
+                        HStack(spacing: 8) {
+                            Image(systemName: "doc").accessibilityHidden(true)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.url.lastPathComponent).lineLimit(1).truncationMode(.middle)
+                                Text(item.detail.isEmpty ? item.url.deletingLastPathComponent().path : item.detail)
+                                    .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                            }.help(item.detail.isEmpty ? item.url.path : item.detail)
+                            Spacer(minLength: 4)
+                            Text(item.state).font(.caption).lineLimit(1)
+                            if let output = item.output {
+                                Button { NSWorkspace.shared.open(output) } label: { Image(systemName: "doc.text.magnifyingglass") }
+                                    .accessibilityLabel("Open export for \(item.url.lastPathComponent)")
+                                Button { NSWorkspace.shared.activateFileViewerSelecting([output]) } label: { Image(systemName: "folder") }
+                                    .accessibilityLabel("Reveal export for \(item.url.lastPathComponent)")
+                            }
+                            if !session.busy && !session.scanning {
+                                Button { session.items.removeAll { $0.id == item.id } } label: { Image(systemName: "xmark").frame(width: 22, height: 24) }
+                                    .buttonStyle(.plain).accessibilityLabel("Remove \(item.url.lastPathComponent)")
+                            }
+                        }.padding(.vertical, 8)
+                        Divider()
+                    }
+                }
+            }
+        }.frame(minHeight: 64, maxHeight: .infinity)
+    }
+
+    private var settings: some View {
+        VStack(spacing: 0) {
+            Button {
+                settingsFocused = true
+                expanded.toggle()
+            } label: {
+                HStack {
+                    Text("Extracted text settings").fontWeight(.medium)
+                    Spacer()
+                    Text(expanded ? "Hide" : "Change").font(.caption)
+                    Image(systemName: expanded ? "chevron.up" : "chevron.down").font(.caption)
+                }.padding(12).contentShape(Rectangle())
+            }.buttonStyle(.plain).focused($settingsFocused).accessibilityValue(expanded ? "Expanded" : "Collapsed")
+            SettingsDisclosure(expanded: expanded, reduceMotion: reduceMotion) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Divider()
+                    HStack(spacing: 8) {
+                        Text("Location").frame(width: 76, alignment: .leading)
+                        SelectablePath(path: session.parent?.path ?? "Not selected", label: "Output location")
+                        Button("Choose…") { session.chooseOutput() }.disabled(session.busy)
+                    }
+                    Picker("Save into", selection: $session.newFolder) {
+                        Text("New subfolder").tag(true); Text("Directly here").tag(false)
+                    }.pickerStyle(.segmented).disabled(session.busy)
+                    if session.newFolder {
+                        HStack {
+                            Text("Folder name").frame(width: 76, alignment: .leading)
+                            TextField("Extracted text", text: $session.folder).textFieldStyle(.roundedBorder)
+                                .accessibilityLabel("Output folder name").disabled(session.busy)
+                        }
+                    }
+                    HStack(spacing: 16) {
+                        Picker("Format", selection: $session.format) {
+                            Text("Text (.txt)").tag(ExportFormat.text); Text("Markdown (.md)").tag(ExportFormat.markdown)
+                        }
+                        Picker("Engine", selection: $session.engine) {
+                            Text("Live Text").tag(OCREngine.liveText); Text("Vision OCR").tag(OCREngine.vision)
+                        }
+                    }.disabled(session.busy)
+                }.font(.system(size: 12)).padding(.horizontal, 12).padding(.bottom, 10)
+
+            }
+            HStack(spacing: 8) {
+                Text("Save to").font(.caption).foregroundStyle(.secondary)
+                SelectablePath(path: session.destination?.path ?? "Choose a valid destination", label: "Resolved output path")
+                Button {
+                    guard let path = session.destination?.path else { return }
+                    NSPasteboard.general.clearContents(); NSPasteboard.general.setString(path, forType: .string)
+                } label: { Image(systemName: "doc.on.doc") }
+                    .buttonStyle(.plain).help("Copy output path").accessibilityLabel("Copy output path")
+                    .disabled(session.destination == nil)
+            }.padding(.horizontal, 12).padding(.bottom, 12)
+        }.overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(hairline))
+    }
+
+    private var footer: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("Originals stay in place").font(.caption).foregroundStyle(.secondary)
+                Spacer()
+                if session.busy {
+                    ProgressView().controlSize(.small)
+                    Button("Stop after current image") { session.job?.cancel(); session.message = "Stopping safely…" }
+                } else {
+                    Button("Extract text") { session.run() }
+                        .buttonStyle(MonochromePrimaryStyle())
+                        .disabled(session.items.isEmpty || session.scanning || session.validation != nil)
+                        .keyboardShortcut(.return, modifiers: .command)
+                }
+            }
+            if !session.message.isEmpty {
+                Text(session.message).font(.caption).lineLimit(2).help(session.message)
+                    .textSelection(.enabled).accessibilityLabel("Batch status: \(session.message)")
+            }
+        }.padding(.horizontal, 16).padding(.vertical, 12)
+    }
+}
+
+private struct DisclosureHeight: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = max(value, nextValue()) }
+}
+
+/// Stable controls reveal inside a clipped frame, without a competing slide transition.
+private struct SettingsDisclosure<Content: View>: View {
+    let expanded: Bool
+    let reduceMotion: Bool
+    @ViewBuilder let content: Content
+    @State private var height: CGFloat = 0
+    var body: some View {
+        content
+            .fixedSize(horizontal: false, vertical: true)
+            .background(GeometryReader { proxy in Color.clear.preference(key: DisclosureHeight.self, value: proxy.size.height) })
+            .frame(height: expanded ? (height > 0 ? height : nil) : 0, alignment: .top)
+            .clipped()
+            .allowsHitTesting(expanded)
+            .disabled(!expanded)
+            .accessibilityElement(children: .contain)
+            .accessibilityHidden(!expanded)
+            .onPreferenceChange(DisclosureHeight.self) { height = $0 }
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.20), value: expanded)
+    }
+}
+
+private struct MonochromePrimaryStyle: ButtonStyle {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.isEnabled) private var enabled
+    func makeBody(configuration: ButtonStyleConfiguration) -> some View {
+        configuration.label.font(.system(size: 13, weight: .semibold))
+            .padding(.horizontal, 18).padding(.vertical, 9)
+            .foregroundStyle(scheme == .dark ? Color.black : .white)
+            .background(scheme == .dark ? Color.white : .black, in: RoundedRectangle(cornerRadius: 7))
+            .opacity(enabled ? (configuration.isPressed ? 0.75 : 1) : 0.3)
     }
 }

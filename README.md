@@ -157,18 +157,19 @@ Custom output mode keeps originals in place and rejects `--archive`. Symlink des
 
 Build the Pearl interface with `./scripts/build-app.sh`, then open `.build/MacTextify.app` in Finder. This creates a locally ad-hoc-signed app; it is not a notarized distribution or App Store build. The GUI uses the same OCRCore recognition engine as the CLI.
 
-Add multiple PNG/JPEG files or folders, optionally include subfolders, then choose an output location. Extracted text settings expand inline beneath the queue. Choose a named subfolder or save directly into the selected directory, in plain text or Markdown. Extraction starts only when you click Extract text. Originals stay in place. Stop requests preserve completed exports and stop further work at safe boundaries.
+Add multiple PNG/JPEG files or folders, optionally include subfolders, then choose an output location. Extracted text settings expand inline beneath the queue. Choose a named subfolder or select **Directly here** to save into the exact directory shown in **Location**, in plain text or Markdown. That directory may also contain the source images or be their parent. Exports, `index.md` and hidden recovery metadata are saved there. Extraction starts only when you click Extract text. Originals stay in place. Stop requests preserve completed exports and stop further work at safe boundaries.
 
 The GUI supports mixed source folders through independently versioned batch state. Use a separate destination from existing CLI runs: GUI destinations contain `.ocr-state/batch-owner.json` and `.ocr-state/batch-records/`, while CLI receipts retain their existing layout and schema. GUI batch records are not input to MacTextify Helper; use the existing CLI workflow for that companion. Do not delete hidden state to force reprocessing; choose a new destination when changing OCR settings. Edited or missing saved exports are never silently recreated. A partially completed run can be retried using the same destination and settings.
 
-Folder enumeration skips hidden files, symbolic links, packages and unsupported formats. Use a new output directory outside selected input files. Markdown links point to original images. Large queues have their own scroll region; the Extract action remains outside the collapsible destination section. Use Command-O to add images and Command-Shift-O to add folders.
+Folder enumeration skips hidden files, symbolic links, packages and unsupported formats. Images remain selectable after exporting beside them; hidden recovery metadata is skipped. Markdown links point to original images. The 544 × 720-point window starts with a large drop area and reveals the queue after images are added. Large queues have their own scroll region; the Extract action remains outside the collapsible destination section. Use Command-O to add files and folders in one picker. Location paths support
+mouse selection and copying; the copy button copies the full destination path.
 
 The native app bundles a text-free White icon (dark mark on white) for Finder and the Dock. To regenerate
 all icon resolutions after editing its vector geometry, run
 `swift scripts/generate-app-icon.swift`, then `scripts/build-app.sh`.
 
 The running app switches its header and Dock icon to Midnight (white mark on
-`#151820`) in dark mode and back to White in light mode. Finder and the Dock
+pure black) in dark mode and back to White in light mode. Finder and the Dock
 while the app is closed use the default White bundle icon on the macOS 14 baseline.
 The README uses matching transparent SVG wordmarks for each appearance.
 

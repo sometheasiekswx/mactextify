@@ -6,7 +6,7 @@ This is development-build evidence, not certification for all supported systems.
 ## Automated checks
 | Check | Result |
 | --- | --- |
-| `swift test` | 68 tests passed |
+| `swift test` | 72 tests passed |
 | `python3 scripts/test-package-source.py` | 5 tests passed |
 | `python3 scripts/smoke-test.py` | Passed |
 | `python3 scripts/package-source.py` | Source archive generated |
@@ -16,14 +16,17 @@ This is development-build evidence, not certification for all supported systems.
 
 Core tests cover mixed roots, same-name exports, source links, deduplication,
 configuration conflicts, edited exports, recovery, locking, cancellation, source
-mutation, legacy state rejection and folder-selection ordering. Packaging tests
+mutation, legacy state rejection and folder-selection ordering. New regressions
+cover direct output beside sources and in parent directories, source preservation,
+rescanning after direct output, edited/unowned files, managed-state rejection,
+trusted macOS temporary-directory aliases and user-created symlink ancestors. Packaging tests
 verify exact binary contents, determinism, private-pattern rejection, invalid icon
 signatures and unknown binary rejection. Privacy scanning remains heuristic.
 CLI smoke checks cover exit codes, dry runs, lock contention, interrupted recovery,
 installation/reinstall/upgrade/rollback, relocation and uninstall preservation.
 
 ## Native interaction checks
-An independent tester exercised synthetic inputs through the native app: file and
+During initial GUI validation, an independent tester exercised synthetic inputs through the native app: file and
 folder choosers, mixed-root extraction, direct/named destinations, text/Markdown,
 invalid names, disclosure state retention/focus, rapid keyboard toggles, bounded
 queues, cancellation, Vision selection and edited-export protection.
@@ -52,3 +55,47 @@ for the App Store; persistent permissions/history are outside this version.
 
 Raw local logs, temporary fixture paths and agent-session notes are intentionally
 excluded from the public repository. No private study corpus was used.
+
+## Compact monochrome refinement
+The outer scroll view was removed; only the queue and excluded-item list scroll.
+A separate scene identifier lets existing installations adopt the smaller default
+window without altering input/output settings. Header and drop-area spacing were
+reduced, repeated introductory text removed, and brand assets regenerated in neutral
+black/white. Native focus and text-selection feedback retain platform behavior.
+
+The first compact layout's native dark-appearance verification covered a simultaneous image/folder selection
+(17 images), scrolling to the final queued image, excluded-item details, mouse
+selection/copying of the location path, full long-path copying with the copy action,
+invalid-name blocking, collapse/reopen state retention and synthetic Vision export.
+That 680 × 720 window kept settings and extraction controls visible. No
+outer scroll area appeared in the accessibility tree. The synthetic invoice text
+and amount were checked in the exported file; duplicate copies reused one export.
+
+## Narrow layout, disclosure and direct-output correction
+The current default is 544 × 720 points: 20% narrower than the first compact layout.
+Native checks confirmed that the empty queue is absent, the drop area fills its
+space, adding an image restores the compact drop bar and queue, and clearing the
+queue restores the expanded drop area. Settings and extraction controls remained
+visible in both states. Collapse/reopen retained direct-output settings and removed
+hidden controls from the accessibility tree. Rapid keyboard toggles reached the
+expected final state without leaving controls stuck. The reveal uses one clipped
+height animation instead of simultaneous layout and insertion transitions.
+
+The reported direct-output error was an overly broad source-overlap restriction.
+Regression tests failed with that restriction and passed after allowing same-folder
+and parent-folder destinations. A native test also reproduced an inconsistent
+check of macOS's temporary-directory alias; its new regression failed before the
+parent-directory check was corrected. Arbitrary symlink ancestors remain rejected.
+
+The rebuilt native app exported a synthetic invoice as text directly into its
+source folder. The expected invoice identifier and amount were present, the original
+image's SHA-256 was unchanged, and no new output subfolder was created. All automated
+checks in the table were rerun after the core changes, including CLI/install smoke
+tests. CLI destination semantics remain unchanged.
+
+Review covered the current UI, destination handling, preservation, regressions and
+documentation. No remaining blocking finding was identified. Full light-mode
+visual inspection, minimum-size interactive resizing and VoiceOver remain unverified.
+Resize gestures through the native automation surface did not change the window
+size, so the default-size check must not be presented as a minimum-size pass.
+No quantified animation-performance claim is made.

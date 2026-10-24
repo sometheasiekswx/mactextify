@@ -14,14 +14,14 @@ func render(_ pixels: Int, dark: Bool) throws -> Data {
     c.translateBy(x: 0, y: 1024); c.scaleBy(x: 1, y: -1)
     let tile = CGPath(roundedRect: CGRect(x: 100, y: 100, width: 824, height: 824),
                       cornerWidth: 184, cornerHeight: 184, transform: nil)
-    c.setFillColor(dark ? CGColor(red: 21/255, green: 24/255, blue: 32/255, alpha: 1) : CGColor(gray: 1, alpha: 1))
+    c.setFillColor(dark ? CGColor(gray: 0, alpha: 1) : CGColor(gray: 1, alpha: 1))
     c.addPath(tile); c.fillPath()
     c.setStrokeColor(CGColor(gray: dark ? 1 : 0, alpha: 0.12)); c.setLineWidth(2)
     c.addPath(tile); c.strokePath()
     // Center the original 202...404 by 65...265 mark, with ample tile padding.
     c.translateBy(x: 512 - 303*2.4, y: 512 - 165*2.4)
     c.scaleBy(x: 2.4, y: 2.4)
-    c.setStrokeColor(dark ? CGColor(gray: 1, alpha: 1) : CGColor(red: 25/255, green: 27/255, blue: 32/255, alpha: 1))
+    c.setStrokeColor(dark ? CGColor(gray: 1, alpha: 1) : CGColor(gray: 0, alpha: 1))
     c.setLineWidth(pixels <= 32 ? 16 : 14)
     c.setLineCap(.round); c.setLineJoin(.round)
     c.move(to: CGPoint(x:378,y:115)); c.addLine(to: CGPoint(x:378,y:95))

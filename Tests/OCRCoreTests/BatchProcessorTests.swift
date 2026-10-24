@@ -57,6 +57,73 @@ final class BatchProcessorTests: XCTestCase {
             XCTAssertFalse(result.excluded.contains { $0 == "nested: subfolder excluded" })
         }
     }
+    func testDirectDestinationCanContainSourcesWithoutChangingThem() async throws {
+        let source = try file("images/photo.png", "original image")
+        let destination = try BatchDestination.resolve(parent: source.deletingLastPathComponent(), folderName: nil)
+        let original = try Data(contentsOf: source)
+        let fake = FakeRecognizer(), processor = BatchProcessor(recognizer: fake)
+        var outputs = [URL]()
+        try await processor.process(files: [source], destination: destination, configuration: Configuration()) {
+            if let output = $0.output { outputs.append(output) }
+        }
+        XCTAssertEqual(outputs.count, 1)
+        let output = try XCTUnwrap(outputs.first)
+        XCTAssertEqual(output.deletingLastPathComponent().path, destination.path)
+        XCTAssertTrue(try String(contentsOf: output).contains("](" + source.lastPathComponent + ")"))
+        XCTAssertEqual(try Data(contentsOf: source), original)
+        try await processor.process(files: [source], destination: destination, configuration: Configuration()) { _ in }
+        XCTAssertEqual(fake.calls, 1)
+        let rescanned = try BatchSelection.scan([root], recursive: true)
+        XCTAssertEqual(rescanned.files, [source])
+        try Data("user edits".utf8).write(to: output)
+        do {
+            try await processor.process(files: [source], destination: destination, configuration: Configuration()) { _ in }
+            XCTFail("Edited export must be protected")
+        } catch {}
+        XCTAssertEqual(try String(contentsOf: output), "user edits")
+        XCTAssertEqual(try Data(contentsOf: source), original)
+    }
+    func testDirectDestinationCanBeParentOfSources() async throws {
+        let source = try file("documents/nested/photo.png", "original image")
+        let destination = try BatchDestination.resolve(parent: root.appendingPathComponent("documents"), folderName: nil)
+        var outputs = [URL]()
+        try await BatchProcessor(recognizer: FakeRecognizer()).process(files: [source], destination: destination, configuration: Configuration()) {
+            if let output = $0.output { outputs.append(output) }
+        }
+        let output = try XCTUnwrap(outputs.first)
+        XCTAssertEqual(output.deletingLastPathComponent().path, destination.path)
+        XCTAssertTrue(try String(contentsOf: output).contains("nested/photo.png"))
+        XCTAssertEqual(try String(contentsOf: source), "original image")
+    }
+    func testDirectDestinationUnderMacOSTemporaryAlias() async throws {
+        let directory = URL(fileURLWithPath: "/tmp", isDirectory: true).appendingPathComponent("mactextify-test-" + UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let source = directory.appendingPathComponent("photo.png")
+        try Data("original".utf8).write(to: source)
+        var exported = false
+        try await BatchProcessor(recognizer: FakeRecognizer()).process(files: [source], destination: directory, configuration: Configuration()) {
+            if $0.state == .exported { exported = true }
+        }
+        XCTAssertTrue(exported)
+        XCTAssertEqual(try String(contentsOf: source), "original")
+    }
+    func testDirectDestinationStillRejectsManagedStateAndUnownedIndex() async throws {
+        let source = try file("images/photo.png", "original image")
+        let state = root.appendingPathComponent("images/.ocr-state")
+        try FileManager.default.createDirectory(at: state, withIntermediateDirectories: true)
+        do {
+            try await BatchProcessor(recognizer: FakeRecognizer()).process(files: [source], destination: state, configuration: Configuration()) { _ in }
+            XCTFail("Cannot export inside managed state")
+        } catch { XCTAssertTrue(String(describing: error).contains("managed state")) }
+        let index = try file("images/index.md", "user index")
+        do {
+            try await BatchProcessor(recognizer: FakeRecognizer()).process(files: [source], destination: source.deletingLastPathComponent(), configuration: Configuration()) { _ in }
+            XCTFail("Unowned index must be protected")
+        } catch { XCTAssertTrue(String(describing: error).contains("index.md")) }
+        XCTAssertEqual(try String(contentsOf: index), "user index")
+        XCTAssertEqual(try String(contentsOf: source), "original image")
+    }
     func testDestinationLockAndSymbolicLinkAreRejected() async throws {
         let a = try file("input/a.png", "one"), destination = root.appendingPathComponent("exports")
         let processor = BatchProcessor(recognizer: FakeRecognizer())
@@ -66,7 +133,13 @@ final class BatchProcessorTests: XCTestCase {
         withExtendedLifetime(lock) {}
         let link = root.appendingPathComponent("linked")
         try FileManager.default.createSymbolicLink(at: link, withDestinationURL: destination)
-        do { try await processor.process(files: [a], destination: link, configuration: Configuration()) { _ in }; XCTFail("Must reject symlink") } catch {}
+        for target in [link, link.appendingPathComponent("child")] {
+            do {
+                try await processor.process(files: [a], destination: target, configuration: Configuration()) { _ in }
+                XCTFail("Must reject a symlink destination or ancestor")
+            } catch { XCTAssertTrue(String(describing: error).contains("symlink")) }
+        }
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.appendingPathComponent("child").path))
     }
     func testUnownedOutputAndChangedSourceArePreserved() async throws {
         let a = try file("input/a.png", "one"), destination = root.appendingPathComponent("exports")

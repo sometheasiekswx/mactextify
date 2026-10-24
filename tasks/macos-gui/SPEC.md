@@ -27,6 +27,10 @@ history, automatic updates and subject-specific answer interpretation are outsid
 - Preserve original sources, edited exports and unowned files. Reject incompatible
   CLI state, user-created symlink destinations/ancestors and exports inside managed
   state. Recursively selected images remain discoverable after exporting beside them.
+- Missing completed exports must not block unrelated selected images or be
+  recreated for unselected images. An explicit Extract action restores a selected
+  image's missing export from saved text only when content and settings match.
+  Keep missing files out of the generated index; preserve receipts for later reuse.
 - Report per-item outcomes. Recognition failures may continue; publication errors
   stop the batch. Cancellation preserves completed work and recoverable state.
 - Provide open-export and Reveal in Finder actions. Warn before quitting during work.
@@ -49,7 +53,9 @@ values and removes hidden controls from accessibility traversal. Invalid destina
 feedback remains visible outside the disclosure and disables extraction.
 
 Reveal stable settings controls inside a clipped height animation lasting 0.20
-seconds, without a competing slide transition. Disable animation for Reduce Motion.
+seconds, with the surrounding layout in the same animation transaction. Group
+the panel geometry so its header, border and controls move together. Use a stable
+rotating chevron. Disable animation for Reduce Motion.
 Provide meaningful accessibility labels and non-color status.
 Full keyboard navigation, VoiceOver and alternative accessibility settings remain
 acceptance requirements pending complete manual verification.

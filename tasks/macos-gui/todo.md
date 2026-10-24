@@ -14,7 +14,9 @@ Evidence and commands: [validation](validation.md).
 - [x] Compact 544 × 720 layout, expanding empty drop area, combined picker and selectable/copyable paths.
 - [x] Direct output into the selected source/parent folder, with original and export preservation checks.
 - [x] Populated 17-image queue, excluded-item popover and invalid-name flow checked in the native app.
-- [x] 72 Swift tests, 5 packaging tests and CLI/install smoke checks.
+- [x] 75 Swift tests, 5 packaging tests and CLI/install smoke checks.
+- [x] Missing old exports do not block new batches; selected missing exports restore from saved text.
+- [x] Slowed native motion inspection and normal-speed rapid disclosure toggles.
 - [x] Source archive and locally signed application build.
 
 ## Outstanding verification and distribution

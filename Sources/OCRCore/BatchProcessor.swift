@@ -98,12 +98,12 @@ public final class BatchProcessor {
             let file = entriesDir.appendingPathComponent(entry.receipt.id + ".json")
             try store.write(encoder.encode(entry), to: file, replace: store.exists(file))
         }
-        func publish(_ entry: inout BatchEntry) throws {
+        func publish(_ entry: inout BatchEntry, restoreMissing: Bool = false) throws {
             let output = dest.appendingPathComponent(entry.receipt.outputName)
             if store.exists(output) {
                 guard try store.read(output) == outputData(entry) else { throw OCRFailure("An existing export was edited; it will not be replaced.") }
             } else {
-                guard entry.receipt.stage == .prepared else { throw OCRFailure("An existing export is missing; automatic replacement is disabled.") }
+                guard entry.receipt.stage == .prepared || restoreMissing else { throw OCRFailure("Select this image and extract again to restore its missing export.") }
                 try store.write(outputData(entry), to: output)
             }
             try checkpoint(.outputPublished)
@@ -113,10 +113,19 @@ public final class BatchProcessor {
             var entry = try JSONDecoder().decode(BatchEntry.self, from: store.read(url))
             try entry.receipt.validate(fileID: url.deletingPathExtension().lastPathComponent)
             guard !entry.receipt.configuration.archive, entry.source.isFileURL, entry.source.path.hasPrefix("/") else { throw OCRFailure("Invalid batch source or archive policy.") }
-            try publish(&entry)
+            // Finish interrupted publications, but do not resurrect completed
+            // exports the user removed from an unrelated previous batch.
+            if entry.receipt.stage == .prepared || store.exists(dest.appendingPathComponent(entry.receipt.outputName)) {
+                try publish(&entry)
+            }
             entries[entry.receipt.id] = entry
         }
-        defer { try? store.rebuildIndex(entries.values.map(\.receipt)) }
+        func rebuildIndex() throws {
+            try store.rebuildIndex(entries.values.filter {
+                store.exists(dest.appendingPathComponent($0.receipt.outputName))
+            }.map(\.receipt))
+        }
+        defer { try? rebuildIndex() }
         for (index, source) in files.enumerated() {
             if Task.isCancelled {
                 for pending in files[index...] { await event(BatchEvent(source: pending, state: .cancelled, detail: "Stopped before extraction", output: nil)) }
@@ -126,9 +135,18 @@ public final class BatchProcessor {
             var publishing = false
             do {
                 let data = try store.read(source), id = digest(data)
-                if let entry = entries[id] {
+                if var entry = entries[id] {
                     guard entry.receipt.configuration == configuration else { throw OCRFailure("Saved settings differ. Choose a new destination for different settings.") }
-                    await event(BatchEvent(source: source, state: .skipped, detail: "Already extracted or duplicate content", output: dest.appendingPathComponent(entry.receipt.outputName)))
+                    let output = dest.appendingPathComponent(entry.receipt.outputName)
+                    if !store.exists(output) {
+                        // The explicit Extract action authorizes restoring only
+                        // selected, matching content with the same saved settings.
+                        publishing = true
+                        try publish(&entry, restoreMissing: true)
+                        await event(BatchEvent(source: source, state: entry.receipt.reviewNeeded ? .needsReview : .exported, detail: "Restored missing export from saved text", output: output))
+                    } else {
+                        await event(BatchEvent(source: source, state: .skipped, detail: "Already extracted or duplicate content", output: output))
+                    }
                     continue
                 }
                 let result: Recognition
@@ -155,6 +173,6 @@ public final class BatchProcessor {
                 if publishing || entries.values.contains(where: { $0.receipt.stage == .prepared }) { throw error }
             }
         }
-        try store.rebuildIndex(entries.values.map(\.receipt))
+        try rebuildIndex()
     }
 }

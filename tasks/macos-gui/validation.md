@@ -6,7 +6,7 @@ This is development-build evidence, not certification for all supported systems.
 ## Automated checks
 | Check | Result |
 | --- | --- |
-| `swift test` | 72 tests passed |
+| `swift test` | 75 tests passed |
 | `python3 scripts/test-package-source.py` | 5 tests passed |
 | `python3 scripts/smoke-test.py` | Passed |
 | `python3 scripts/package-source.py` | Source archive generated |
@@ -99,3 +99,35 @@ visual inspection, minimum-size interactive resizing and VoiceOver remain unveri
 Resize gestures through the native automation surface did not change the window
 size, so the default-size check must not be presented as a minimum-size pass.
 No quantified animation-performance claim is made.
+
+## Missing-export and motion follow-up
+The missing-export error was reproduced when an unrelated completed receipt remained
+after its export had been removed. Three new regressions failed with the original
+error, then passed after the correction: unrelated missing exports no longer block
+a new batch or reappear; selected missing text/Markdown exports restore byte-for-byte
+from saved text without OCR; differing settings cannot restore an old export.
+The index excludes missing files. Existing edited-file, lock, no-clobber, cancellation
+and interrupted-publication tests remain passing in the full 75-test suite.
+
+Native verification used isolated synthetic files and copied synthetic batch state.
+A new invoice exported directly into a directory with a missing old export. Its
+expected text was present and the old export remained absent. Selecting the old
+image and extracting again restored identical saved text, with a visible restoration
+status. Original hashes were unchanged in both runs. No real destination was repaired
+or processed as part of this test.
+
+Earlier endpoint screenshots missed the animation defect. A temporary two-second
+animation exposed the header/border jumping ahead of the body and controls crossing
+into the drop area. Moving the animation to the shared layout and grouping panel
+geometry kept them aligned in intermediate native frames during hide and show.
+A stable rotating chevron replaces the changing action label. The final app restores
+0.20-second timing; normal-speed collapse/reopen and rapid keyboard toggles retained
+settings and hid collapsed controls from the accessibility tree. This is visual
+interaction evidence, not a frame-rate benchmark. The use of grouped geometry follows
+[Apple's geometryGroup documentation](https://developer.apple.com/documentation/swiftui/view/geometrygroup()).
+
+Review covered the working diff against the preceding UI commit, restoration scope,
+configuration matching, publication safety, index ownership, layout and accessibility
+state. No blocking finding remained. The broader manual/platform limitations above
+still apply. The CLI and storage implementation were unchanged in this follow-up;
+prior CLI smoke evidence remains applicable.

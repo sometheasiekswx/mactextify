@@ -49,3 +49,14 @@ ownership, no-clobber, locking and managed-state checks. Keep CLI destination ru
 unchanged. Apply the same trusted macOS alias checks to the immediate destination
 parent as to other ancestors. Add failing-then-passing regressions and verify real
 OCR into a synthetic source directory, including source-hash preservation.
+
+## Missing-export and motion follow-up
+Load completed receipts without requiring every old export to still exist. Keep
+interrupted-publication recovery, edited-file checks and atomic no-clobber writes.
+Restore only explicitly selected missing exports after content/configuration
+matching, and omit missing files from the index. Verify both unrelated and selected
+missing-export cases, matching saved text and unchanged source hashes.
+
+Animate the shared layout and group settings geometry so the panel and controls
+stay aligned during both hide and show. Inspect intermediate frames in a temporary
+slowed diagnostic build, then restore the production timing and verify rapid toggles.

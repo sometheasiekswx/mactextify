@@ -95,6 +95,59 @@ final class BatchProcessorTests: XCTestCase {
         XCTAssertTrue(try String(contentsOf: output).contains("nested/photo.png"))
         XCTAssertEqual(try String(contentsOf: source), "original image")
     }
+    func testMissingUnselectedExportDoesNotBlockDirectOutputOrReappear() async throws {
+        let old = try file("images/old.png", "old image"), current = try file("images/current.png", "current image")
+        let destination = old.deletingLastPathComponent(), processor = BatchProcessor(recognizer: FakeRecognizer())
+        var oldOutput: URL?
+        try await processor.process(files: [old], destination: destination, configuration: Configuration()) { oldOutput = $0.output ?? oldOutput }
+        let removed = try XCTUnwrap(oldOutput)
+        try FileManager.default.removeItem(at: removed)
+        var currentOutput: URL?
+        try await processor.process(files: [current], destination: destination, configuration: Configuration()) { currentOutput = $0.output ?? currentOutput }
+        let output = try XCTUnwrap(currentOutput)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: output.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: removed.path))
+        let index = try String(contentsOf: destination.appendingPathComponent("index.md"))
+        XCTAssertTrue(index.contains(output.lastPathComponent))
+        XCTAssertFalse(index.contains(removed.lastPathComponent))
+        XCTAssertEqual(try String(contentsOf: old), "old image")
+        XCTAssertEqual(try String(contentsOf: current), "current image")
+    }
+    func testExplicitExtractionRestoresSelectedMissingExportFromSavedText() async throws {
+        for format in [ExportFormat.text, .markdown] {
+            let source = try file("\(format)/photo.png", "original image")
+            let destination = source.deletingLastPathComponent(), fake = FakeRecognizer()
+            let processor = BatchProcessor(recognizer: fake)
+            var config = Configuration(); config.format = format
+            var output: URL?
+            try await processor.process(files: [source], destination: destination, configuration: config) { output = $0.output ?? output }
+            let saved = try XCTUnwrap(output), expected = try Data(contentsOf: saved)
+            try FileManager.default.removeItem(at: saved)
+            var restored = false
+            try await processor.process(files: [source], destination: destination, configuration: config) {
+                if $0.output == saved { restored = $0.detail.contains("Restored") }
+            }
+            XCTAssertTrue(restored)
+            XCTAssertEqual(try Data(contentsOf: saved), expected)
+            XCTAssertEqual(fake.calls, 1)
+            XCTAssertEqual(try String(contentsOf: source), "original image")
+        }
+    }
+    func testMissingExportWithDifferentSettingsIsNotRestored() async throws {
+        let source = try file("images/photo.png", "original image")
+        let destination = source.deletingLastPathComponent(), processor = BatchProcessor(recognizer: FakeRecognizer())
+        var output: URL?
+        try await processor.process(files: [source], destination: destination, configuration: Configuration()) { output = $0.output ?? output }
+        let saved = try XCTUnwrap(output)
+        try FileManager.default.removeItem(at: saved)
+        var changed = Configuration(); changed.format = .text
+        var failure = ""
+        try await processor.process(files: [source], destination: destination, configuration: changed) {
+            if $0.state == .failed { failure = $0.detail }
+        }
+        XCTAssertTrue(failure.contains("Saved settings differ"))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: saved.path))
+    }
     func testDirectDestinationUnderMacOSTemporaryAlias() async throws {
         let directory = URL(fileURLWithPath: "/tmp", isDirectory: true).appendingPathComponent("mactextify-test-" + UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)

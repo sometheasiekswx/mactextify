@@ -174,13 +174,16 @@ struct PearlView: View {
                     .disabled(session.busy)
                 if !session.items.isEmpty { queue }
                 else if !session.exclusions.isEmpty { exclusionsButton.frame(maxWidth: .infinity, alignment: .trailing) }
-                settings.fixedSize(horizontal: false, vertical: true)
+                settings.fixedSize(horizontal: false, vertical: true).geometryGroup()
                 if let issue = session.validation {
                     Label(issue, systemImage: "exclamationmark.triangle")
                         .font(.caption).frame(maxWidth: .infinity, alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }.padding(16)
+                // The queue/drop area, panel position and clipped body must
+                // share a transaction, otherwise the panel jumps ahead of its body.
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.20), value: expanded)
             Divider()
             footer
         }
@@ -289,11 +292,11 @@ struct PearlView: View {
                 HStack {
                     Text("Extracted text settings").fontWeight(.medium)
                     Spacer()
-                    Text(expanded ? "Hide" : "Change").font(.caption)
-                    Image(systemName: expanded ? "chevron.up" : "chevron.down").font(.caption)
+                    Image(systemName: "chevron.down").font(.caption)
+                        .rotationEffect(.degrees(expanded ? 180 : 0))
                 }.padding(12).contentShape(Rectangle())
             }.buttonStyle(.plain).focused($settingsFocused).accessibilityValue(expanded ? "Expanded" : "Collapsed")
-            SettingsDisclosure(expanded: expanded, reduceMotion: reduceMotion) {
+            SettingsDisclosure(expanded: expanded) {
                 VStack(alignment: .leading, spacing: 10) {
                     Divider()
                     HStack(spacing: 8) {
@@ -366,7 +369,6 @@ private struct DisclosureHeight: PreferenceKey {
 /// Stable controls reveal inside a clipped frame, without a competing slide transition.
 private struct SettingsDisclosure<Content: View>: View {
     let expanded: Bool
-    let reduceMotion: Bool
     @ViewBuilder let content: Content
     @State private var height: CGFloat = 0
     var body: some View {
@@ -380,7 +382,6 @@ private struct SettingsDisclosure<Content: View>: View {
             .accessibilityElement(children: .contain)
             .accessibilityHidden(!expanded)
             .onPreferenceChange(DisclosureHeight.self) { height = $0 }
-            .animation(reduceMotion ? nil : .easeInOut(duration: 0.20), value: expanded)
     }
 }
 

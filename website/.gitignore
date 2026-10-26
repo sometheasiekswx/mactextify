@@ -1,0 +1,7 @@
+node_modules/
+dist/
+public/downloads/
+public/release.json
+output/
+.generated/
+.playwright-cli/

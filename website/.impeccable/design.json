@@ -1,0 +1,656 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-26T15:39:03.326301+00:00",
+  "title": "Design System: MacTextify Website",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00542 95.10)",
+          "oklch(26.43% 0.00542 95.10)",
+          "oklch(37.86% 0.00542 95.10)",
+          "oklch(49.29% 0.00542 95.10)",
+          "oklch(60.71% 0.00542 95.10)",
+          "oklch(72.14% 0.00542 95.10)",
+          "oklch(83.57% 0.00542 95.10)",
+          "oklch(95% 0.00542 95.10)"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.00483 145.42)",
+          "oklch(26.43% 0.00483 145.42)",
+          "oklch(37.86% 0.00483 145.42)",
+          "oklch(49.29% 0.00483 145.42)",
+          "oklch(60.71% 0.00483 145.42)",
+          "oklch(72.14% 0.00483 145.42)",
+          "oklch(83.57% 0.00483 145.42)",
+          "oklch(95% 0.00483 145.42)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.01287 123.66)",
+          "oklch(26.43% 0.01287 123.66)",
+          "oklch(37.86% 0.01287 123.66)",
+          "oklch(49.29% 0.01287 123.66)",
+          "oklch(60.71% 0.01287 123.66)",
+          "oklch(72.14% 0.01287 123.66)",
+          "oklch(83.57% 0.01287 123.66)",
+          "oklch(95% 0.01287 123.66)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.01087 112.39)",
+          "oklch(26.43% 0.01087 112.39)",
+          "oklch(37.86% 0.01087 112.39)",
+          "oklch(49.29% 0.01087 112.39)",
+          "oklch(60.71% 0.01087 112.39)",
+          "oklch(72.14% 0.01087 112.39)",
+          "oklch(83.57% 0.01087 112.39)",
+          "oklch(95% 0.01087 112.39)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00800 106.55)",
+          "oklch(26.43% 0.00800 106.55)",
+          "oklch(37.86% 0.00800 106.55)",
+          "oklch(49.29% 0.00800 106.55)",
+          "oklch(60.71% 0.00800 106.55)",
+          "oklch(72.14% 0.00800 106.55)",
+          "oklch(83.57% 0.00800 106.55)",
+          "oklch(95% 0.00800 106.55)"
+        ]
+      },
+      "source-paper": {
+        "role": "neutral",
+        "displayName": "Source Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26.43% 0.00000 0.00)",
+          "oklch(37.86% 0.00000 0.00)",
+          "oklch(49.29% 0.00000 0.00)",
+          "oklch(60.71% 0.00000 0.00)",
+          "oklch(72.14% 0.00000 0.00)",
+          "oklch(83.57% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "source-line": {
+        "role": "neutral",
+        "displayName": "Source Line",
+        "tonalRamp": [
+          "oklch(15% 0.00828 121.64)",
+          "oklch(26.43% 0.00828 121.64)",
+          "oklch(37.86% 0.00828 121.64)",
+          "oklch(49.29% 0.00828 121.64)",
+          "oklch(60.71% 0.00828 121.64)",
+          "oklch(72.14% 0.00828 121.64)",
+          "oklch(83.57% 0.00828 121.64)",
+          "oklch(95% 0.00828 121.64)"
+        ]
+      },
+      "result-paper": {
+        "role": "neutral",
+        "displayName": "Result Paper",
+        "tonalRamp": [
+          "oklch(15% 0.01079 139.43)",
+          "oklch(26.43% 0.01079 139.43)",
+          "oklch(37.86% 0.01079 139.43)",
+          "oklch(49.29% 0.01079 139.43)",
+          "oklch(60.71% 0.01079 139.43)",
+          "oklch(72.14% 0.01079 139.43)",
+          "oklch(83.57% 0.01079 139.43)",
+          "oklch(95% 0.01079 139.43)"
+        ]
+      },
+      "result-ink": {
+        "role": "neutral",
+        "displayName": "Result Ink",
+        "tonalRamp": [
+          "oklch(15% 0.00986 125.69)",
+          "oklch(26.43% 0.00986 125.69)",
+          "oklch(37.86% 0.00986 125.69)",
+          "oklch(49.29% 0.00986 125.69)",
+          "oklch(60.71% 0.00986 125.69)",
+          "oklch(72.14% 0.00986 125.69)",
+          "oklch(83.57% 0.00986 125.69)",
+          "oklch(95% 0.00986 125.69)"
+        ]
+      },
+      "result-copy": {
+        "role": "neutral",
+        "displayName": "Result Copy",
+        "tonalRamp": [
+          "oklch(15% 0.01594 126.85)",
+          "oklch(26.43% 0.01594 126.85)",
+          "oklch(37.86% 0.01594 126.85)",
+          "oklch(49.29% 0.01594 126.85)",
+          "oklch(60.71% 0.01594 126.85)",
+          "oklch(72.14% 0.01594 126.85)",
+          "oklch(83.57% 0.01594 126.85)",
+          "oklch(95% 0.01594 126.85)"
+        ]
+      },
+      "result-line": {
+        "role": "neutral",
+        "displayName": "Result Line",
+        "tonalRamp": [
+          "oklch(15% 0.01425 128.88)",
+          "oklch(26.43% 0.01425 128.88)",
+          "oklch(37.86% 0.01425 128.88)",
+          "oklch(49.29% 0.01425 128.88)",
+          "oklch(60.71% 0.01425 128.88)",
+          "oklch(72.14% 0.01425 128.88)",
+          "oklch(83.57% 0.01425 128.88)",
+          "oklch(95% 0.01425 128.88)"
+        ]
+      },
+      "app-background": {
+        "role": "neutral",
+        "displayName": "App Background",
+        "tonalRamp": [
+          "oklch(15% 0.01091 139.43)",
+          "oklch(26.43% 0.01091 139.43)",
+          "oklch(37.86% 0.01091 139.43)",
+          "oklch(49.29% 0.01091 139.43)",
+          "oklch(60.71% 0.01091 139.43)",
+          "oklch(72.14% 0.01091 139.43)",
+          "oklch(83.57% 0.01091 139.43)",
+          "oklch(95% 0.01091 139.43)"
+        ]
+      },
+      "app-muted": {
+        "role": "neutral",
+        "displayName": "App Muted",
+        "tonalRamp": [
+          "oklch(15% 0.02135 131.50)",
+          "oklch(26.43% 0.02135 131.50)",
+          "oklch(37.86% 0.02135 131.50)",
+          "oklch(49.29% 0.02135 131.50)",
+          "oklch(60.71% 0.02135 131.50)",
+          "oklch(72.14% 0.02135 131.50)",
+          "oklch(83.57% 0.02135 131.50)",
+          "oklch(95% 0.02135 131.50)"
+        ]
+      },
+      "terminal-background": {
+        "role": "neutral",
+        "displayName": "Terminal Background",
+        "tonalRamp": [
+          "oklch(15% 0.01301 140.46)",
+          "oklch(26.43% 0.01301 140.46)",
+          "oklch(37.86% 0.01301 140.46)",
+          "oklch(49.29% 0.01301 140.46)",
+          "oklch(60.71% 0.01301 140.46)",
+          "oklch(72.14% 0.01301 140.46)",
+          "oklch(83.57% 0.01301 140.46)",
+          "oklch(95% 0.01301 140.46)"
+        ]
+      },
+      "terminal-ink": {
+        "role": "neutral",
+        "displayName": "Terminal Ink",
+        "tonalRamp": [
+          "oklch(15% 0.01436 128.63)",
+          "oklch(26.43% 0.01436 128.63)",
+          "oklch(37.86% 0.01436 128.63)",
+          "oklch(49.29% 0.01436 128.63)",
+          "oklch(60.71% 0.01436 128.63)",
+          "oklch(72.14% 0.01436 128.63)",
+          "oklch(83.57% 0.01436 128.63)",
+          "oklch(95% 0.01436 128.63)"
+        ]
+      },
+      "scan": {
+        "role": "secondary",
+        "displayName": "Scan",
+        "tonalRamp": [
+          "oklch(15% 0.06948 131.44)",
+          "oklch(26.43% 0.06948 131.44)",
+          "oklch(37.86% 0.06948 131.44)",
+          "oklch(49.29% 0.06948 131.44)",
+          "oklch(60.71% 0.06948 131.44)",
+          "oklch(72.14% 0.06948 131.44)",
+          "oklch(83.57% 0.06948 131.44)",
+          "oklch(95% 0.06948 131.44)"
+        ]
+      },
+      "selection": {
+        "role": "neutral",
+        "displayName": "Selection",
+        "tonalRamp": [
+          "oklch(15% 0.02340 128.77)",
+          "oklch(26.43% 0.02340 128.77)",
+          "oklch(37.86% 0.02340 128.77)",
+          "oklch(49.29% 0.02340 128.77)",
+          "oklch(60.71% 0.02340 128.77)",
+          "oklch(72.14% 0.02340 128.77)",
+          "oklch(83.57% 0.02340 128.77)",
+          "oklch(95% 0.02340 128.77)"
+        ]
+      },
+      "selection-ink": {
+        "role": "neutral",
+        "displayName": "Selection Ink",
+        "tonalRamp": [
+          "oklch(15% 0.00494 145.40)",
+          "oklch(26.43% 0.00494 145.40)",
+          "oklch(37.86% 0.00494 145.40)",
+          "oklch(49.29% 0.00494 145.40)",
+          "oklch(60.71% 0.00494 145.40)",
+          "oklch(72.14% 0.00494 145.40)",
+          "oklch(83.57% 0.00494 145.40)",
+          "oklch(95% 0.00494 145.40)"
+        ]
+      },
+      "midnight-paper": {
+        "role": "neutral",
+        "displayName": "Midnight Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00492 145.40)",
+          "oklch(26.43% 0.00492 145.40)",
+          "oklch(37.86% 0.00492 145.40)",
+          "oklch(49.29% 0.00492 145.40)",
+          "oklch(60.71% 0.00492 145.40)",
+          "oklch(72.14% 0.00492 145.40)",
+          "oklch(83.57% 0.00492 145.40)",
+          "oklch(95% 0.00492 145.40)"
+        ]
+      },
+      "midnight-muted": {
+        "role": "neutral",
+        "displayName": "Midnight Muted",
+        "tonalRamp": [
+          "oklch(15% 0.01459 124.61)",
+          "oklch(26.43% 0.01459 124.61)",
+          "oklch(37.86% 0.01459 124.61)",
+          "oklch(49.29% 0.01459 124.61)",
+          "oklch(60.71% 0.01459 124.61)",
+          "oklch(72.14% 0.01459 124.61)",
+          "oklch(83.57% 0.01459 124.61)",
+          "oklch(95% 0.01459 124.61)"
+        ]
+      },
+      "midnight-line": {
+        "role": "neutral",
+        "displayName": "Midnight Line",
+        "tonalRamp": [
+          "oklch(15% 0.01274 131.55)",
+          "oklch(26.43% 0.01274 131.55)",
+          "oklch(37.86% 0.01274 131.55)",
+          "oklch(49.29% 0.01274 131.55)",
+          "oklch(60.71% 0.01274 131.55)",
+          "oklch(72.14% 0.01274 131.55)",
+          "oklch(83.57% 0.01274 131.55)",
+          "oklch(95% 0.01274 131.55)"
+        ]
+      },
+      "midnight-surface": {
+        "role": "neutral",
+        "displayName": "Midnight Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00927 145.31)",
+          "oklch(26.43% 0.00927 145.31)",
+          "oklch(37.86% 0.00927 145.31)",
+          "oklch(49.29% 0.00927 145.31)",
+          "oklch(60.71% 0.00927 145.31)",
+          "oklch(72.14% 0.00927 145.31)",
+          "oklch(83.57% 0.00927 145.31)",
+          "oklch(95% 0.00927 145.31)"
+        ]
+      },
+      "contrast-muted": {
+        "role": "neutral",
+        "displayName": "Contrast Muted",
+        "tonalRamp": [
+          "oklch(15% 0.01764 128.96)",
+          "oklch(26.43% 0.01764 128.96)",
+          "oklch(37.86% 0.01764 128.96)",
+          "oklch(49.29% 0.01764 128.96)",
+          "oklch(60.71% 0.01764 128.96)",
+          "oklch(72.14% 0.01764 128.96)",
+          "oklch(83.57% 0.01764 128.96)",
+          "oklch(95% 0.01764 128.96)"
+        ]
+      },
+      "contrast-line": {
+        "role": "neutral",
+        "displayName": "Contrast Line",
+        "tonalRamp": [
+          "oklch(15% 0.02169 130.40)",
+          "oklch(26.43% 0.02169 130.40)",
+          "oklch(37.86% 0.02169 130.40)",
+          "oklch(49.29% 0.02169 130.40)",
+          "oklch(60.71% 0.02169 130.40)",
+          "oklch(72.14% 0.02169 130.40)",
+          "oklch(83.57% 0.02169 130.40)",
+          "oklch(95% 0.02169 130.40)"
+        ]
+      },
+      "midnight-contrast-muted": {
+        "role": "neutral",
+        "displayName": "Midnight Contrast Muted",
+        "tonalRamp": [
+          "oklch(15% 0.02359 131.16)",
+          "oklch(26.43% 0.02359 131.16)",
+          "oklch(37.86% 0.02359 131.16)",
+          "oklch(49.29% 0.02359 131.16)",
+          "oklch(60.71% 0.02359 131.16)",
+          "oklch(72.14% 0.02359 131.16)",
+          "oklch(83.57% 0.02359 131.16)",
+          "oklch(95% 0.02359 131.16)"
+        ]
+      },
+      "midnight-contrast-line": {
+        "role": "neutral",
+        "displayName": "Midnight Contrast Line",
+        "tonalRamp": [
+          "oklch(15% 0.02647 132.20)",
+          "oklch(26.43% 0.02647 132.20)",
+          "oklch(37.86% 0.02647 132.20)",
+          "oklch(49.29% 0.02647 132.20)",
+          "oklch(60.71% 0.02647 132.20)",
+          "oklch(72.14% 0.02647 132.20)",
+          "oklch(83.57% 0.02647 132.20)",
+          "oklch(95% 0.02647 132.20)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Observed display role; responsive overrides are documented in DESIGN.md."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Observed headline role; responsive overrides are documented in DESIGN.md."
+      },
+      "serif-emphasis": {
+        "displayName": "Serif Emphasis",
+        "purpose": "Italic emphasis inside headings; inherits their size."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Observed title role; responsive overrides are documented in DESIGN.md."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Observed body role; responsive overrides are documented in DESIGN.md."
+      },
+      "body-small": {
+        "displayName": "Body Small",
+        "purpose": "Observed body small role; responsive overrides are documented in DESIGN.md."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Observed button role; responsive overrides are documented in DESIGN.md."
+      },
+      "button-small": {
+        "displayName": "Button Small",
+        "purpose": "Observed button small role; responsive overrides are documented in DESIGN.md."
+      },
+      "text-link": {
+        "displayName": "Text Link",
+        "purpose": "Observed text link role; responsive overrides are documented in DESIGN.md."
+      },
+      "navigation": {
+        "displayName": "Navigation",
+        "purpose": "Observed navigation role; responsive overrides are documented in DESIGN.md."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Observed label role; responsive overrides are documented in DESIGN.md."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Observed code role; responsive overrides are documented in DESIGN.md."
+      }
+    },
+    "shadows": [
+      {
+        "name": "source-paper",
+        "value": "0 12px 32px #1a241a12",
+        "purpose": "Separates the white source document from its stage."
+      },
+      {
+        "name": "result-paper",
+        "value": "0 12px 32px #1a241a18",
+        "purpose": "Separates the dark extracted result from its stage."
+      },
+      {
+        "name": "connector-icon",
+        "value": "0 6px 20px #1112",
+        "purpose": "Lifts the app icon between source and result."
+      },
+      {
+        "name": "native-capture",
+        "value": "0 28px 80px #0005",
+        "purpose": "Anchors the actual native app image."
+      },
+      {
+        "name": "download-icon",
+        "value": "0 14px 28px #141e1415",
+        "purpose": "Lifts the existing app icon above the download heading."
+      }
+    ],
+    "motion": [
+      {
+        "name": "action-transition",
+        "value": "180ms ease",
+        "purpose": "Primary-button transform and link-arrow movement."
+      },
+      {
+        "name": "action-hover",
+        "value": "translateY(-2px)",
+        "purpose": "Primary button hover; disabled under reduced motion."
+      },
+      {
+        "name": "action-press",
+        "value": "scale(0.97)",
+        "purpose": "Button and primary-action active feedback; disabled under reduced motion."
+      },
+      {
+        "name": "link-hover",
+        "value": "translateX(4px)",
+        "purpose": "Text-link and inline-link arrows; reduced motion suppresses both transforms."
+      },
+      {
+        "name": "hero-entry",
+        "value": "1000ms; outExpo; stagger(110); translateY: 22px → 0; opacity: 0.45 → 1",
+        "purpose": "Two heading lines; bypassed with reduced motion."
+      },
+      {
+        "name": "paper-settle",
+        "value": "1100ms; outExpo; stagger(100); translateY: 25px → 0; rotate: -5deg / 5deg; opacity: 0 → 1",
+        "purpose": "Back papers; bypassed with reduced motion."
+      },
+      {
+        "name": "extraction-clock",
+        "value": "3800ms linear; autoplay: false",
+        "purpose": "Starts once at 25% viewport intersection; pauses offscreen and when hidden; pause/replay/range controls remain available."
+      },
+      {
+        "name": "result-reveal",
+        "value": "220ms ease; thresholds: 10%, 25%, 40%, 55%, 70%",
+        "purpose": "Opacity and translation reveal sample lines; full result is the reduced-motion initial state."
+      },
+      {
+        "name": "navigation-spring",
+        "value": "spring({ stiffness: 200, damping: 28 })",
+        "purpose": "Anime.js 4.5.0 spring for keyboard focus and pointer-leave reset. Pointer tracking and reduced-motion updates are direct."
+      },
+      {
+        "name": "native-scroll",
+        "value": "translateY: 26px → -14px; linear; sync: 0.4",
+        "purpose": "Bound to the app section, enter bottom bottom and leave top top; omitted with reduced motion."
+      },
+      {
+        "name": "copy-status",
+        "value": "3500ms",
+        "purpose": "Clears transient copy feedback; not a decorative animation."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Disables CSS animations/transitions and smooth scrolling; completes scan, hides scan line, skips Anime.js entrance/scroll motion, and updates navigation directly."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-min",
+        "value": "1600px"
+      },
+      {
+        "name": "compact-desktop-max",
+        "value": "1100px"
+      },
+      {
+        "name": "tablet-max",
+        "value": "800px"
+      },
+      {
+        "name": "phone-max",
+        "value": "600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "description": "Filled action with quiet lift, press feedback, and a visible keyboard outline.",
+      "html": "<a class=\"ds-primary\" href=\"#download\">Download for Mac <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-primary{font-family:\"Manrope Variable\", system-ui, sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--ink,#1c1e1c);color:var(--paper,#f4f3ef);min-height:54px;padding:13px 23px;border:0;border-radius:9px;font-size:14px;font-weight:650;line-height:1.5;text-decoration:none;cursor:pointer;transition:transform 180ms ease}.ds-primary:hover{transform:translateY(-2px);background:color-mix(in srgb,var(--ink,#1c1e1c) 85%,var(--paper,#f4f3ef))}.ds-primary:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-primary:active{transform:scale(.97)}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}.ds-primary:hover,.ds-primary:active{transform:none}}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Compact header action",
+      "kind": "button",
+      "description": "The header sizing of the same primary action.",
+      "html": "<a class=\"ds-compact\" href=\"#download\">Get MacTextify <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-compact{font-family:\"Manrope Variable\", system-ui, sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--ink,#1c1e1c);color:var(--paper,#f4f3ef);min-height:43px;padding:10px 16px;border:0;border-radius:9px;font-size:12px;font-weight:650;line-height:1.5;text-decoration:none;cursor:pointer;transition:transform 180ms ease}.ds-compact:hover{transform:translateY(-2px);background:color-mix(in srgb,var(--ink,#1c1e1c) 85%,var(--paper,#f4f3ef))}.ds-compact:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-compact:active{transform:scale(.97)}@media(prefers-reduced-motion:reduce){.ds-compact{transition:none}.ds-compact:hover,.ds-compact:active{transform:none}}",
+      "refersTo": "button-compact"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "description": "Quiet secondary link with an arrow; the representative link does not include a service icon.",
+      "html": "<a class=\"ds-text-link\" href=\"#open-source\">View on GitHub <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-text-link{font-family:\"Manrope Variable\", system-ui, sans-serif;display:inline-flex;gap:9px;align-items:center;color:var(--ink,#1c1e1c);font-size:13px;font-weight:650;line-height:1.65;text-decoration:none}.ds-text-link svg{transition:transform 180ms ease}.ds-text-link:hover svg{transform:translateX(4px)}.ds-text-link:focus-visible{outline:2px solid currentColor;outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-text-link svg{transition:none}.ds-text-link:hover svg{transform:none}}",
+      "refersTo": "text-link"
+    },
+    {
+      "name": "Spotlight navigation",
+      "kind": "nav",
+      "description": "Static light position and actual link states. Pointer and keyboard spring choreography remain in SpotlightNav.tsx.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><span class=\"ds-nav-light\" aria-hidden=\"true\"></span><a href=\"#how-it-works\">How it works</a><a href=\"#the-app\">The app</a><a href=\"#open-source\">Open source</a></nav>",
+      "css": ".ds-nav{font-family:\"Manrope Variable\", system-ui, sans-serif;display:flex;align-items:center;position:relative;isolation:isolate;width:fit-content;border-bottom:1px solid var(--line,#d7d8d0);color:var(--ink,#1c1e1c)}.ds-nav a{position:relative;z-index:1;padding:12px 18px;color:inherit;font-size:12px;font-weight:600;line-height:1.65;text-decoration:none}.ds-nav a:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-nav-light{position:absolute;inset:0;pointer-events:none;background:radial-gradient(65px circle at 70px 110%,color-mix(in srgb,var(--ink,#1c1e1c) 12%,transparent),transparent 90%)}@media(prefers-contrast:more){.ds-nav-light{display:none}}",
+      "refersTo": "navigation-link"
+    },
+    {
+      "name": "Output format selector",
+      "kind": "chip",
+      "description": "Pressed-state styling for the two native output format buttons; state switching belongs to React.",
+      "html": "<div class=\"ds-format\" aria-label=\"Sample output format\"><button type=\"button\" aria-pressed=\"true\">.txt</button><button type=\"button\" aria-pressed=\"false\">.md</button></div>",
+      "css": ".ds-format{font-family:\"Manrope Variable\", system-ui, sans-serif;display:flex;width:fit-content;border:1px solid var(--line,#d7d8d0);padding:3px;border-radius:7px;color:var(--ink,#1c1e1c)}.ds-format button{font:inherit;font-size:10px;line-height:1.65;background:none;color:inherit;border:0;padding:4px 12px;border-radius:4px;cursor:pointer}.ds-format button[aria-pressed=\"true\"]{background:var(--ink,#1c1e1c);color:var(--paper,#f4f3ef)}.ds-format button:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-format button:active{transform:scale(.97)}@media(prefers-reduced-motion:reduce){.ds-format button:active{transform:none}}",
+      "refersTo": "format-selected"
+    },
+    {
+      "name": "Extraction progress",
+      "kind": "input",
+      "description": "Native keyboard-operable range; the browser supplies its track and thumb shape.",
+      "html": "<label class=\"ds-range\"><span class=\"ds-range-label\">Extraction demo progress</span><input type=\"range\" min=\"0\" max=\"100\" value=\"100\" aria-label=\"Extraction demo progress\" /></label>",
+      "css": ".ds-range{display:flex;align-items:center;max-width:590px;position:relative}.ds-range-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.ds-range input{width:100%;height:24px;accent-color:var(--ink,#1c1e1c);cursor:ew-resize}.ds-range input:focus-visible{outline:2px solid currentColor;outline-offset:5px;}"
+    },
+    {
+      "name": "Output file chip",
+      "kind": "chip",
+      "description": "Noninteractive illustrative file label.",
+      "html": "<span class=\"ds-file-chip\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14 3H5v18h14V8Zm0 0v5h5M8 12h8m-8 4h6\"/></svg>Project notes.md</span>",
+      "css": ".ds-file-chip{font-family:\"Manrope Variable\", system-ui, sans-serif;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface,#eaeae4);color:var(--ink,#1c1e1c);border-radius:7px;font-size:11px;line-height:1.65}",
+      "refersTo": "file-chip"
+    },
+    {
+      "name": "Extraction result paper",
+      "kind": "custom",
+      "description": "Completed synthetic text result. This preview is static; the full source/result stage and copy behavior live in the application.",
+      "html": "<section class=\"ds-result\"><div class=\"ds-file-bar\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14 3H5v18h14V8Zm0 0v5h5M8 12h8m-8 4h6\"/></svg><span>Project notes.txt</span><span class=\"ds-result-check\" aria-label=\"Sample complete\">✓</span></div><div class=\"ds-result-body\"><p class=\"ds-result-label\">PROJECT NOTES</p><p class=\"ds-result-title\">A calmer workspace</p><p>Keep the useful words.</p><p>Leave the originals untouched.</p><p>Next step: turn ideas into action.</p></div><div class=\"ds-result-footer\"><span>Editable. Searchable. Yours.</span><button type=\"button\" aria-label=\"Copy sample text\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"13\" rx=\"2\"/><path d=\"M15 8V4H4v12h4\"/></svg></button></div></section>",
+      "css": ".ds-result{font-family:\"Manrope Variable\", system-ui, sans-serif;background:#232722;color:#e6e9e2;border-radius:10px;box-shadow:0 12px 32px #1a241a18;overflow:hidden;max-width:530px}.ds-file-bar{display:flex;gap:8px;align-items:center;padding:12px 16px;font-size:10px;line-height:1.5;border-bottom:1px solid #42463e;color:#d8dcd3}.ds-result-check{margin-left:auto}.ds-result-body{min-height:190px;padding:16px 24px}.ds-result-body p{margin:0 0 11px;color:#cbd0c5;font-size:11px;line-height:1.5}.ds-result-body .ds-result-label{font-size:8px;letter-spacing:.06em}.ds-result-body .ds-result-title{font-size:17px;font-weight:600;letter-spacing:-.02em;color:#f6f7f3;margin-bottom:14px}.ds-result-footer{min-height:35px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:9px;color:#bcc2b5;padding:0 12px 0 24px;border-top:1px solid #42463e}.ds-result-footer button{display:grid;place-items:center;width:38px;height:35px;border:0;background:none;color:inherit;cursor:pointer}.ds-result-footer button:hover{color:#fff}.ds-result-footer button:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-result-footer button:active{transform:scale(.97)}.ds-result-footer button:disabled{opacity:.4;cursor:default}@media(prefers-reduced-motion:reduce){.ds-result-footer button:active{transform:none}}",
+      "refersTo": "extraction-result"
+    },
+    {
+      "name": "Download panel",
+      "kind": "card",
+      "description": "Preview warning precedes the action. This component preview shows the layout; it is not a downloadable artifact.",
+      "html": "<section class=\"ds-download\"><h3>MacTextify for Mac</h3><p class=\"ds-release-meta\">macOS 14+ · Free &amp; open source</p><p class=\"ds-warning\"><strong>Unsigned preview.</strong> This build isn’t Developer ID signed or notarized by Apple. macOS may block it on first launch.</p><a class=\"ds-primary ds-download-action\" href=\"#download\">Download preview <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a><details class=\"ds-install\"><summary>How to install this preview</summary><p>Download and unzip the archive. Move MacTextify.app to Applications.</p></details><p class=\"ds-source\">Prefer to build it yourself? <a href=\"#open-source\">Get the source</a></p></section>",
+      "css": ".ds-primary{font-family:\"Manrope Variable\", system-ui, sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:12px;background:var(--ink,#1c1e1c);color:var(--paper,#f4f3ef);min-height:54px;padding:13px 23px;border:0;border-radius:9px;font-size:14px;font-weight:650;line-height:1.5;text-decoration:none;cursor:pointer;transition:transform 180ms ease}.ds-primary:hover{transform:translateY(-2px);background:color-mix(in srgb,var(--ink,#1c1e1c) 85%,var(--paper,#f4f3ef))}.ds-primary:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-primary:active{transform:scale(.97)}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}.ds-primary:hover,.ds-primary:active{transform:none}}.ds-download{font-family:\"Manrope Variable\", system-ui, sans-serif;padding:37px;background:var(--paper,#f4f3ef);color:var(--ink,#1c1e1c);border-radius:var(--radius,14px);max-width:500px;line-height:1.65}.ds-download h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}.ds-download p{color:var(--muted,#666961)}.ds-release-meta{font-size:12px;margin:8px 0 0;line-height:1.8}.ds-warning{font-size:12px;line-height:1.8;margin:16px 0 0}.ds-warning strong{color:var(--ink,#1c1e1c);font-weight:650}.ds-download-action{display:flex;margin:24px 0 18px}.ds-download-action svg{margin-left:auto}.ds-install{margin-top:18px;border-top:1px solid var(--line,#d7d8d0);padding-top:15px;font-size:11px}.ds-install summary{cursor:pointer;min-height:30px;font-weight:600}.ds-install summary:focus-visible,.ds-source a:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-source{font-size:10px;padding-top:20px;margin-top:20px;border-top:1px solid var(--line,#d7d8d0)}.ds-source a{color:var(--ink,#1c1e1c);text-underline-offset:4px}@media(max-width:800px){.ds-download{padding:26px}}@media(max-width:600px){.ds-download{padding:25px}}",
+      "refersTo": "download-panel"
+    },
+    {
+      "name": "Build terminal",
+      "kind": "custom",
+      "description": "Compact dark code surface with an explicit copy control; this snippet is a visual excerpt, not a build runner.",
+      "html": "<section class=\"ds-terminal\"><div class=\"ds-terminal-header\"><span>Build it on your Mac</span><button type=\"button\" aria-label=\"Copy build commands\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"8\" y=\"8\" width=\"12\" height=\"13\" rx=\"2\"/><path d=\"M15 8V4H4v12h4\"/></svg><span>Copy</span></button></div><pre><code>./scripts/check-prerequisites.sh\n./scripts/build-app.sh</code></pre><p>Requires full Xcode + Swift 5.9+.</p></section>",
+      "css": ".ds-terminal{font-family:\"Manrope Variable\", system-ui, sans-serif;background:#242923;color:#e4e9df;border-radius:12px;overflow:hidden;min-width:0;max-width:540px}.ds-terminal-header{display:flex;justify-content:space-between;gap:12px;padding:18px 23px;font-size:11px;line-height:1.65;border-bottom:1px solid #474e41}.ds-terminal-header button{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:10px;border:0;background:none;color:inherit;cursor:pointer}.ds-terminal-header button:focus-visible{outline:2px solid currentColor;outline-offset:5px;}.ds-terminal-header button:active{transform:scale(.97)}.ds-terminal pre{padding:24px;overflow-x:auto;margin:0;font-family:monospace;font-size:10px;line-height:2.2}.ds-terminal>p{margin:0;padding:0 24px 23px;color:#b5bdaf;font-size:10px;line-height:1.65}@media(prefers-reduced-motion:reduce){.ds-terminal-header button:active{transform:none}}",
+      "refersTo": "terminal"
+    }
+  ],
+  "narrative": {
+    "northStar": "Pearl/Midnight, expressed as paper and words",
+    "overview": "This website extends the established MacTextify identity into an editorial web surface. Warm paper, near-black ink, generous whitespace, and a restrained dark app region make the words and the actual product the visual subjects. The existing logo and native app imagery remain authoritative; this record does not redefine the native app’s design system.\n\nManrope gives the interface a clear, compact voice. Georgia italics provide emphasis inside large headings, while small labels, thin rules, and gently rounded document surfaces carry the supporting information. Depth comes from paper stacks and product imagery. Motion explains extraction and responds to navigation or scrolling; it does not run as an endless background effect.",
+    "keyCharacteristics": [
+      "Warm paper and ink, with a user-selectable Midnight palette.",
+      "Manrope headings and controls with selective Georgia italic emphasis.",
+      "Asymmetric editorial layouts that become a single reading column on phones.",
+      "Light source paper paired with a fixed dark text result and real native app imagery.",
+      "User-controllable motion with reduced-motion and higher-contrast alternatives."
+    ],
+    "rules": [
+      {
+        "name": "The Theme Boundary Rule",
+        "body": "Theme the website’s paper, ink, muted text, dividers, and supporting surfaces together. Keep the source image, dark extraction result, dark app region, and terminal faithful to their current content treatments.",
+        "section": "colors"
+      },
+      {
+        "name": "The Emphasis Rule",
+        "body": "Use Georgia for an emphasized phrase inside a heading. Keep navigation, body copy, controls, and technical labels in their established families.",
+        "section": "typography"
+      },
+      {
+        "name": "The Material Depth Rule",
+        "body": "Reserve shadows for documents, the app icon, and the native capture. Editorial copy, navigation, and FAQ rows rely on whitespace and rules.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the existing logo and distinguish the synthetic interactive illustration from the actual native app capture.",
+      "Do preserve the Pearl/Midnight palette mapping and the fixed content colors inside the extraction result, app showcase, and terminal.",
+      "Do keep headings in Manrope with selective Georgia emphasis, and preserve concise line lengths in supporting copy.",
+      "Do keep the whole source image visible with object-fit: contain at every breakpoint.",
+      "Do expose pause/replay, progress, format selection, and copy status using native controls and accessible labels.",
+      "Do keep the preview’s signing warning above the download action and preserve the source-build alternative.",
+      "Do provide reduced-motion and higher-contrast presentations and keep meaningful content available without entrance animation."
+    ],
+    "donts": [
+      "Don’t treat these web tokens as a redesign of the native macOS app.",
+      "Don’t replace product evidence with testimonials, benchmarks, or release assurances that the project does not supply.",
+      "Don’t turn the soft navigation spotlight or scan wash into decorative page-wide gradients.",
+      "Don’t add endless ambient motion or hide the completed example for reduced-motion users.",
+      "Don’t use the illustrative scan to imply that this website uploads images or performs OCR.",
+      "Don’t crop the sample screenshot or replace its complete words with a truncated image."
+    ]
+  }
+}

@@ -22,3 +22,8 @@ graphify-out/
 # Public README captures use synthetic documents only.
 !/assets/readme/app-workspace.png
 !/assets/readme/app-detail.png
+
+# Public website assets: icons and inspected synthetic app captures only.
+!/website/public/media/app-icon.png
+!/website/public/media/native-app.png
+!/website/public/media/sample-project.png

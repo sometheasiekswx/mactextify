@@ -1,0 +1,17 @@
+{
+  "app-icon.png": {
+    "sha256": "c8f605b35ea5181dd27670fae4e90ae3e587a3f218300658eb666ab3ce3a07d6",
+    "source": "assets/AppIcon.png",
+    "notes": "Existing public MacTextify icon; unchanged bytes."
+  },
+  "native-app.png": {
+    "sha256": "4a3d4f7e7ad7454f05f121d7f826393c4c5b0ae9b0e83fb19062296ac67a0892",
+    "source": ".local-notes/readme-captures/completed-light.png",
+    "notes": "Actual native app capture using three synthetic fixtures, already used in published README composition; unchanged bytes."
+  },
+  "sample-project.png": {
+    "sha256": "e62615bf0adba24b228b368a9250bfa7120b555b693ff12be0170454b8075f35",
+    "source": ".local-notes/readme-captures/sample-project.png",
+    "notes": "Synthetic Project notes fixture, not a private screenshot; unchanged bytes."
+  }
+}

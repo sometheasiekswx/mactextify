@@ -13,6 +13,7 @@
 </p>
 
 <p align="center">
+  <a href="https://sometheasiekswx.github.io/mactextify/">Website</a> ·
   <a href="#quick-start">Get started</a> ·
   <a href="#how-it-works">How it works</a> ·
   <a href="docs/cli.md">Command-line guide</a> ·

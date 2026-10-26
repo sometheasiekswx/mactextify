@@ -46,15 +46,19 @@ GitHub's Website checks workflow installs the lockfile, checks formatting, runs 
 
 The preview is ad-hoc signed, **not Developer ID signed or notarized**. It is clearly labelled before download. Only the architecture actually built is advertised; Intel users can use source builds until an Intel/universal artifact has been verified. Do not change the label to “notarized” without a separate signing/notarization implementation and verified release evidence.
 
-## Publish later
+## Public hosting
 
-No public deployment or GitHub Release is created by these scripts.
+The selected public URL is https://sometheasiekswx.github.io/mactextify/. The `Website checks and Pages` workflow builds and publishes this site from `main` after formatting, regression tests and TypeScript/build checks pass. Pull requests run checks only. The `github-pages` environment is the production deployment target; only `website/dist/` is uploaded.
+
+This workflow explicitly requires a source-only build. It never publishes the locally prepared app ZIP or creates a GitHub Release. Public binary distribution remains a separate release decision. See [hosting and recovery](../tasks/website/hosting.md) for setup, verification and rollback.
+
+## Other deployment targets
 
 For Vercel or another static host, use root directory `website`, install `npm ci --ignore-scripts`, build `npm run build`, output `dist`. A build from Git alone has the honest source-only fallback. To publish a downloadable preview, deploy the already-verified local `dist/` containing the archive, or explicitly supply the verified archive/checksum/manifest to the build. Review the archive before uploading. GitHub Pages also supports the static output with the configured relative base.
 
 Before a public app preview, test the exact downloaded ZIP on a clean supported Mac and exercise the app-specific Gatekeeper path; a successful local launch or `codesign --verify` does not establish this. Do not disable Gatekeeper or remove quarantine as an installation shortcut. Apple guidance: https://support.apple.com/en-au/102445.
 
-Before public site publication, choose the hosting account, domain and audience; verify the live page, download status/content/hash, navigation, mobile layout and HTTPS on that actual target. Keep the previous static deployment/archive for rollback. No DNS changes or telemetry are needed by this site.
+For a different target or custom domain, choose the hosting account, domain and audience; verify the live page, download status/content/hash, navigation, mobile layout and HTTPS on that actual target. Keep the previous static deployment/archive for rollback. No DNS changes or telemetry are needed by the current GitHub Pages site.
 
 ## Evidence and assets
 

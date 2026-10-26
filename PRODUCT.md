@@ -25,9 +25,11 @@ MacTextify name, existing logo and Pearl/Midnight black-and-white branding. User
 README.md, docs/distribution.md, existing synthetic native app captures in assets/readme/, and public MIT source at https://github.com/sometheasiekswx/mactextify. No testimonials or benchmarks are supplied.
 
 ## Release Decision
-2026-10-27: user has no Developer ID signing/notarization setup and requested website and release preparation. Prepare a clearly labelled locally ad-hoc-signed preview archive; do not claim notarization. No public app release or website deployment is authorized in this task.
+2026-10-27: user has no Developer ID signing/notarization setup and initially requested website and release preparation. Prepare a clearly labelled locally ad-hoc-signed preview archive; do not claim notarization.
 
 The subsequent review request authorizes fixes and publication of the website source to the existing GitHub repository. Generated binaries and local evidence are excluded from the source commit.
+
+The subsequent hosting request selects GitHub Pages for a public website at https://sometheasiekswx.github.io/mactextify/. Deploy the source-only site automatically after website checks pass on main. Public distribution of the experimental app ZIP remains a separate, unresolved choice. See [hosting and recovery](tasks/website/hosting.md).
 
 ## Implementation Choice
 React and TypeScript with Vite, selected for a static site using adapted Vengeance UI React interactions and Anime.js. No server, account system, analytics, or external font runtime.

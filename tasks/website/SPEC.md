@@ -12,4 +12,11 @@ Build a polished public product website in `website/`. Preserve Pearl/Midnight i
 - Static build, TypeScript, meaningful browser checks, accessibility review, archive integrity and relevant app checks pass. Record untested downloaded-Gatekeeper behavior explicitly.
 
 ## Boundaries
-No changes to the OCR implementation, private helper, study material or third-party dashboard fix. The user authorized review, fixes and a source commit/push on 27 October 2026. Scope publication to the website, its documentation, ignore rules and CI. Public site deployment and app binary publication remain separate actions. No disabling Gatekeeper. The prepared preview is local evidence, not a claim of a published production release.
+No changes to the OCR implementation, private helper, study material or third-party dashboard fix. The user authorized review, fixes and a source commit/push on 27 October 2026, then requested public hosting and selected GitHub Pages. Scope publication to the website, its documentation and CI. App binary publication remains a separate unresolved choice. No disabling Gatekeeper. The prepared preview is local evidence, not a claim of a published production release.
+
+## Public hosting acceptance
+
+- GitHub Pages serves the website over public HTTPS at `https://sometheasiekswx.github.io/mactextify/`, without authentication.
+- Website changes on main deploy only after website formatting, tests and production build pass; pull requests never deploy.
+- The initial hosted site uses the existing source-build fallback and contains no experimental app ZIP or local evidence.
+- Verify real hosted assets, demo controls, source/contribution links, mobile layout and accessibility. Document deployment/recovery and keep the repository website link current.

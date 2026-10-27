@@ -27,7 +27,7 @@ export PATH="$HOME/.local/bin:$PATH"
 mactextify --version
 ```
 
-Builds are local; no official binary download currently exists. Do not disable Gatekeeper to run untrusted downloads. Read [distribution](distribution.md) before preparing a public release.
+The CLI installer builds locally. Prebuilt graphical MacTextify.app downloads are available for Apple silicon, Intel and Universal from [GitHub Releases](https://github.com/sometheasiekswx/mactextify/releases). Do not disable Gatekeeper to run untrusted downloads. Read [distribution](distribution.md) before preparing a public release.
 
 ## Use
 

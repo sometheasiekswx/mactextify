@@ -90,3 +90,60 @@ test("release build rejects extra files outside its verified manifest", () => {
     assert.throws(() => readRelease(root), /Unverified public download/);
   });
 });
+
+test("published release requires exactly three valid architectures and fixed GitHub destinations", async () => {
+  const { validatePublishedRelease } = await import("./release-manifest.mjs");
+  const data = {
+    available: true,
+    version: "0.3.0",
+    signing: "ad-hoc",
+    sourceRevision: "a".repeat(40),
+    assets: ["arm64", "x86_64", "universal"].map((architecture) => ({
+      architecture,
+      file: `MacTextify-0.3.0-${architecture}.zip`,
+      bytes: bytes.length,
+      sha256: valid.sha256,
+      url: "https://evil.invalid",
+    })),
+  };
+  const result = validatePublishedRelease(data);
+  assert.equal(
+    result.assets[0].url,
+    "https://github.com/sometheasiekswx/mactextify/releases/download/v0.3.0/MacTextify-0.3.0-arm64.zip",
+  );
+  for (const change of [
+    { assets: data.assets.slice(1) },
+    { assets: [data.assets[0], data.assets[0], data.assets[2]] },
+    { sourceRevision: "main" },
+    { signing: "notarized" },
+    { version: "../../bad" },
+    { assets: data.assets.map((a) => ({ ...a, file: "../../bad" })) },
+    { assets: data.assets.map((a) => ({ ...a, sha256: "bad" })) },
+  ]) {
+    assert.throws(
+      () => validatePublishedRelease({ ...data, ...change }),
+      /Invalid published/,
+    );
+  }
+});
+
+test("published build rejects leftover local binaries and reads only validated release metadata", () => {
+  withDownloads(false, (root, downloads) => {
+    const data = {
+      available: true,
+      version: "0.3.0",
+      signing: "ad-hoc",
+      sourceRevision: "a".repeat(40),
+      assets: ["arm64", "x86_64", "universal"].map((architecture) => ({
+        architecture,
+        file: `MacTextify-0.3.0-${architecture}.zip`,
+        bytes: bytes.length,
+        sha256: valid.sha256,
+      })),
+    };
+    writeFileSync(join(root, "published-release.json"), JSON.stringify(data));
+    assert.equal(readRelease(root).assets.length, 3);
+    writeFileSync(join(downloads, "old-preview.zip"), bytes);
+    assert.throws(() => readRelease(root), /Unverified public download/);
+  });
+});

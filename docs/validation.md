@@ -1,3 +1,15 @@
+# Binary distribution verification — 28 October 2026
+
+Version 0.3.0 release artifacts are built from `307e222ae3229f484520c6e86b24651784df2cf7`. [Binary release verification](https://github.com/sometheasiekswx/mactextify/actions/runs/40543127553) passed for arm64 and Universal on macOS 26 and x86_64 on native Intel macOS 15. Each job ran Swift tests, built an isolated app, verified the extracted signature, version, architecture and bundled MIT license, and launched the extracted app. Both Universal Mach-O slices declare macOS 14.0 minimum. Linked libraries use macOS system paths, not developer-machine paths.
+
+The exact downloaded Universal CI artifact also launched locally and extracted the synthetic project image correctly to TXT through the normal UI. Local Universal functional checks additionally covered Markdown export. The final arm64 CI artifact passed a second local extracted launch check. The sample image remained unchanged.
+
+The apps are ad-hoc signed. `spctl --assess` rejects the unnotarized app as expected; this is disclosed before download. No Developer ID signing, notarization, or clean-Mac interactive Gatekeeper exception test is claimed. The documented installation route is Apple's app-specific Open Anyway flow. Intel runtime evidence comes from a native Intel hosted runner, not local cross-compilation alone.
+
+Earlier validation entries below are historical snapshots; their statements about unpublished releases describe their original dates.
+
+---
+
 # Source-install prerequisite validation — 2026-10-24
 
 The source installer checks macOS 14+, selected full Xcode, its macOS SDK and Swift 5.9+ before writing installation state. It builds with selected Xcode Swift instead of an unrelated Swift earlier on PATH. Smoke checks cover missing Xcode without prefix creation and a shadow Swift executable that must not be used. These changes add no OCR settings, answer detection, study workflow, runtime dependencies or network services.

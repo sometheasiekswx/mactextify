@@ -21,47 +21,14 @@ npm run preview
 
 The build uses relative asset URLs, so it can be served at a domain root or a subdirectory. Deploy only `website/dist/`, never the repository root. `dist/` is the complete static artifact; no environment secrets are required. Source without locally prepared binaries renders a source-build action.
 
-## Prepare the app download
+## Public app downloads
 
-On a Mac with full Xcode selected, from `website/`:
+The three published app ZIPs live in GitHub Releases, not in Git or the Pages bundle. `published-release.json` records their version, exact app source revision, sizes and SHA-256 hashes. Destinations are derived from the fixed repository and version rather than trusted from arbitrary URLs.
 
-```sh
-npm run prepare:download
-npm run build
-```
+The Pages workflow runs tests, verifies all three public ZIPs and SHA256SUMS over HTTPS, then builds and deploys. A missing or changed download fails deployment. The app is ad-hoc signed and explicitly labelled not Developer ID signed or notarized. See [distribution and maintainer steps](../docs/distribution.md).
 
-Preparation exports only the tracked app inputs from the recorded Git commit into a temporary directory, then runs its prerequisites and app build scripts in isolation. Untracked source, working changes and stale local bundles cannot enter this build. It checks the version, identifies the actual architecture, verifies the ad-hoc signature, ZIPs only the fresh temporary `.build/MacTextify.app`, extracts and verifies it again, and creates a checksum and `.generated/release.json`. The build refuses mismatched archive metadata. Website changes are separate from the app source revision recorded in the manifest.
+For an unpublished local preview, `npm run prepare:download` retains the original single-architecture path. Use a checkout without `published-release.json`; it builds from tracked app inputs in an isolated directory and validates the archive. Keep preview `.generated/` and `public/downloads/` outside a published website checkout: public builds reject leftover downloads so Vite cannot copy unverified files. Never commit generated binaries.
 
-Generated files are ignored:
+## Hosting and recovery
 
-- `public/downloads/MacTextify-<version>-<architecture>-preview.zip`
-- Its `.sha256` file
-- `.generated/release.json`
-
-These must travel together. They are embedded/copied into a subsequent production build. Keep the prepared archive and checksum in a release evidence store if publishing. Re-run `npm run build` after preparing or replacing an archive; restart the dev server to refresh its compiled release metadata.
-
-The build rejects every file in `public/downloads/` except the manifest's verified archive and checksum. Without a manifest, that directory must be empty or absent. Move previous versions and unrelated files to your release evidence store before preparing a different version or architecture; the scripts do not delete them for you.
-
-GitHub's Website checks workflow installs the lockfile, checks formatting, runs the manifest/preparation regression tests, type-checks and builds the source-only site. The generated app ZIP and manifest are intentionally absent from a fresh clone.
-
-The preview is ad-hoc signed, **not Developer ID signed or notarized**. It is clearly labelled before download. Only the architecture actually built is advertised; Intel users can use source builds until an Intel/universal artifact has been verified. Do not change the label to “notarized” without a separate signing/notarization implementation and verified release evidence.
-
-## Public hosting
-
-The selected public URL is https://sometheasiekswx.github.io/mactextify/. The `Website checks and Pages` workflow builds and publishes this site from `main` after formatting, regression tests and TypeScript/build checks pass. Pull requests run checks only. The `github-pages` environment is the production deployment target; only `website/dist/` is uploaded.
-
-This workflow explicitly requires a source-only build. It never publishes the locally prepared app ZIP or creates a GitHub Release. Public binary distribution remains a separate release decision. See [hosting and recovery](../tasks/website/hosting.md) for setup, verification and rollback.
-
-## Other deployment targets
-
-For Vercel or another static host, use root directory `website`, install `npm ci --ignore-scripts`, build `npm run build`, output `dist`. A build from Git alone has the honest source-only fallback. To publish a downloadable preview, deploy the already-verified local `dist/` containing the archive, or explicitly supply the verified archive/checksum/manifest to the build. Review the archive before uploading. GitHub Pages also supports the static output with the configured relative base.
-
-Before a public app preview, test the exact downloaded ZIP on a clean supported Mac and exercise the app-specific Gatekeeper path; a successful local launch or `codesign --verify` does not establish this. Do not disable Gatekeeper or remove quarantine as an installation shortcut. Apple guidance: https://support.apple.com/en-au/102445.
-
-For a different target or custom domain, choose the hosting account, domain and audience; verify the live page, download status/content/hash, navigation, mobile layout and HTTPS on that actual target. Keep the previous static deployment/archive for rollback. No DNS changes or telemetry are needed by the current GitHub Pages site.
-
-## Evidence and assets
-
-See `../tasks/website/verification.md` for results and limits. Browser evidence is locally retained under `output/playwright/`; native build/test evidence is in `../.local-notes/website-reference/`. Original source images are untouched. `assets-provenance.json` records the copied public icon and inspected synthetic captures.
-
-The sample animation illustrates extraction with fixed content. Copying Markdown is an illustrative snippet, not a claim that it reproduces all metadata in native-app Markdown exports. The app screenshot shows actual controls and review labels.
+GitHub Pages uses `.github/workflows/website.yml`. Revert the publication change to recover source-only access if downloads become invalid. Changes to release bytes require a new version and hashes. Verify the live page, all architecture links and downloaded checksums after deployment. See [hosting](../tasks/website/hosting.md).

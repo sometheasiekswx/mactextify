@@ -32,9 +32,8 @@ jobs:
       - run: npm ci --ignore-scripts --no-fund
       - run: npm run check:format
       - run: npm test
-      - name: Verify source-only publication
-        run: |
-          node --input-type=module -e "import { readRelease } from './scripts/release-manifest.mjs'; if (readRelease().available) throw new Error('Public binary publication is not enabled in this workflow.');"
+      - name: Verify published downloads and checksums
+        run: node scripts/verify-published-release.mjs
       - run: npm run build
       - name: Configure Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'

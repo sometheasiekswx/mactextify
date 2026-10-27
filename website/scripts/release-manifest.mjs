@@ -50,6 +50,15 @@ export function readRelease(root = siteRoot) {
         );
     }
   };
+  const published = resolve(root, "published-release.json");
+  if (existsSync(published)) {
+    checkFiles([]);
+    if (lstatSync(published).isSymbolicLink())
+      throw new Error("Published manifest must not be a symbolic link.");
+    return validatePublishedRelease(
+      JSON.parse(readFileSync(published, "utf8")),
+    );
+  }
   const manifest = resolve(root, ".generated/release.json");
   if (!existsSync(manifest)) {
     checkFiles([]);
@@ -72,4 +81,37 @@ export function readRelease(root = siteRoot) {
   if (checksum !== `${data.sha256}  ${data.file}\n`)
     throw new Error("Checksum file does not match the release manifest.");
   return release;
+}
+
+export function validatePublishedRelease(data) {
+  if (
+    data?.available !== true ||
+    !/^\d+\.\d+\.\d+$/.test(data.version) ||
+    data.signing !== "ad-hoc" ||
+    !/^[a-f0-9]{40}$/.test(data.sourceRevision) ||
+    !Array.isArray(data.assets) ||
+    data.assets.length !== 3
+  )
+    throw new Error("Invalid published release manifest.");
+  const expected = new Set(["arm64", "x86_64", "universal"]);
+  for (const asset of data.assets) {
+    if (
+      !expected.delete(asset.architecture) ||
+      asset.file !== `MacTextify-${data.version}-${asset.architecture}.zip` ||
+      !Number.isSafeInteger(asset.bytes) ||
+      asset.bytes < 1 ||
+      !/^[a-f0-9]{64}$/.test(asset.sha256)
+    )
+      throw new Error("Invalid published release asset.");
+  }
+  // Derive destinations; manifests cannot redirect users to arbitrary hosts.
+  const base = `https://github.com/sometheasiekswx/mactextify/releases/download/v${data.version}`;
+  return {
+    ...data,
+    assets: data.assets.map((asset) => ({
+      ...asset,
+      url: `${base}/${asset.file}`,
+      checksumURL: `${base}/SHA256SUMS`,
+    })),
+  };
 }

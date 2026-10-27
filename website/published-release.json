@@ -1,0 +1,26 @@
+{
+  "version": "0.3.0",
+  "sourceRevision": "307e222ae3229f484520c6e86b24651784df2cf7",
+  "signing": "ad-hoc",
+  "available": true,
+  "assets": [
+    {
+      "architecture": "arm64",
+      "file": "MacTextify-0.3.0-arm64.zip",
+      "bytes": 529992,
+      "sha256": "34ac61c567fb557753f43d47478ee5c0e54c934cc33071b869895449da2222f5"
+    },
+    {
+      "architecture": "universal",
+      "file": "MacTextify-0.3.0-universal.zip",
+      "bytes": 918532,
+      "sha256": "8a5fed5690f6ed1fb674650e01a33760f23b15d26c417083584ae3a60adbe405"
+    },
+    {
+      "architecture": "x86_64",
+      "file": "MacTextify-0.3.0-x86_64.zip",
+      "bytes": 544983,
+      "sha256": "589e269a3582bbab022d9a93d3511c674c5ff9d01e952ff110d71691092f81f1"
+    }
+  ]
+}

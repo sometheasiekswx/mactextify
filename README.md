@@ -42,7 +42,13 @@ A photo of a page. A scanned letter. A screenshot worth keeping. MacTextify extr
 
 ## Quick start
 
-**MacTextify is currently a source build.** There is no official signed or notarized app download. Building requires **macOS 14+, Swift 5.9+, and full Xcode** with a compatible macOS SDK; Command Line Tools alone are not the supported setup. Runtime availability of Live Text depends on your hardware and OS. See [tested platforms](docs/validation.md) and [distribution status](docs/distribution.md).
+**[Download MacTextify for macOS 14+](https://sometheasiekswx.github.io/mactextify/#download)** — choose Apple silicon, Intel, or Universal. Unzip and move MacTextify.app to Applications. No Xcode is needed to run the prebuilt app.
+
+**These downloads are not Developer ID signed or notarized.** If macOS blocks the first launch and you trust the download, use System Settings → Privacy & Security → **Open Anyway** for MacTextify, then confirm Open. See [installation instructions and checksums](docs/distribution.md) and [Apple’s opening guidance](https://support.apple.com/en-au/102445).
+
+### Build from source
+
+Building requires **macOS 14+, Swift 5.9+, and full Xcode** with a compatible macOS SDK; Command Line Tools alone are not the supported setup. Runtime availability of Live Text depends on your hardware and OS. See [tested platforms](docs/validation.md) and [distribution status](docs/distribution.md).
 
 ```sh
 git clone https://github.com/sometheasiekswx/mactextify.git

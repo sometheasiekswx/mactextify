@@ -275,41 +275,81 @@ export function App() {
               {release.available ? (
                 <>
                   <p className="release-meta">
-                    Version {release.version} ·{" "}
-                    {release.architecture === "arm64"
-                      ? "Apple silicon"
-                      : release.architecture === "x86_64"
-                        ? "Intel"
-                        : "Universal"}{" "}
-                    · macOS 14+
-                    <br />
-                    {(release.bytes / 1024 / 1024).toFixed(1)} MB ZIP
+                    Version {release.version} · macOS 14+ · Free & open source
                   </p>
                   <p className="release-note release-warning">
-                    <strong>Unsigned preview.</strong> This build isn’t
-                    Developer ID signed or notarized by Apple. macOS may block
-                    it on first launch.
+                    <strong>Unsigned download.</strong> Not Developer ID signed
+                    or notarized by Apple. macOS may block the first launch; see
+                    installation instructions below.
                   </p>
-                  <a
-                    className="button download-primary"
-                    href={`./downloads/${release.file}`}
-                    download
-                  >
-                    <Icon name="download" /> Download preview{" "}
-                    <Icon name="arrow" />
-                  </a>
-                  <details className="install-details">
-                    <summary>How to install this preview</summary>
+                  <p className="release-note">
+                    Choose Apple silicon for an M-series chip, Intel for an
+                    Intel processor, or Universal for either. Find yours in
+                    Apple menu → About This Mac.
+                  </p>
+                  {("assets" in release
+                    ? release.assets
+                    : [
+                        {
+                          ...release,
+                          url: `./downloads/${release.file}`,
+                          checksumURL: `./downloads/${release.file}.sha256`,
+                        },
+                      ]
+                  ).map((asset) => (
+                    <div
+                      key={asset.architecture}
+                      className="architecture-download"
+                    >
+                      <a className="button download-primary" href={asset.url}>
+                        <Icon name="download" />{" "}
+                        {asset.architecture === "arm64"
+                          ? "Apple silicon"
+                          : asset.architecture === "x86_64"
+                            ? "Intel"
+                            : "Universal"}
+                        <span>
+                          {(asset.bytes / 1024 / 1024).toFixed(1)} MB ZIP
+                        </span>
+                      </a>
+                      <details className="checksum">
+                        <summary>
+                          Verify{" "}
+                          {asset.architecture === "arm64"
+                            ? "Apple silicon"
+                            : asset.architecture === "x86_64"
+                              ? "Intel"
+                              : "Universal"}{" "}
+                          download
+                        </summary>
+                        <p>SHA-256</p>
+                        <code>{asset.sha256}</code>
+                        <a href={asset.checksumURL}>Download checksums</a>
+                        <p>
+                          In Terminal, run{" "}
+                          <code>shasum -a 256 ~/Downloads/{asset.file}</code>{" "}
+                          and compare the result above.
+                        </p>
+                      </details>
+                    </div>
+                  ))}
+                  <details className="install-details" open>
+                    <summary>How to install MacTextify</summary>
                     <ol>
-                      <li>Download and unzip the archive.</li>
+                      <li>
+                        Download your chosen ZIP and double-click it to unzip.
+                      </li>
                       <li>Move MacTextify.app to Applications.</li>
                       <li>
-                        Open the app. If macOS blocks it and you trust this
-                        download, follow{" "}
+                        Open MacTextify. If macOS blocks it, dismiss the alert.
+                        If you trust this download, open System Settings →
+                        Privacy & Security, scroll to Security, and click Open
+                        Anyway for MacTextify. Confirm Open and authenticate if
+                        asked. See{" "}
                         <a href="https://support.apple.com/en-au/102445">
                           Apple’s app-specific opening instructions
-                        </a>{" "}
-                        in Privacy & Security.
+                        </a>
+                        .
                       </li>
                     </ol>
                     <p>
@@ -317,21 +357,17 @@ export function App() {
                       Review extracted text for accuracy.
                     </p>
                   </details>
-                  <details className="checksum">
-                    <summary>Verify the download</summary>
-                    <p>SHA-256</p>
-                    <code>{release.sha256}</code>
-                    <a href={`./downloads/${release.file}.sha256`} download>
-                      Download checksum
+                  <p className="release-note">
+                    Built from{" "}
+                    <a href={`${repo}/commit/${release.sourceRevision}`}>
+                      {release.sourceRevision.slice(0, 7)}
                     </a>
-                    <p>
-                      Built from source revision{" "}
-                      <a href={`${repo}/commit/${release.sourceRevision}`}>
-                        {release.sourceRevision.slice(0, 7)}
-                      </a>
-                      .
-                    </p>
-                  </details>
+                    .{" "}
+                    <a href={`${repo}/releases/tag/v${release.version}`}>
+                      Release notes
+                    </a>
+                    . No Xcode required.
+                  </p>
                 </>
               ) : (
                 <>

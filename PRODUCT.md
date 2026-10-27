@@ -29,7 +29,7 @@ README.md, docs/distribution.md, existing synthetic native app captures in asset
 
 The subsequent review request authorizes fixes and publication of the website source to the existing GitHub repository. Generated binaries and local evidence are excluded from the source commit.
 
-The subsequent hosting request selects GitHub Pages for a public website at https://sometheasiekswx.github.io/mactextify/. Deploy the source-only site automatically after website checks pass on main. Public distribution of the experimental app ZIP remains a separate, unresolved choice. See [hosting and recovery](tasks/website/hosting.md).
+The subsequent hosting request selects GitHub Pages for a public website at https://sometheasiekswx.github.io/mactextify/. Deploy the site automatically after website checks pass on main. On 28 October 2026 the user authorized public unsigned app downloads for Apple silicon, Intel and Universal via GitHub Releases; the website verifies their hashes before deployment. See [hosting and recovery](tasks/website/hosting.md).
 
 ## Implementation Choice
 React and TypeScript with Vite, selected for a static site using adapted Vengeance UI React interactions and Anime.js. No server, account system, analytics, or external font runtime.

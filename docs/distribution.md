@@ -1,31 +1,31 @@
-# Distribution and release checklist
+# Distribution
 
-Source is published at [sometheasiekswx/mactextify](https://github.com/sometheasiekswx/mactextify) under the existing MIT license (MacTextify contributors). Private vulnerability reporting is enabled. Local build steps do not publish tags or release assets. There is no versioned binary release.
+MacTextify 0.3.0 is distributed as ZIP archives containing MacTextify.app for **Apple silicon (arm64)**, **Intel (x86_64)**, and **Universal (both)**. Download from the [website](https://sometheasiekswx.github.io/mactextify/#download) or [GitHub Releases](https://github.com/sometheasiekswx/mactextify/releases). macOS 14 or later is required. Prebuilt apps do not require Xcode, Swift, Python, or Rosetta when the correct native download is selected.
 
-## Source-first release
+## Install
 
-Build/install from source is the initial distribution route. The install helper does not require Python or third-party packages. Users obtain Apple developer tools separately. Runtime is local and offline. A custom Homebrew formula can later build from a release archive; no formula/core acceptance is currently promised.
+1. In Apple menu → About This Mac, check **Chip** (Apple M-series) or **Processor** (Intel). Universal works on either.
+2. Download the matching ZIP, double-click to extract it, then drag MacTextify.app to Applications.
+3. Open MacTextify. These builds are **ad-hoc signed, not Developer ID signed or notarized by Apple**. If macOS blocks opening, dismiss the alert.
+4. If you trust the download, open System Settings → Privacy & Security, scroll to Security, and choose **Open Anyway** for MacTextify. Confirm **Open** and authenticate if asked. Follow [Apple's instructions](https://support.apple.com/en-au/102445). Managed Macs may require administrator assistance.
+5. Add PNG/JPEG images, choose an output folder and TXT or Markdown, then extract. Review OCR output for accuracy. Live Text availability depends on hardware and OS.
 
-Prepare a local source archive with `python3 scripts/package-source.py`. This uses an explicit file allowlist, rejects symlinks and private path patterns, and writes an archive plus SHA-256 digest into ignored `dist/`. Inspect both the allowlist and resulting archive. Build/install the extracted archive in a clean environment before publishing.
+Do not disable Gatekeeper globally or remove quarantine as an installation shortcut. A damaged-app or malware warning is not the ordinary unidentified-developer prompt: stop and check the download rather than bypassing it.
 
-## Pending publication checks
+## Verify your download
 
-- [x] Source repository owner/name, public visibility, existing MIT attribution and private security reporting configured.
-- [x] Initial publication used a 32-file source allowlist. The current source package follows `scripts/source-files.txt`, including generic prerequisite checks, public branding and synthetic README screenshots. No private images, receipts, generated graphs or build artifacts are packaged.
-- [ ] Run macOS CI on the advertised ARM/Intel and OS matrix. Record actual runtime coverage.
-- [ ] Complete a manual Finder chooser test (selection, cancellation, keep and archive) on supported systems.
-- [ ] Confirm VERSION, CLI version, changelog and intended tag agree.
-- [ ] Build/smoke-test the exact release archive; inspect checksums and file manifest.
-- [ ] Only after publication authorization: push source, create tag/release and verify downloadable checksums.
+Each release includes `SHA256SUMS`. Run `shasum -a 256 ~/Downloads/MacTextify-0.3.0-arm64.zip` (substitute your actual filename), then compare against the release and website checksum. The published website manifest records the exact source revision, architecture, size and hash of every ZIP.
 
-No automatic release publication workflow is provided. The manually triggered release-check workflow only tests and packages a local archive on its runner. It requires no write permission or release credentials. A human can decide how to publish after these checks.
+## Maintainer release path
 
-## Optional prebuilt downloads
+- `scripts/package-app.py <arm64|x86_64|universal> --output <directory>` exports tracked inputs from an exact Git commit into a fresh temporary directory. It refuses to overwrite release assets.
+- `scripts/build-app.sh` derives the app version from VERSION and creates a fresh, ad-hoc-signed bundle. Universal includes both architectures.
+- The manually dispatched **Binary release verification** workflow runs Swift tests, packages each architecture, checks the extracted signature and launches the packaged app on a native runner. Artifacts include per-archive metadata. This workflow cannot publish a release.
+- Download the verified workflow artifacts, check a common source revision/version, publish ZIPs and SHA256SUMS to the versioned GitHub Release, then record them in `website/published-release.json`.
+- Pages fetches all three release archives and checks their bytes and hashes before deployment. Test live download links and hashes after deployment.
 
-A prebuilt release requires actual downloaded-binary/Gatekeeper testing and a signing/notarization decision. Developer ID credentials and enrollment cost are an owner decision. Do not claim binaries are notarized or instruct users to disable Gatekeeper globally. Apple framework implementations are not redistributed with this source.
+A valid ad-hoc signature and successful launch are not Apple notarization or proof of the interactive Gatekeeper experience on a clean Mac. Record that test separately; never claim it ran if unavailable.
 
-References: [Apple notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution), [GitHub runner platforms](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
+Recovery: revert the website publication change to restore source-only access. If a release artifact is defective, withdraw it and publish a corrected version with new checksums; do not silently replace an existing version's bytes.
 
-## Rollback and compatibility
-
-Reinstall a previous trusted source version to switch the current executable. Previous installation slots are retained until uninstall. Project data is never rolled back by installation. Receipt schema is independently versioned; older tools must reject unsupported newer schemas. Any future schema migration requires backups and upgrade/downgrade tests. No automatic update checks.
+The MIT-licensed source remains available. Source builds require macOS 14+, full Xcode and a compatible Swift/macOS SDK. Apple frameworks are supplied by macOS and are not redistributed.

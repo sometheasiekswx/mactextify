@@ -9,7 +9,7 @@ This is the sanitized implementation record for the reusable product. The saniti
 - [x] P5 automated: real-corpus copies accounted for with unchanged hashes; rerun stable. Originals remain untouched; no assistant image transcription.
 - [x] P6 local: installer, distinct-version upgrade/rollback, uninstall and source-independent runtime tests. Public macOS CI configured as source only; remote/older-OS hardware evidence pending.
 - [x] P7 local preparation: deterministic source archive and clean archive installation verified; no private files packaged.
-- [x] P7 source publication: authorized public GitHub source repository with MIT license and private security reporting. Versioned release assets, full platform/UI validation and binary distribution remain pending.
+- [x] P7 source publication: authorized public GitHub source repository with MIT license and private security reporting. Versioned unsigned app distribution was subsequently authorized; see [binary release verification](validation.md) for architecture, UI and installation-test evidence and limitations.
 
 Evidence: [validation.md](validation.md). Checkmarks above apply only to the explicitly named local implementation scope, not unverified platform/distribution claims.
 

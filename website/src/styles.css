@@ -1486,3 +1486,19 @@
     margin-top: 16px;
   }
 }
+
+/* Keep architecture choices readable on narrow phones. */
+.architecture-download .download-primary {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+.architecture-download .download-primary span {
+  margin-left: auto;
+  font-size: 11px;
+}
+.architecture-download .checksum {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 0;
+}

@@ -12,7 +12,7 @@ Build a polished public product website in `website/`. Preserve Pearl/Midnight i
 - Static build, TypeScript, meaningful browser checks, accessibility review, archive integrity and relevant app checks pass. Record untested downloaded-Gatekeeper behavior explicitly.
 
 ## Boundaries
-No changes to the OCR implementation, private helper, study material or third-party dashboard fix. The user authorized review, fixes and a source commit/push on 27 October 2026, then requested public hosting and selected GitHub Pages. Scope publication to the website, its documentation and CI. App binary publication remains a separate unresolved choice. No disabling Gatekeeper. The prepared preview is local evidence, not a claim of a published production release.
+No changes to the OCR implementation, private helper, study material or third-party dashboard fix. The user authorized review, fixes and a source commit/push on 27 October 2026, then requested public hosting and selected GitHub Pages. The 28 October 2026 follow-up explicitly authorizes unsigned app publication via GitHub Releases for Apple silicon, Intel and Universal, with website downloads and installation instructions. See [binary release scope](binary-release.md). No disabling Gatekeeper. Only verified published assets may appear in the public download manifest.
 
 ## Public hosting acceptance
 

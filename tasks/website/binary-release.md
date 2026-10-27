@@ -13,3 +13,17 @@ Website offers all three architectures, sizes, checksums, source revision and cl
 
 ## Recovery and limits
 Revert the website manifest/integration commit to restore source-only downloads; withdraw release assets only if defective. No global Gatekeeper changes or quarantine-removal installation instructions. Record clean-Mac interactive Gatekeeper testing separately from local launch, signature checks and native CI; those checks do not prove every managed Mac can open an unsigned app.
+
+## Verification notes
+- Isolated build initially omitted Tests declared by Package.swift; fixed before release. Review also added the required MIT license inside each app bundle and checks its bytes after extraction.
+- Local arm64, x86_64 and Universal builds succeeded; Universal signature/architecture/extracted launch checks passed. Through the packaged Universal app's UI, the synthetic sample exported correctly to TXT and Markdown in separate temporary output folders. Original sample hash was preserved. This is local functional evidence, not a clean-Mac Gatekeeper test.
+- Website checks cover malformed metadata, duplicate/missing architectures, fixed GitHub destinations, corrupt archives and stray local downloads. Responsive checks at 320/390/768/1024/1440 and mobile axe passed. One local test run encountered a temporary-directory cleanup race (ENOTEMPTY); immediate rerun passed all nine tests; no assertion was suppressed.
+- Release binaries are taken from the final successful Binary release verification workflow, not earlier local preview builds. Website hashes must be replaced with those final artifact hashes before commit/deploy.
+
+## Release evidence
+- Final app revision: `307e222ae3229f484520c6e86b24651784df2cf7`.
+- Binary verification run [40543127553](https://github.com/sometheasiekswx/mactextify/actions/runs/40543127553): all three jobs passed, including extracted app launch on native Intel and Apple silicon.
+- App revision macOS matrix [40543122265](https://github.com/sometheasiekswx/mactextify/actions/runs/40543122265): all three OS jobs passed, including tests, release builds and installer smoke checks.
+- [Release v0.3.0](https://github.com/sometheasiekswx/mactextify/releases/tag/v0.3.0) contains the three verified ZIPs, SHA256SUMS and release-manifest.json. Public downloads match all recorded sizes and SHA-256 hashes.
+- Final metadata replaced the temporary local-build values before publication of the website. Original local preview artifacts were preserved in ignored `.build/release-evidence/previous-website-preview/`.
+- Review: isolated source export, bundle version/license, correct architectures, native launch, fixed download destinations, checksums, responsive controls and truthful installation disclosures checked. No remaining blocking findings. Clean-Mac interactive Gatekeeper testing remains unverified and is disclosed.

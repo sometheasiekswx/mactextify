@@ -27,7 +27,7 @@ with tempfile.TemporaryDirectory(prefix='mactextify-release-') as directory:
     source = stage / 'source'
     source.mkdir()
     tar = stage / 'source.tar'
-    run('git', 'archive', f'--output={tar}', revision, '--', 'Sources', 'Package.swift',
+    run('git', 'archive', f'--output={tar}', revision, '--', 'Sources', 'Tests', 'Package.swift',
         'VERSION', 'assets/AppIcon.icns', 'assets/AppIconDark.icns',
         'scripts/build-app.sh', 'scripts/check-prerequisites.sh')
     run('tar', '-xf', str(tar), '-C', str(source))

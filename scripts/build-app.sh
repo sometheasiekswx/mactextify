@@ -4,7 +4,7 @@ repo="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo"
 architecture="${1:-native}"
 case "$architecture" in
-  native) arch_args=() ;;
+  native) arch_args=(--arch "$(uname -m)") ;;
   arm64|x86_64) arch_args=(--arch "$architecture") ;;
   universal) arch_args=(--arch arm64 --arch x86_64) ;;
   *) printf 'Unsupported architecture: %s\n' "$architecture" >&2; exit 2 ;;

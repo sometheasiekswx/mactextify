@@ -17,6 +17,7 @@ app="$repo/.build/MacTextify.app"
 rm -rf "$app"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
 cp "$repo/assets/"*.icns "$app/Contents/Resources/"
+cp "$repo/LICENSE" "$app/Contents/Resources/LICENSE"
 cp "$bin_path/MacTextifyApp" "$app/Contents/MacOS/MacTextifyApp"
 cat > "$app/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>

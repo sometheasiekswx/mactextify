@@ -28,7 +28,7 @@ with tempfile.TemporaryDirectory(prefix='mactextify-release-') as directory:
     source.mkdir()
     tar = stage / 'source.tar'
     run('git', 'archive', f'--output={tar}', revision, '--', 'Sources', 'Tests', 'Package.swift',
-        'VERSION', 'assets/AppIcon.icns', 'assets/AppIconDark.icns',
+        'VERSION', 'LICENSE', 'assets/AppIcon.icns', 'assets/AppIconDark.icns',
         'scripts/build-app.sh', 'scripts/check-prerequisites.sh')
     run('tar', '-xf', str(tar), '-C', str(source))
     subprocess.run(['bash', 'scripts/check-prerequisites.sh'], cwd=source, check=True)
@@ -50,6 +50,8 @@ with tempfile.TemporaryDirectory(prefix='mactextify-release-') as directory:
     expected = {'arm64', 'x86_64'} if args.architecture == 'universal' else {args.architecture}
     if actual != expected:
         raise SystemExit(f'Architecture mismatch: {actual} != {expected}')
+    if (extracted / 'Contents/Resources/LICENSE').read_bytes() != (source / 'LICENSE').read_bytes():
+        raise SystemExit('Bundled license does not match source')
     info = plistlib.loads((extracted / 'Contents/Info.plist').read_bytes())
     if info['CFBundleShortVersionString'] != version or info['LSMinimumSystemVersion'] != '14.0':
         raise SystemExit('Bundle version or minimum macOS mismatch')

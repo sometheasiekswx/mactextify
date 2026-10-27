@@ -22,6 +22,7 @@ export function exportAppSource(repository, revision, destination) {
         "Tests",
         "Package.swift",
         "VERSION",
+        "LICENSE",
         "assets/AppIcon.icns",
         "assets/AppIconDark.icns",
         "scripts/build-app.sh",

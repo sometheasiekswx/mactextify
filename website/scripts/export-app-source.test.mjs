@@ -31,6 +31,7 @@ test("revision export excludes untracked Swift, extra icons and stale bundle res
       "Tests/OCRCoreTests/Fixture.swift",
       "Package.swift",
       "VERSION",
+      "LICENSE",
       "assets/AppIcon.icns",
       "assets/AppIconDark.icns",
       "scripts/build-app.sh",

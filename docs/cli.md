@@ -34,19 +34,19 @@ Builds are local; no official binary download currently exists. Do not disable G
 Keep source images in place (default):
 
 ```sh
-mactextify process --folder "$HOME/Documents/Research screenshots"
+mactextify process --folder "$HOME/Documents/Research images"
 ```
 
 Archive successfully extracted originals:
 
 ```sh
-mactextify process --folder "$HOME/Documents/Reading screenshots" --archive
+mactextify process --folder "$HOME/Documents/Reading images" --archive
 ```
 
 Preview the work without OCR or filesystem changes:
 
 ```sh
-mactextify process --folder "$HOME/Documents/Reading screenshots" --archive --dry-run
+mactextify process --folder "$HOME/Documents/Reading images" --archive --dry-run
 ```
 
 Plain text and language selection:
@@ -128,7 +128,7 @@ swift build -c release
 python3 scripts/smoke-test.py
 ```
 
-Python 3 is used only for developer smoke tests and source packaging, not installation or OCR runtime. Tests generate synthetic images at runtime; never add private screenshots. See [architecture](architecture.md), [contributing](../CONTRIBUTING.md), [security](../SECURITY.md), and [release checklist](distribution.md).
+Python 3 is used only for developer smoke tests and source packaging, not installation or OCR runtime. Tests generate synthetic images at runtime; never add private images. See [architecture](architecture.md), [contributing](../CONTRIBUTING.md), [security](../SECURITY.md), and [release checklist](distribution.md).
 
 MIT license; Apple Vision remains an Apple platform framework and is not bundled here.
 

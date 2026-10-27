@@ -17,6 +17,8 @@ The **Needs Review** row states are intentional: Live Text does not expose confi
 
 Both compositions are 1760 × 1120 PNGs, displayed at up to 880 pixels in the README. The captures were scaled and arranged on neutral presentation backgrounds; captions, framing and surrounding typography were added. App controls, row states and recognized text were not redrawn or replaced. The dark surround of the second image is presentation framing, not a claim of a dark-mode app capture. No private study inputs or personal paths appear in these published images.
 
+On 28 October 2026, the workspace composition was rendered again from the same native capture and synthetic input, changing its surrounding caption to “A folder of images.” for the broader image-to-text positioning. The original capture files and prior composition source were retained. The workflow diagram titles were also updated to “From images to text files” in both editable HTML sources and SVG exports; their geometry and processing steps are unchanged.
+
 To make fresh captures, create synthetic images with large black text on white, add them with the native picker, choose a fresh local demo destination, and extract. Compare actual exports and input hashes. Capture the app window with settings expanded and collapsed; open one resulting text file in an editor. Keep the real **Needs Review** labels. Do not substitute a mock app interface or use private documents as fixtures.
 
 ## Workflow diagram

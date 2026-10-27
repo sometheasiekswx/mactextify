@@ -650,7 +650,7 @@
       "Don’t turn the soft navigation spotlight or scan wash into decorative page-wide gradients.",
       "Don’t add endless ambient motion or hide the completed example for reduced-motion users.",
       "Don’t use the illustrative scan to imply that this website uploads images or performs OCR.",
-      "Don’t crop the sample screenshot or replace its complete words with a truncated image."
+      "Don’t crop the sample image or replace its complete words with a truncated image."
     ]
   }
 }

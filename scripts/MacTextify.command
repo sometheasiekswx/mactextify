@@ -8,7 +8,7 @@ fi
 # No file paths are interpolated into AppleScript source.
 if ! folder=$(/usr/bin/osascript <<'APPLESCRIPT'
 try
-  return POSIX path of (choose folder with prompt "Choose a folder of screenshots to extract locally")
+  return POSIX path of (choose folder with prompt "Choose a folder of PNG or JPEG images to extract text locally")
 on error number -128
   return ""
 end try

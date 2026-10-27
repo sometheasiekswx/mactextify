@@ -12,6 +12,6 @@
   "sample-project.png": {
     "sha256": "e62615bf0adba24b228b368a9250bfa7120b555b693ff12be0170454b8075f35",
     "source": ".local-notes/readme-captures/sample-project.png",
-    "notes": "Synthetic Project notes fixture, not a private screenshot; unchanged bytes."
+    "notes": "Synthetic Project notes fixture, not a private image; unchanged bytes."
   }
 }

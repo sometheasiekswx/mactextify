@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-labelledby="workflow-dark-title workflow-dark-desc" id="workflow-dark-root">
-<title id="workflow-dark-title">From screenshots to searchable text</title>
+<title id="workflow-dark-title">From images to text files</title>
 <desc id="workflow-dark-desc">PNG and JPEG images go through local Apple OCR into text or Markdown exports and an index, with saved records for recovery and originals kept in place by the native app.</desc>
 <defs>
       <style>#workflow-dark-root { color: #ffffff; font-family: -apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif; }
@@ -15,7 +15,7 @@
 <rect x="0" y="0" width="960" height="480" fill="#000000"/>
 <rect x="24" y="24" width="912" height="432" rx="8" fill="url(#workflow-dark-dots)" stroke="#333333"/>
 <text x="48" y="64" class="diagram-eyebrow">A LOCAL WORKFLOW</text>
-<text x="48" y="104" fill="#ffffff" font-size="30" font-weight="600">From screenshots to searchable text.</text>
+<text x="48" y="104" fill="#ffffff" font-size="30" font-weight="600">From images to text files.</text>
 <line x1="248" y1="232" x2="328" y2="232" stroke="#b8b8b8" stroke-width="1.5" marker-end="url(#workflow-dark-arrow)"/>
 <line x1="612" y1="232" x2="692" y2="232" stroke="#b8b8b8" stroke-width="1.5" marker-end="url(#workflow-dark-arrow)"/>
 <line x1="472" y1="288" x2="472" y2="332" stroke="#b8b8b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#workflow-dark-arrow)"/>

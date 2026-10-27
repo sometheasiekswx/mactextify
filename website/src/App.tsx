@@ -80,9 +80,9 @@ export function App() {
         <section className="hero wrap" aria-labelledby="hero-title">
           <div className="hero-heading">
             <h1 ref={headline} id="hero-title">
-              <span>Your screenshots.</span>
+              <span>Text in images.</span>
               <span>
-                Now <em>searchable.</em>
+                Now <em>text files.</em>
               </span>
             </h1>
             <div className="hero-intro">
@@ -96,7 +96,7 @@ export function App() {
           </div>
           <div className="hero-action-row">
             <p>
-              Turn images into text you can search, copy, and keep.
+              Extract words from images into text and Markdown files.
               <br className="desktop-break" /> All on your Mac. All yours.
             </p>
             <div className="hero-buttons">
@@ -128,8 +128,9 @@ export function App() {
             <span>Make it useful again.</span>
           </h2>
           <p>
-            A meeting recap. A passage worth keeping. That screenshot you knew
-            you’d need later. Give those words a life beyond the image.
+            A photographed page. A scanned letter. A screenshot worth keeping.
+            Turn the words in your images into files you can search, edit, and
+            use.
           </p>
         </section>
 
@@ -182,7 +183,7 @@ export function App() {
                 src="./media/native-app.png"
                 width="1088"
                 height="1440"
-                alt="The real MacTextify app after extracting three synthetic screenshots. Each result is marked Needs Review, and text output settings are visible."
+                alt="The real MacTextify app after extracting three synthetic text images. Each result is marked Needs Review, and text output settings are visible."
                 loading="lazy"
               />
               <figcaption>
@@ -206,7 +207,7 @@ export function App() {
             </h2>
             <p>
               Apple OCR works on your device. No uploads, no account, no API
-              key. Your screenshots stay with you.
+              key. Your images stay with you.
             </p>
           </div>
           <div className="principle-details">
@@ -267,7 +268,7 @@ export function App() {
                 <br />
                 More <em>doing.</em>
               </h2>
-              <p>Make your screenshots work for you.</p>
+              <p>Turn the text in your images into files you can use.</p>
             </div>
             <div className="download-panel">
               <h3>MacTextify for Mac</h3>
@@ -425,9 +426,11 @@ export function App() {
             <details>
               <summary>Which images can I use?</summary>
               <p>
-                PNG and JPEG images, individually or in folders. You can include
-                subfolders. OCR can misread characters and line order; review
-                names, numbers, and other important details.
+                Photos, scans, screenshots, and other images containing text,
+                saved as PNG or JPEG. Add individual images or folders,
+                including subfolders. Convert other formats to PNG or JPEG
+                first. OCR can misread characters and line order; review names,
+                numbers, and other important details.
               </p>
             </details>
             <details>

@@ -4,7 +4,7 @@ Source repository: [sometheasiekswx/mactextify](https://github.com/sometheasieks
 
 Use macOS 14+, Swift 5.9+ and full Xcode with a compatible macOS SDK. Complete Xcode first-launch setup and run `./scripts/check-prerequisites.sh` before installing. Run `swift test`, `swift build -c release` and `python3 scripts/smoke-test.py` from the root. No external Swift dependencies. Keep source formatting consistent with the surrounding files.
 
-Add behavior tests for changes to recognition, persistence, overwrite protection, recovery or installation. Generate synthetic fixtures in tests from text you own. Do not commit screenshots, receipts, extracted text or logs from real projects. Check `git diff --cached` and the complete staged file list before committing.
+Add behavior tests for changes to recognition, persistence, overwrite protection, recovery or installation. Generate synthetic fixtures in tests from text you own. Do not commit private images, receipts, extracted text or logs from real projects. Check `git diff --cached` and the complete staged file list before committing.
 
 Never weaken file-safety checks to make a test pass. Keep CLI/output/state changes documented in CHANGELOG.md; independently version receipt schemas. Record which OS/architecture was actually tested. A cross-compile does not prove runtime support.
 

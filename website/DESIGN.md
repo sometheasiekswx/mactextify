@@ -283,7 +283,7 @@ The navigation is adapted from Vengeance UI’s MIT-licensed SpotlightNavbar; pr
 
 ### Extraction illustration
 
-The signature illustration pairs a complete synthetic screenshot on white paper with selectable text on a dark result surface. File bars, the connector app icon, and the result footer make the transformation readable. The result is fixed sample data, not browser OCR. The page explicitly labels the illustration and links to the real app capture.
+The signature illustration pairs a complete synthetic text image on white paper with selectable text on a dark result surface. File bars, the connector app icon, and the result footer make the transformation readable. The result is fixed sample data, not browser OCR. The page explicitly labels the illustration and links to the real app capture.
 
 Anime.js 4.5.0 drives a 3800ms linear scan. It starts once on first entry at a 25% intersection threshold, pauses offscreen or when the document becomes hidden, and never loops on its own. Pause/play/replay and the native progress range give the user control. Scrubbing pauses playback. Lines reveal at progress thresholds of 10%, 25%, 40%, 55%, and 70%, with 220ms opacity/transform transitions. The copy button is disabled until the scan completes.
 
@@ -326,4 +326,4 @@ The sidecar records motion, shadows, breakpoints, and ten representative compone
 - Don’t turn the soft navigation spotlight or scan wash into decorative page-wide gradients.
 - Don’t add endless ambient motion or hide the completed example for reduced-motion users.
 - Don’t use the illustrative scan to imply that this website uploads images or performs OCR.
-- Don’t crop the sample screenshot or replace its complete words with a truncated image.
+- Don’t crop the sample image or replace its complete words with a truncated image.

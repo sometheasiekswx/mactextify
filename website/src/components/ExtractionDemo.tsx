@@ -113,7 +113,7 @@ export function ExtractionDemo() {
       style={{ "--progress": progress / 100 } as CSSProperties}
     >
       <div className="demo-topline">
-        <span>A screenshot goes in.</span>
+        <span>An image goes in.</span>
         <span>Useful words come out.</span>
       </div>
       <div className="demo-stage">

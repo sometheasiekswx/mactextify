@@ -1,6 +1,6 @@
 # Design and engineering contract
 
-The public-facing product is a macOS local screenshot OCR tool, independent of any particular subject or assistant. The package contains an executable CLI and an internal OCRCore target; the latter is an implementation boundary, not a promised stable third-party SDK.
+The public-facing product is a macOS local image-to-text tool for PNG and JPEG images, independent of any particular subject or assistant. The package contains an executable CLI and an internal OCRCore target; the latter is an implementation boundary, not a promised stable third-party SDK.
 
 ## Boundaries
 

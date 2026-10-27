@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-<h1 align="center">Your screenshots. Now searchable.</h1>
+<h1 align="center">Text in images. Now text files.</h1>
 
 <p align="center">
   Turn images into text you can search, copy, and keep.<br>
@@ -25,14 +25,14 @@
 </p>
 
 <p align="center">
-  <a href="assets/readme/app-workspace.png"><img src="assets/readme/app-workspace.png" alt="MacTextify with three synthetic screenshots exported successfully and inline output settings visible" width="880"></a>
+  <a href="assets/readme/app-workspace.png"><img src="assets/readme/app-workspace.png" alt="MacTextify with three synthetic text images exported successfully and inline output settings visible" width="880"></a>
 </p>
 
 <p align="center"><sub>Real app captures with synthetic sample documents. Original images stay in place.</sub></p>
 
 ## Keep the words. Keep your workflow.
 
-A screenshot is easy to save and easy to lose track of. MacTextify turns folders of PNG and JPEG images into individual text or Markdown files, with an index to find your way back.
+A photo of a page. A scanned letter. A screenshot worth keeping. MacTextify extracts the words from PNG and JPEG images into individual text or Markdown files, with an index to find your way back. Search, copy, and edit the text without retyping it.
 
 - **Made for your Mac.** A compact SwiftUI interface, drag-and-drop, and a native file-and-folder picker with ⌘O.
 - **Private by design.** OCR runs locally with Apple Live Text or an explicitly selected Vision engine. No account, API key, subscription, or application network requests.
@@ -115,7 +115,7 @@ Install the CLI locally, then extract a folder:
 ```sh
 ./scripts/install.sh
 export PATH="$HOME/.local/bin:$PATH"
-mactextify process --folder "$HOME/Documents/Screenshots"
+mactextify process --folder "$HOME/Documents/Images"
 ```
 
 The CLI scans top-level PNG/JPEG files and keeps originals by default. Use `--output-folder` for a separate destination, `--format text` for plain text, or `--dry-run` to preview without OCR or filesystem changes. The optional `--archive` mode moves successfully exported originals; it cannot be combined with custom output mode.
@@ -130,7 +130,7 @@ swift test
 python3 scripts/test-package-source.py
 ```
 
-Python is used for developer checks and source packaging, not OCR or installation. Tests generate synthetic images; private screenshots do not belong in the repository.
+Python is used for developer checks and source packaging, not OCR or installation. Tests generate synthetic images; private images do not belong in the repository.
 
 | Explore | Read more |
 | --- | --- |

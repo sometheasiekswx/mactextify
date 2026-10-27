@@ -8,7 +8,7 @@
 
 ## Direction contract
 Mode: Persuade. Existing world: Pearl/Midnight. Code-led implementation for the user-requested interactive motion; no persistent workflow preference inferred.
-First viewport: quiet floating navigation, large left-aligned “Your screenshots. Now searchable.” typography, two clear actions and a horizontally composed cinematic extraction stage. Text itself is the subject. Asymmetric sections alternate light editorial space with a dark native-app showcase.
+First viewport: quiet floating navigation, large left-aligned “Text in images. Now text files.” typography, two clear actions and a horizontally composed cinematic extraction stage. Text itself is the subject. Asymmetric sections alternate light editorial space with a dark native-app showcase.
 Signature: a user-controllable scan passes over a synthetic note and reveals selectable words; stacked papers settle with Anime.js. Motion defaults visible, stops when offscreen and respects reduced motion. The demonstration is separate from the actual app screenshot.
 Quality bar: strong typography and whitespace, rich material detail without decorative gradients or grids, no invented metrics, no endless ambient movement, precise responsive layouts.
 Hosting is now selected: GitHub Pages with its default public URL. Public binary publication remains a separate unresolved choice; Gatekeeper testing on a fresh downloaded copy remains an app-release prerequisite.

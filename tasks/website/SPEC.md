@@ -4,7 +4,7 @@ Build a polished public product website in `website/`. Preserve Pearl/Midnight i
 
 ## Acceptance
 - Responsive home page explains PNG/JPEG → text/Markdown, on-device privacy and native macOS workflow.
-- Distinctive, interruptible Anime.js screenshot-to-text demonstration with playback, scrub and copy controls. Clearly identified as a sample; no user files uploaded or processed.
+- Distinctive, interruptible Anime.js image-to-text demonstration with playback, scrub and copy controls. Clearly identified as a sample; no user files uploaded or processed.
 - Adapt a reviewed Vengeance UI component with its MIT notice and provenance.
 - Genuine native app imagery from synthetic fixtures, with useful alt text and no private content.
 - Download section explains architecture, macOS requirements, unsigned/not-notarized preview status, checksum and installation. No fabricated release URL; source-only fallback when no prepared archive exists.

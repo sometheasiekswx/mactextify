@@ -8,10 +8,10 @@ web
 This record covers the public website for the native macOS app.
 
 ## Users
-Mac users who want to turn saved screenshots into searchable, reusable text; developers who want to inspect or contribute to the source.
+Mac users who want to extract words from photos, scans, screenshots and other PNG/JPEG images into reusable text files; developers who want to inspect or contribute to the source.
 
 ## Product Purpose
-Explain the app, demonstrate screenshot-to-text extraction, provide an honest installation path, and invite contributions.
+Explain the app, demonstrate image-to-text extraction, provide an honest installation path, and invite contributions.
 
 ## Capabilities and Constraints
 Native SwiftUI app using local Apple OCR. PNG/JPEG batches, plain text and Markdown exports, original preservation and recovery records. macOS 14+. Source builds require full Xcode and Swift 5.9+. Live Text availability depends on the machine and OS. OCR results need review.

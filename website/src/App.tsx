@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { animate, stagger, onScroll } from "animejs";
-import { SpotlightNav } from "./components/SpotlightNav";
+import { animate, stagger } from "animejs";
+import { SectionNav } from "./components/SectionNav";
 import { ExtractionDemo } from "./components/ExtractionDemo";
 import { Icon } from "./icons";
 import { useCopy, useReducedMotion } from "./hooks";
+import { useScrollMotion } from "./useScrollMotion";
 import { release, repo } from "./release";
 
 const buildCommand = `git clone ${repo}.git\ncd mactextify\n./scripts/check-prerequisites.sh\n./scripts/build-app.sh\nopen .build/MacTextify.app`;
@@ -11,6 +12,7 @@ const buildCommand = `git clone ${repo}.git\ncd mactextify\n./scripts/check-prer
 export function App() {
   const [theme, setTheme] = useState<"pearl" | "midnight">("pearl");
   const reduced = useReducedMotion();
+  useScrollMotion(reduced);
   const headline = useRef<HTMLHeadingElement>(null);
   const { copy, status } = useCopy();
   useEffect(() => {
@@ -23,7 +25,6 @@ export function App() {
     if (reduced || !headline.current) return;
     const intro = animate(headline.current.children, {
       translateY: [22, 0],
-      opacity: [0.45, 1],
       delay: stagger(110),
       duration: 1000,
       ease: "outExpo",
@@ -32,50 +33,33 @@ export function App() {
       intro.revert();
     };
   }, [reduced]);
-  useEffect(() => {
-    if (reduced) return;
-    const capture = document.querySelector(".native-capture");
-    if (!capture) return;
-    const observer = onScroll({
-      target: ".app-section",
-      enter: "bottom bottom",
-      leave: "top top",
-      sync: 0.4,
-    });
-    const motion = animate(capture, {
-      translateY: [26, -14],
-      ease: "linear",
-      autoplay: observer,
-    });
-    return () => {
-      motion.revert();
-      observer.revert();
-    };
-  }, [reduced]);
   return (
     <>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header className="site-header wrap">
-        <a href="#" className="brand" aria-label="MacTextify home">
-          <img src="./media/app-icon.png" alt="" width="36" height="36" />
-          <span>MacTextify</span>
-        </a>
-        <SpotlightNav />
-        <div className="header-actions">
-          <button
-            className="theme-button"
-            aria-label={`Switch to ${theme === "pearl" ? "Midnight" : "Pearl"} theme`}
-            onClick={() => setTheme(theme === "pearl" ? "midnight" : "pearl")}
-          >
-            <Icon name={theme === "pearl" ? "moon" : "sun"} size={18} />
-          </button>
-          <a className="button button-small" href="#download">
-            Get MacTextify <Icon name="download" size={16} />
+      <div className="header-shell">
+        <div className="reading-progress" aria-hidden="true" />
+        <header className="site-header wrap">
+          <a href="#" className="brand" aria-label="MacTextify home">
+            <img src="./media/app-icon.png" alt="" width="36" height="36" />
+            <span>MacTextify</span>
           </a>
-        </div>
-      </header>
+          <SectionNav />
+          <div className="header-actions">
+            <button
+              className="theme-button"
+              aria-label={`Switch to ${theme === "pearl" ? "Midnight" : "Pearl"} theme`}
+              onClick={() => setTheme(theme === "pearl" ? "midnight" : "pearl")}
+            >
+              <Icon name={theme === "pearl" ? "moon" : "sun"} size={18} />
+            </button>
+            <a className="button button-small" href="#download">
+              Download <Icon name="download" size={16} />
+            </a>
+          </div>
+        </header>
+      </div>
       <main id="main">
         <section className="hero wrap" aria-labelledby="hero-title">
           <div className="hero-heading">

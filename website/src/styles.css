@@ -162,7 +162,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    min-height: 104px;
+    min-height: 80px;
   }
   .brand {
     display: inline-flex;
@@ -210,43 +210,71 @@
     font-size: 12px;
   }
   .theme-button {
-    border: 0;
+    border: 1px solid transparent;
     background: none;
     display: grid;
     place-items: center;
-    width: 38px;
+    padding: 0;
+    width: 44px;
     height: 44px;
+    flex: 0 0 44px;
     border-radius: 50%;
+    aspect-ratio: 1;
+    transition: background-color 160ms ease;
   }
   .theme-button:hover {
     background: var(--surface);
   }
-  .spotlight-nav {
+  .header-shell {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .reading-progress {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: left center;
+    pointer-events: none;
+  }
+  .section-nav {
     display: flex;
     align-items: center;
-    position: relative;
-    border-bottom: 1px solid var(--line);
-    --spotlight-x: 70px;
-    isolation: isolate;
+    gap: 28px;
   }
-  .spotlight-nav a {
-    display: block;
+  .section-nav a {
     position: relative;
-    z-index: 1;
-    padding: 12px 18px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     font-size: 12px;
     text-decoration: none;
     font-weight: 600;
+    color: var(--muted);
+    white-space: nowrap;
   }
-  .nav-light {
+  .section-nav a::after {
+    content: "";
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      65px circle at var(--spotlight-x) 110%,
-      color-mix(in srgb, var(--ink) 12%, transparent),
-      transparent 90%
-    );
+    inset: auto 0 3px;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 180ms ease;
+  }
+  .section-nav a:hover,
+  .section-nav a[aria-current],
+  .section-nav a:focus-visible {
+    color: var(--ink);
+  }
+  .section-nav a:hover::after,
+  .section-nav a[aria-current]::after {
+    transform: scaleX(1);
   }
   .hero {
     padding-top: 65px;
@@ -455,9 +483,7 @@
     font-size: 11px;
     line-height: 1.5;
     margin-bottom: 11px;
-    transition:
-      opacity 220ms ease,
-      transform 220ms ease;
+    transition: transform 220ms ease;
   }
   .result-line-0 {
     font-size: 8px;
@@ -784,7 +810,9 @@
     font-size: 11px;
   }
   details summary {
-    min-height: 30px;
+    min-height: 44px;
+    display: list-item;
+    align-content: center;
     font-weight: 600;
   }
   details ol {
@@ -981,8 +1009,8 @@
     .intro-section {
       gap: 60px;
     }
-    .spotlight-nav a {
-      padding-inline: 11px;
+    .section-nav {
+      gap: 18px;
     }
     .header-actions {
       gap: 6px;
@@ -995,12 +1023,27 @@
     .wrap {
       width: calc(100% - 48px);
     }
+    :root {
+      scroll-padding-top: 138px;
+    }
     .site-header {
-      min-height: 90px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0 12px;
+      padding-top: 12px;
     }
-    .spotlight-nav {
-      display: none;
+    .header-actions {
+      grid-column: 2;
+      grid-row: 1;
     }
+    .section-nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-content: center;
+      gap: 28px;
+      padding-block: 4px;
+    }
+
     .hero {
       padding-top: 37px;
     }
@@ -1162,8 +1205,7 @@
       width: calc(100% - 40px);
     }
     .site-header {
-      min-height: 78px;
-      gap: 10px;
+      gap: 0 8px;
     }
     .brand {
       font-size: 17px;
@@ -1177,16 +1219,14 @@
       gap: 5px;
     }
     .header-actions .button {
-      min-height: 38px;
+      min-height: 44px;
       padding: 9px 11px;
       font-size: 10px;
     }
     .header-actions .button svg {
       display: none;
     }
-    .theme-button {
-      width: 30px;
-    }
+
     .hero {
       padding-top: 35px;
     }
@@ -1471,9 +1511,6 @@
     :root[data-theme="midnight"] {
       --muted: #d6dfcf;
       --line: #a4ae9d;
-    }
-    .nav-light {
-      display: none;
     }
     .result-line {
       opacity: 1 !important;

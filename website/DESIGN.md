@@ -240,7 +240,7 @@ The extraction stage uses `minmax(0, 1fr) 120px minmax(0, 1fr)` for source, conn
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | At least 1600px | Hero top padding increases from 65px to 90px.                                                                                                                                                                                                     |
 | At most 1100px  | Outer gutters become 36px; the hero side note disappears; wide section gaps reduce to 60px; navigation links compact; the demo connector narrows to 85px.                                                                                         |
-| At most 800px   | Outer gutters become 24px; the center navigation hides while brand, theme, and download actions remain; hero actions stack below the description; the demo retains two papers with a 55px connector; section spacing and type compact.            |
+| At most 800px   | Outer gutters become 24px; section links move to a second header row beneath brand, theme, and download actions; hero actions stack below the description; the demo retains two papers with a 55px connector; section spacing and type compact.            |
 | At most 600px   | Outer gutters become 20px; the demo becomes source → vertical connector → result; narrative regions become one column; the fact row becomes two columns; demo controls can wrap; terminal content can scroll horizontally; footer links can wrap. |
 
 The minimum body width is 320px. On phones the native capture centers at 91% of the content width. The source content viewport changes from 225px to 205px at tablet size and 190px on phones; the scan’s travel matches those heights. The source image retains `object-fit: contain` at every size. Preserve the logical reading order when columns collapse.
@@ -259,7 +259,7 @@ The system combines flat editorial surfaces with softly lifted physical objects.
 | Native capture | `0 28px 80px #0005`     |
 | Download icon  | `0 14px 28px #141e1415` |
 
-The source stack uses perspective (1000px) and settled rotations of −5° and +5°. The navigation spotlight is a small radial state treatment, and the scan wash follows the moving scan line. Neither defines the page background.
+The source stack uses perspective (1000px) and settled rotations of −5° and +5°. The navigation uses a thin active underline, and the scan wash follows the moving scan line. Neither defines the page background.
 
 **The Material Depth Rule.** Reserve shadows for documents, the app icon, and the native capture. Editorial copy, navigation, and FAQ rows rely on whitespace and rules.
 
@@ -279,13 +279,15 @@ Keyboard focus uses a visible currentColor outline (2px, offset 5px). A skip lin
 
 ### Navigation
 
-The navigation is adapted from Vengeance UI’s MIT-licensed SpotlightNavbar; provenance is recorded in `THIRD_PARTY_NOTICES.md`. It keeps native anchor links, a thin lower rule, and a small radial spotlight. Pointer movement updates the light directly. Keyboard focus and pointer leave use Anime.js `spring({ stiffness: 200, damping: 28 })`, returning to the initial 70px position on pointer leave. There is no persistent active-section indicator. At 800px and below the center navigation hides; the header’s main action remains available.
+The sticky header uses native section links with a restrained active-section underline. The previous Vengeance-inspired radial spotlight was replaced during navigation polish; its license remains in THIRD_PARTY_NOTICES.md for historical attribution. Hover and keyboard focus remain visible. Below 800px, navigation moves to a second row rather than disappearing. The theme control is exactly 44 × 44px at every width, with no padding or flex shrink, so its highlight remains circular.
+
+A 2px header line follows document scroll progress. Anime.js links the intro heading, workflow steps, native capture, privacy icon, file examples, download icon and terminal to scroll position. Transforms reverse with scrolling; text does not fade, preserving contrast. Reduced motion removes these observers and restores the static layout. Native capture scales from 0.94 to 1 while moving from 32px to −20px across the section's full viewport passage.
 
 ### Extraction illustration
 
 The signature illustration pairs a complete synthetic text image on white paper with selectable text on a dark result surface. File bars, the connector app icon, and the result footer make the transformation readable. The result is fixed sample data, not browser OCR. The page explicitly labels the illustration and links to the real app capture.
 
-Anime.js 4.5.0 drives a 3800ms linear scan. It starts once on first entry at a 25% intersection threshold, pauses offscreen or when the document becomes hidden, and never loops on its own. Pause/play/replay and the native progress range give the user control. Scrubbing pauses playback. Lines reveal at progress thresholds of 10%, 25%, 40%, 55%, and 70%, with 220ms opacity/transform transitions. The copy button is disabled until the scan completes.
+Anime.js 4.5.0 drives a 3800ms linear scan. It starts once on first entry at a 25% intersection threshold, pauses offscreen or when the document becomes hidden, and never loops on its own. Pause/play/replay and the native progress range give the user control. Scrubbing pauses playback. Lines reveal at progress thresholds of 10%, 25%, 40%, 55%, and 70%, with 220ms transform transitions, with text appearing immediately at full contrast. The copy button is disabled until the scan completes.
 
 The .txt/.md segmented buttons expose `aria-pressed`; the selected segment reverses ink and paper. Both formats derive displayed lines and clipboard content from the same sample, including the PROJECT NOTES label. Copy status is announced through a live status region, clears after 3500ms, and reports “Select the text to copy” if clipboard access fails. There is a native range input rather than a custom slider implementation. No editable text field is present.
 
@@ -301,9 +303,9 @@ The download panel sits on the contrasting surface band and has its own paper fi
 
 ### Motion and accessibility
 
-The hero’s two heading lines enter over 1000ms with outExpo easing, a 110ms stagger, 22px upward travel, and opacity from 0.45 to 1. The back papers settle over 1100ms with outExpo easing, a 100ms stagger, and 25px upward travel. The native capture moves from 26px to −14px with scroll progress across the app section, using linear easing and `sync: 0.4`.
+The hero’s two heading lines enter over 1000ms with outExpo easing, a 110ms stagger, 22px upward travel, at full text contrast. The back papers settle over 1100ms with outExpo easing, a 100ms stagger, and 25px upward travel. Scroll-linked motion uses a linear playhead with `sync: true`; see Navigation above for current targets.
 
-`prefers-reduced-motion` is observed live. It bypasses hero, paper, and native-capture animation; immediately completes the scan; removes the scan line; makes navigation position changes direct; disables CSS animation/transitions and smooth scrolling; and suppresses primary button, text-link and inline-link transforms. Reduced-motion users can still scrub the sample manually, and the main demo control restores the fully revealed state. The browser theme-color metadata follows the selected Pearl/Midnight background.
+`prefers-reduced-motion` is observed live. It bypasses hero, paper, and native-capture animation; immediately completes the scan; removes the scan line; keeps section navigation static; disables CSS animation/transitions and smooth scrolling; and suppresses primary button, text-link and inline-link transforms. Reduced-motion users can still scrub the sample manually, and the main demo control restores the fully revealed state. The browser theme-color metadata follows the selected Pearl/Midnight background.
 
 The sidecar records motion, shadows, breakpoints, and ten representative components as self-contained HTML/CSS previews. Those previews show the visual system and CSS states; React event handlers, clipboard operations, and Anime.js choreography remain in the application source. Its generated tonal strips are inspection aids, not additional approved application colors.
 
@@ -323,7 +325,7 @@ The sidecar records motion, shadows, breakpoints, and ten representative compone
 
 - Don’t treat these web tokens as a redesign of the native macOS app.
 - Don’t replace product evidence with testimonials, benchmarks, or release assurances that the project does not supply.
-- Don’t turn the soft navigation spotlight or scan wash into decorative page-wide gradients.
+- Don’t turn the scan wash into decorative page-wide gradients.
 - Don’t add endless ambient motion or hide the completed example for reduced-motion users.
 - Don’t use the illustrative scan to imply that this website uploads images or performs OCR.
 - Don’t crop the sample image or replace its complete words with a truncated image.

@@ -159,7 +159,11 @@ export function ExtractionDemo() {
               <Icon name={progress >= 99.9 ? "check" : "file"} size={16} />
             </span>
           </div>
-          <div className="result-body" aria-label="Sample extracted text">
+          <div
+            className="result-body"
+            role="group"
+            aria-label="Sample extracted text"
+          >
             {outputLines.map((line, i) => (
               <p
                 key={line}

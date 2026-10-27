@@ -1,6 +1,6 @@
 # Distribution
 
-MacTextify 0.3.0 is distributed as ZIP archives containing MacTextify.app for **Apple silicon (arm64)**, **Intel (x86_64)**, and **Universal (both)**. Download from the [website](https://sometheasiekswx.github.io/mactextify/#download) or [GitHub Releases](https://github.com/sometheasiekswx/mactextify/releases). macOS 14 or later is required. Prebuilt apps do not require Xcode, Swift, Python, or Rosetta when the correct native download is selected.
+MacTextify 0.3.0 is distributed as ZIP archives containing MacTextify.app for **Apple silicon (arm64)**, **Intel (x86_64)**, and **Universal (both)**. Download from the [website](https://mactextify.vercel.app/#download) or [GitHub Releases](https://github.com/sometheasiekswx/mactextify/releases). macOS 14 or later is required. Prebuilt apps do not require Xcode, Swift, Python, or Rosetta when the correct native download is selected.
 
 ## Install
 

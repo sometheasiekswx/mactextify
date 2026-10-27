@@ -33,3 +33,5 @@ The subsequent hosting request selects GitHub Pages for a public website at http
 
 ## Implementation Choice
 React and TypeScript with Vite, selected for a static site using adapted Vengeance UI React interactions and Anime.js. No server, account system, analytics, or external font runtime.
+
+On 28 October 2026 the user confirmed Vercel as the primary website at https://mactextify.vercel.app/, with GitHub Pages retained as a fallback from the same repository. GitHub Releases continues to host the app downloads.

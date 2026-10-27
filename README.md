@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://sometheasiekswx.github.io/mactextify/">Website</a> ·
+  <a href="https://mactextify.vercel.app/">Website</a> ·
   <a href="#quick-start">Get started</a> ·
   <a href="#how-it-works">How it works</a> ·
   <a href="docs/cli.md">Command-line guide</a> ·
@@ -42,7 +42,7 @@ A photo of a page. A scanned letter. A screenshot worth keeping. MacTextify extr
 
 ## Quick start
 
-**[Download MacTextify for macOS 14+](https://sometheasiekswx.github.io/mactextify/#download)** — choose Apple silicon, Intel, or Universal. Unzip and move MacTextify.app to Applications. No Xcode is needed to run the prebuilt app.
+**[Download MacTextify for macOS 14+](https://mactextify.vercel.app/#download)** — choose Apple silicon, Intel, or Universal. Unzip and move MacTextify.app to Applications. No Xcode is needed to run the prebuilt app.
 
 **These downloads are not Developer ID signed or notarized.** If macOS blocks the first launch and you trust the download, use System Settings → Privacy & Security → **Open Anyway** for MacTextify, then confirm Open. See [installation instructions and checksums](docs/distribution.md) and [Apple’s opening guidance](https://support.apple.com/en-au/102445).
 

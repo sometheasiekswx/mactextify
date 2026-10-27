@@ -32,3 +32,7 @@ For an unpublished local preview, `npm run prepare:download` retains the origina
 ## Hosting and recovery
 
 GitHub Pages uses `.github/workflows/website.yml`. Revert the publication change to recover source-only access if downloads become invalid. Changes to release bytes require a new version and hashes. Verify the live page, all architecture links and downloaded checksums after deployment. See [hosting](../tasks/website/hosting.md).
+
+## Primary and fallback hosting
+
+The primary URL is https://mactextify.vercel.app/. Vercel builds the `website` root with Node 24 using `vercel.json`; formatting, tests and published download checksum verification must pass before the production build. The linked GitHub repository deploys `main` automatically. GitHub Pages remains a fallback at https://sometheasiekswx.github.io/mactextify/. Both builds use Vercel as their canonical URL.

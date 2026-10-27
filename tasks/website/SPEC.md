@@ -16,7 +16,7 @@ No changes to the OCR implementation, private helper, study material or third-pa
 
 ## Public hosting acceptance
 
-- GitHub Pages serves the website over public HTTPS at `https://sometheasiekswx.github.io/mactextify/`, without authentication.
-- Website changes on main deploy only after website formatting, tests and production build pass; pull requests never deploy.
+- Vercel serves the primary website at `https://mactextify.vercel.app/`; GitHub Pages retains the fallback website over public HTTPS at `https://sometheasiekswx.github.io/mactextify/`, without authentication.
+- Website changes on main deploy only after website formatting, tests and production build pass; pull requests never deploy to production; Vercel may create protected previews.
 - The initial hosted site uses the existing source-build fallback and contains no experimental app ZIP or local evidence.
 - Verify real hosted assets, demo controls, source/contribution links, mobile layout and accessibility. Document deployment/recovery and keep the repository website link current.

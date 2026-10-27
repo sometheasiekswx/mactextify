@@ -1,5 +1,15 @@
 # Public website hosting
 
+## Agreed hosting update — 28 October 2026
+
+The user confirmed Vercel as the primary host on the existing Hobby workspace, with GitHub Pages retained as a working fallback. Both hosts will deploy from the same repository. Use `mactextify.vercel.app` if available; confirm its assignment before changing canonical metadata, README links or the GitHub homepage. Downloads remain on GitHub Releases. No paid features, domain purchase or DNS changes are required.
+
+Implementation order: import the repository into Vercel with root directory `website`, configure Node 24 and the production branch `main`, verify the assigned public URL, update the primary links and metadata, then verify the exact published revision on both hosts. `website/vercel.json` preserves the existing formatting, tests, published-download checksum verification and production build gates. Output is only `dist`; no runtime secrets are needed.
+
+Vercel project: `mactextify` (`prj_h83qlOndkNVebwdXkVbZAgpFJ163`) in `somethea-sieks-projects`. The verified primary project domain is `https://mactextify.vercel.app/`. GitHub authentication has been repaired and the repository is linked. Production is public; preview deployments retain Vercel authentication. Production deployment and public browser verification remain the final release gates.
+
+Recovery: retain Pages throughout the migration. If Vercel verification fails, keep Pages as the primary link until fixed. After migration, revert a broken source change and redeploy through both checked build pipelines; use a previous verified Vercel production deployment for an urgent rollback. This static site has no database or server-side migration.
+
 ## Agreed scope — 27 October 2026
 
 The user requested a hosted public URL and selected GitHub Pages. The target is the existing public `sometheasiekswx/mactextify` repository, with the default URL `https://sometheasiekswx.github.io/mactextify/`. No domain purchase or DNS changes are needed. Automatic deployment follows the existing website checks on main.

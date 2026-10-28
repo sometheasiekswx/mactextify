@@ -1,3 +1,15 @@
+# Automatic 0.4.0 release verification — 29 October 2026
+
+The [tag-triggered release](https://github.com/sometheasiekswx/mactextify/actions/runs/40719951071) passed from source `ba75da73ce8138b5124574166b5f4c737f393b0f`, after a successful [dry run](https://github.com/sometheasiekswx/mactextify/actions/runs/40718345176). All three architecture jobs passed Swift tests, source-package/release guards, packaging and native launch checks. Separate compatibility checks passed on macOS 14, Intel macOS 15 and macOS 26.
+
+The release job signed all archives using the GitHub environment secret and verified signatures with the app's public key. It published eight immutable assets, downloaded them without credentials to compare bytes, then created website metadata commit `87030fc2e9d9dc6ada11f8cf31931168c8e429a3`. [Pages deployment](https://github.com/sometheasiekswx/mactextify/actions/runs/40722256672) passed; Vercel production deployment `dpl_DJ56FQYw8vi2SjdgxXh4cdvba8Ff` reached READY for that commit.
+
+Independent public-download checks matched all three archive sizes, SHA-256 checksums and Ed25519 signatures. Both hosts served the exact released feeds. Browser checks on both hosts showed version 0.4.0 and correct architecture links with no console errors. The downloaded arm64 app launched locally; Sparkle probe mode discovered 0.4.0 through each production feed using an isolated lower-version fixture. Probe checks do not install anything. The earlier isolated installer test verified rejection of an invalid signature, valid installation/relaunch and preservation of exported text.
+
+These remain ad-hoc-signed, unnotarized apps. Clean-Mac interactive Gatekeeper behavior and interactive installation during a real OCR batch remain manual verification limitations; the busy-work installation gate has automated coverage. Users on 0.3.0 must manually install 0.4.0 once to obtain the updater.
+
+---
+
 # Binary distribution verification — 28 October 2026
 
 Version 0.3.0 release artifacts are built from `307e222ae3229f484520c6e86b24651784df2cf7`. [Binary release verification](https://github.com/sometheasiekswx/mactextify/actions/runs/40543127553) passed for arm64 and Universal on macOS 26 and x86_64 on native Intel macOS 15. Each job ran Swift tests, built an isolated app, verified the extracted signature, version, architecture and bundled MIT license, and launched the extracted app. Both Universal Mach-O slices declare macOS 14.0 minimum. Linked libraries use macOS system paths, not developer-machine paths.

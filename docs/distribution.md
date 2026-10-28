@@ -1,6 +1,6 @@
 # Distribution
 
-MacTextify 0.3.0 is distributed as ZIP archives containing MacTextify.app for **Apple silicon (arm64)**, **Intel (x86_64)**, and **Universal (both)**. Download from the [website](https://mactextify.vercel.app/#download) or [GitHub Releases](https://github.com/sometheasiekswx/mactextify/releases). macOS 14 or later is required. Prebuilt apps do not require Xcode, Swift, Python, or Rosetta when the correct native download is selected.
+MacTextify 0.4.0 is distributed as ZIP archives containing MacTextify.app for **Apple silicon (arm64)**, **Intel (x86_64)**, and **Universal (both)**. Download from the [website](https://mactextify.vercel.app/#download) or [GitHub Releases](https://github.com/sometheasiekswx/mactextify/releases). macOS 14 or later is required. Prebuilt apps do not require Xcode, Swift, Python, or Rosetta when the correct native download is selected.
 
 ## Install
 
@@ -14,7 +14,7 @@ Do not disable Gatekeeper globally or remove quarantine as an installation short
 
 ## Verify your download
 
-Each release includes `SHA256SUMS`. Run `shasum -a 256 ~/Downloads/MacTextify-0.3.0-arm64.zip` (substitute your actual filename), then compare against the release and website checksum. The published website manifest records the exact source revision, architecture, size and hash of every ZIP.
+Each release includes `SHA256SUMS`. Run `shasum -a 256 ~/Downloads/MacTextify-0.4.0-arm64.zip` (substitute your actual filename), then compare against the release and website checksum. The published website manifest records the exact source revision, architecture, size and hash of every ZIP.
 
 ## Maintainer release path
 
@@ -30,9 +30,9 @@ Recovery: revert the website publication change to restore source-only access. I
 
 The MIT-licensed source remains available. Source builds require macOS 14+, full Xcode and a compatible Swift/macOS SDK. Apple frameworks are supplied by macOS and are not redistributed.
 
-## In-app updates (prepared for 0.4.0; not yet released)
+## In-app updates (0.4.0 and later)
 
-The public download remains 0.3.0. Empty feeds are deployed until the first updater-enabled release is published. That first release must be installed manually once. Subsequent stable releases can be installed using **MacTextify → Check for Updates…**, followed by Sparkle's download and install/relaunch prompts. **Automatically Check for Updates** is optional and off by default. Downloads and installation require confirmation; OCR and scanning finish before a confirmed installation proceeds. Exported files remain outside the app bundle.
+Version 0.4.0 is the first updater-enabled release. Users upgrading from 0.3.0 must install it manually once. Subsequent stable releases can be installed using **MacTextify → Check for Updates…**, followed by Sparkle's download and install/relaunch prompts. **Automatically Check for Updates** is optional and off by default. Downloads and installation require confirmation; OCR and scanning finish before a confirmed installation proceeds. Exported files remain outside the app bundle.
 
 The updater uses an architecture-specific HTTPS feed at `/updates/arm64.xml`, `/updates/x86_64.xml`, or `/updates/universal.xml` on the primary website. The release archive is authenticated with Sparkle's Ed25519 signature before extraction. This is separate from Developer ID signing/notarization; the app remains ad-hoc signed until that distribution setup is added. OCR inputs and output text are never included in update requests; the hosting services receive normal request metadata such as IP address and app version. System-profile reporting is disabled.
 

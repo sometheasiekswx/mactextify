@@ -36,3 +36,9 @@ Recovery and publication order are documented in `docs/distribution.md`. The ins
 ## Review and source shipping
 
 Review found and fixed missing production feed endpoints: three valid empty appcasts now ship with the website, without advertising unreleased binaries. Sparkle integration tests exercise empty feeds for each architecture, signature rejection, recovery retry, install/relaunch, already-current responses and preservation of exports. CLI installation/upgrade/rollback smoke checks also pass. Source push triggers website deployments; binary verification is run separately on native Apple silicon and Intel CI. A new public binary release is not included in this source push.
+
+## Automatic release completed — 29 October 2026
+
+Stable version tags now build, verify, sign and publish all three architectures, then update website download metadata and feeds only after verifying public asset bytes. Manual dispatch is a nonpublishing dry run. The authorized signing key transfer to the `binary-release` environment completed without exposing or committing private material; the local Keychain key remains available.
+
+Version 0.4.0 is published. Production release run `40719951071` and Pages run `40722256672` passed; Vercel deployed the generated metadata commit. Public checksums/signatures, native arm64 launch, both websites and Sparkle discovery from all three live feeds passed. See `docs/validation.md` for exact source, deployment evidence and remaining manual-check limits. Earlier unreleased-status entries above are historical.

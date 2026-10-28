@@ -1,8 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rss version="2.0">
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
   <channel>
     <title>MacTextify — universal</title>
-    <link>https://mactextify.vercel.app/</link>
-    <description>Stable MacTextify updates. No updater-enabled release is published yet.</description>
+    <item>
+      <title>MacTextify 0.4.0</title>
+      <sparkle:version>0.4.0</sparkle:version>
+      <sparkle:shortVersionString>0.4.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <enclosure url="https://github.com/sometheasiekswx/mactextify/releases/download/v0.4.0/MacTextify-0.4.0-universal.zip" length="1939561" type="application/octet-stream" sparkle:edSignature="eBoFxDERHOBaELFYpYQBYnAeuxj9U5fu7mGUvL05v0k1n5ygDhfrlkVL2GV39aDZiOgUbYwi84ypIEBItAMCBQ==" />
+    </item>
   </channel>
 </rss>

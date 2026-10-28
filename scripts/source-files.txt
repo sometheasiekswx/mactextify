@@ -73,3 +73,8 @@ scripts/verify-app.py
 website/public/updates/arm64.xml
 website/public/updates/x86_64.xml
 website/public/updates/universal.xml
+.github/workflows/publish-release.yml
+scripts/validate-release.py
+scripts/publish-release.py
+scripts/test-release.py
+scripts/verify-update-signature.swift

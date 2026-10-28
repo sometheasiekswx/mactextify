@@ -4,6 +4,7 @@ import argparse
 import base64
 import hashlib
 import json
+import os
 from pathlib import Path
 import plistlib
 import re
@@ -25,7 +26,8 @@ def prepare(directory, output):
     if output.exists():
         raise ValueError('Output must be a new directory; never overwrite published feeds')
     public_key = (REPO / 'config/update-public-key.txt').read_text().strip()
-    if run(TOOLS / 'generate_keys', '--account', ACCOUNT, '-p') != public_key:
+    secret = os.environ.pop('SPARKLE_PRIVATE_KEY', None)
+    if not secret and run(TOOLS / 'generate_keys', '--account', ACCOUNT, '-p') != public_key:
         raise ValueError('Keychain signing key does not match the app public key')
     feeds = {}
     version = revision = None
@@ -60,10 +62,18 @@ def prepare(directory, output):
             arches = set(run('lipo', '-archs', app / 'Contents/MacOS/MacTextifyApp').split())
             if arches != ({'arm64', 'x86_64'} if arch == 'universal' else {arch}):
                 raise ValueError('Binary architecture mismatch')
-        signature = run(TOOLS / 'sign_update', '--account', ACCOUNT, '-p', archive)
+        if secret:
+            # stdin keeps the key out of process arguments and child environments.
+            signed = subprocess.run([str(TOOLS / 'sign_update'), '--ed-key-file', '-', '-p', str(archive)],
+                input=secret, text=True, capture_output=True)
+            if signed.returncode:
+                raise ValueError('Signing failed; tool output withheld to protect key material')
+            signature = signed.stdout.strip()
+        else:
+            signature = run(TOOLS / 'sign_update', '--account', ACCOUNT, '-p', archive)
         if len(base64.b64decode(signature, validate=True)) != 64:
             raise ValueError('Invalid signature output')
-        run(TOOLS / 'sign_update', '--account', ACCOUNT, '--verify', archive, signature)
+        run('swift', REPO / 'scripts/verify-update-signature.swift', public_key, signature, archive)
         rss = ET.Element('rss', version='2.0'); channel = ET.SubElement(rss, 'channel')
         ET.SubElement(channel, 'title').text = f'MacTextify — {arch}'
         item = ET.SubElement(channel, 'item')

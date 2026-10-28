@@ -1,0 +1,102 @@
+name: Publish app release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: app-release
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: version
+        env:
+          EVENT: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+        run: |
+          python3 scripts/validate-release.py
+          echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+  package:
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-26
+            architecture: arm64
+          - os: macos-15-intel
+            architecture: x86_64
+          - os: macos-26
+            architecture: universal
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - run: swift test
+      - run: python3 scripts/test-package-source.py
+      - run: python3 scripts/test-release.py
+      - name: Package exact source and verify native launch
+        env:
+          ARCH: ${{ matrix.architecture }}
+        run: |
+          python3 scripts/package-app.py "$ARCH" --output dist/binaries
+          python3 scripts/verify-app.py dist/binaries/*.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-${{ matrix.architecture }}
+          path: dist/binaries/*
+          if-no-files-found: error
+  publish:
+    needs: [validate, package]
+    runs-on: macos-26
+    timeout-minutes: 20
+    environment: binary-release
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: release-*
+          merge-multiple: true
+          path: dist/binaries
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - run: swift package resolve
+      - name: Sign and validate against embedded public key
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          test -n "$SPARKLE_PRIVATE_KEY" || { echo 'Missing release signing secret'; exit 1; }
+          python3 scripts/prepare-appcast.py dist/binaries --output dist/update-feeds
+      - name: Prepare release manifest and checksums
+        run: python3 scripts/publish-release.py --prepare-only
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: signed-release
+          path: |
+            dist/binaries/*
+            dist/update-feeds/*
+          if-no-files-found: error
+      - name: Publish verified assets and advance website
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python3 scripts/publish-release.py --publish

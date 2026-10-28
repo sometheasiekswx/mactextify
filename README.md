@@ -35,7 +35,7 @@
 A photo of a page. A scanned letter. A screenshot worth keeping. MacTextify extracts the words from PNG and JPEG images into individual text or Markdown files, with an index to find your way back. Search, copy, and edit the text without retyping it.
 
 - **Made for your Mac.** A compact SwiftUI interface, drag-and-drop, and a native file-and-folder picker with ⌘O.
-- **Private by design.** OCR runs locally with Apple Live Text or an explicitly selected Vision engine. No account, API key, subscription, or application network requests.
+- **Private by design.** OCR runs locally with Apple Live Text or an explicitly selected Vision engine. No account, API key, or subscription. OCR stays on-device. In-app update checks contact the release server only when requested or when automatic checks are enabled.
 - **A batch, your way.** Mix files and folders, opt into subfolders, and choose exactly where exports go.
 - **Files you own.** Plain text for a clean transcript. Markdown for recognized text, source links, and extraction metadata.
 - **Careful with your work.** The app keeps originals in place, protects edited exports, and saves progress for recovery.

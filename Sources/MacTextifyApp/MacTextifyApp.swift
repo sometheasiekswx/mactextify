@@ -21,6 +21,7 @@ struct QueueItem: Identifiable {
     @Published var engine = OCREngine.liveText
     @Published var busy = false
     @Published var scanning = false
+    @Published var updatePending = false
     @Published var message = ""
     var job: Task<Void,Never>?
     var scanJob: Task<Void,Never>?
@@ -47,7 +48,7 @@ struct QueueItem: Identifiable {
         panel.begin { response in if response == .OK, let url = panel.url { self.access(url); self.parent = url } }
     }
     func add(_ urls: [URL]) {
-        guard !busy, !scanning else { return }
+        guard !busy, !scanning, !updatePending else { return }
         for url in urls { access(url) }
         scanning = true; message = "Checking selected files…"
         let recurse = recursive
@@ -64,7 +65,7 @@ struct QueueItem: Identifiable {
         }
     }
     func run() {
-        guard let destination, validation == nil, !items.isEmpty, !busy else { return }
+        guard let destination, validation == nil, !items.isEmpty, !busy, !scanning, !updatePending else { return }
         busy = true; message = "Extracting on your Mac…"
         for i in items.indices { items[i].state = "Ready"; items[i].detail = ""; items[i].output = nil }
         let urls = items.map(\.url)
@@ -90,15 +91,21 @@ struct QueueItem: Identifiable {
 @main struct MacTextifyApplication: App {
     @StateObject private var session = Session()
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
+    @StateObject private var updates = AppUpdates()
     var body: some Scene {
         WindowGroup("MacTextify", id: "narrow-workspace") {
-            PearlView(session: session).onAppear { delegate.session = session }
+            PearlView(session: session).onAppear { delegate.session = session; updates.attach(session) }
         }
         .defaultSize(width: 544, height: 720)
         .windowStyle(.hiddenTitleBar)
         .commands {
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates…") { updates.check() }
+                    .disabled(!updates.canCheck || session.busy || session.scanning || session.updatePending)
+                Toggle("Automatically Check for Updates", isOn: $updates.automaticChecks)
+            }
             CommandGroup(replacing: .newItem) {
-                Button("Add files or folders…") { session.choose() }.keyboardShortcut("o").disabled(session.busy || session.scanning)
+                Button("Add files or folders…") { session.choose() }.keyboardShortcut("o").disabled(session.busy || session.scanning || session.updatePending)
             }
         }
     }
@@ -106,6 +113,7 @@ struct QueueItem: Identifiable {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     weak var session: Session?
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if let session, session.updatePending && (session.busy || session.scanning) { return .terminateCancel }
         guard let session, session.busy || session.scanning else { return .terminateNow }
         let alert = NSAlert(); alert.messageText = "Stop extraction and quit?"; alert.informativeText = "Completed exports are preserved. In-flight work will finish its safe checkpoint."
         alert.addButton(withTitle: "Keep working"); alert.addButton(withTitle: "Stop and quit")
@@ -224,9 +232,9 @@ struct PearlView: View {
         }.padding(16).frame(maxWidth: .infinity)
             .background(targeted ? ink.opacity(0.07) : paper, in: RoundedRectangle(cornerRadius: 10))
             .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(targeted ? ink : hairline, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
-            .disabled(session.busy || session.scanning)
+            .disabled(session.busy || session.scanning || session.updatePending)
             .dropDestination(for: URL.self) { urls, _ in
-                guard !session.busy, !session.scanning else { return false }
+                guard !session.busy, !session.scanning, !session.updatePending else { return false }
                 session.add(urls); return true
             } isTargeted: { targeted = $0 }
     }
@@ -349,7 +357,7 @@ struct PearlView: View {
                 } else {
                     Button("Extract text") { session.run() }
                         .buttonStyle(MonochromePrimaryStyle())
-                        .disabled(session.items.isEmpty || session.scanning || session.validation != nil)
+                        .disabled(session.items.isEmpty || session.scanning || session.updatePending || session.validation != nil)
                         .keyboardShortcut(.return, modifiers: .command)
                 }
             }

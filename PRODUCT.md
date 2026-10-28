@@ -16,7 +16,7 @@ Explain the app, demonstrate image-to-text extraction, provide an honest install
 ## Capabilities and Constraints
 Native SwiftUI app using local Apple OCR. PNG/JPEG batches, plain text and Markdown exports, original preservation and recovery records. macOS 14+. Source builds require full Xcode and Swift 5.9+. Live Text availability depends on the machine and OS. OCR results need review.
 
-No account, subscription, API key, or application network requests. The website demo is an illustrative interaction with synthetic content, not browser OCR.
+No account, subscription, or API key. OCR stays on-device; update checks contact the release server manually or by opt-in. The website demo is an illustrative interaction with synthetic content, not browser OCR.
 
 ## Brand Commitments
 MacTextify name, existing logo and Pearl/Midnight black-and-white branding. User requested Anime.js motion, Vengeance UI components and Apple-inspired responsiveness.

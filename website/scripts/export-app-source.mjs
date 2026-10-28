@@ -21,6 +21,8 @@ export function exportAppSource(repository, revision, destination) {
         "Sources",
         "Tests",
         "Package.swift",
+        "Package.resolved",
+        "config/update-public-key.txt",
         "VERSION",
         "LICENSE",
         "assets/AppIcon.icns",

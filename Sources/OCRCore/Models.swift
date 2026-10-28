@@ -1,7 +1,7 @@
 import Foundation
 import CryptoKit
 
-public let toolVersion = "0.3.0"
+public let toolVersion = "0.4.0"
 
 public struct OCRFailure: Error, CustomStringConvertible {
     public let description: String

@@ -438,9 +438,11 @@ export function App() {
             <details>
               <summary>Does anything leave my Mac?</summary>
               <p>
-                The native app makes no application network requests. OCR uses
-                Apple’s on-device frameworks. The website demonstration uses
-                fixed sample content and does not upload or process your files.
+                OCR runs on your Mac. Updater-enabled versions contact the
+                release server only for manual or opted-in update checks. OCR
+                uses Apple’s on-device frameworks. The website demonstration
+                uses fixed sample content and does not upload or process your
+                files.
               </p>
             </details>
             <details>

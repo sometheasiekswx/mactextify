@@ -30,6 +30,8 @@ test("revision export excludes untracked Swift, extra icons and stale bundle res
       "Sources/MacTextifyApp/main.swift",
       "Tests/OCRCoreTests/Fixture.swift",
       "Package.swift",
+      "Package.resolved",
+      "config/update-public-key.txt",
       "VERSION",
       "LICENSE",
       "assets/AppIcon.icns",

@@ -60,3 +60,16 @@ assets/readme/workflow-dark.svg
 assets/readme/app-workspace.png
 assets/readme/app-detail.png
 tasks/readme-presentation/plan.md
+Package.resolved
+config/update-public-key.txt
+Sources/MacTextifyApp/AppUpdates.swift
+Sources/UpdateSupport/InstallationGate.swift
+Tests/UpdateSupportTests/InstallationGateTests.swift
+scripts/prepare-appcast.py
+scripts/verify-updater.py
+tasks/in-app-updates.md
+scripts/package-app.py
+scripts/verify-app.py
+website/public/updates/arm64.xml
+website/public/updates/x86_64.xml
+website/public/updates/universal.xml
